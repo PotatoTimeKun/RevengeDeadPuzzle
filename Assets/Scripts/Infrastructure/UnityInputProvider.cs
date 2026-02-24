@@ -12,8 +12,8 @@ public class UnityInputProvider : MonoBehaviour
 {
     public static UnityInputProvider Instance { get; private set; }
 
-    private InputHandler inputHandler;
     private InputActions inputActions;
+    private InputHandler inputHandler;
     private InputState _currentInputState = InputState.None;
     public InputState CurrentInputState
     {
@@ -40,6 +40,12 @@ public class UnityInputProvider : MonoBehaviour
 
     private void OnEnable()
     {
+        if (inputActions == null)
+        {
+            inputActions = new InputActions();
+        }
+        inputActions.Enable();
+
         inputActions.Player.Move.performed += HandlePlayerMove;
         inputActions.Player.Jump.performed += HandlePlayerJump;
         inputActions.Player.Drag.performed += HandlePlayerDrag;
@@ -49,14 +55,10 @@ public class UnityInputProvider : MonoBehaviour
         inputActions.Menu.Move.started -= HandleMenuMove;
         inputActions.Menu.Submit.performed -= HandleMenuSubmit;
         inputActions.Menu.Cancel.performed -= HandleMenuCancel;
-
-        inputActions.Enable();
     }
 
     private void OnDisable()
     {
-        inputActions.Disable();
-
         inputActions.Player.Move.performed -= HandlePlayerMove;
         inputActions.Player.Jump.performed -= HandlePlayerJump;
         inputActions.Player.Drag.performed -= HandlePlayerDrag;
@@ -66,6 +68,8 @@ public class UnityInputProvider : MonoBehaviour
         inputActions.Menu.Move.started -= HandleMenuMove;
         inputActions.Menu.Submit.performed -= HandleMenuSubmit;
         inputActions.Menu.Cancel.performed -= HandleMenuCancel;
+
+        inputActions.Disable();
     }
 
     private void HandlePlayerMove(InputAction.CallbackContext context)
