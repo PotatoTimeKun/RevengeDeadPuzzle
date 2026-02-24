@@ -1,37 +1,121 @@
-using System;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class UnityInputProvider
+public class UnityInputProvider : MonoBehaviour
 {
-    private static UnityInputProvider _instance;
-    public static UnityInputProvider Instance
+    public static UnityInputProvider Instance { get; private set; }
+
+    private InputState currentInputState = InputState.None;
+    private InputHandler inputHandler;
+    private InputActions inputActions;
+
+    private UnityInputProvider()
     {
-        get
+        inputHandler = InputHandler.Instance;
+    }
+    private void Awake()
+    {
+        if (Instance == null)
         {
-            if (_instance == null) _instance = new();
-            return _instance;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
-    [SerializeField]
-    public class PlayerAction
+
+    private void OnEnable()
     {
-        public Action<Vector2> Move;
-        public Action Jump;
-        public Action Drag;
-        public Action Suicide;
-        public Action Menu;
+        inputActions.Player.Move.performed += HandlePlayerMove;
+        inputActions.Player.Jump.performed += HandlePlayerJump;
+        inputActions.Player.Drag.performed += HandlePlayerDrag;
+        inputActions.Player.Suicide.performed -= HandlePlayerSuicide;
+        inputActions.Player.Menu.performed -= HandlePlayerMenu;
+
+        inputActions.Menu.Move.started -= HandleMenuMove;
+        inputActions.Menu.Submit.performed -= HandleMenuSubmit;
+        inputActions.Menu.Cancel.performed -= HandleMenuCancel;
+
+        inputActions.Enable();
     }
 
-    [SerializeField]
-    public class MenuAction
+    private void OnDisable()
     {
-        public Action<Vector2> Move;
-        public Action Submit;
-        public Action Cancel;
+        inputActions.Disable();
+
+        inputActions.Player.Move.performed -= HandlePlayerMove;
+        inputActions.Player.Jump.performed -= HandlePlayerJump;
+        inputActions.Player.Drag.performed -= HandlePlayerDrag;
+        inputActions.Player.Suicide.performed -= HandlePlayerSuicide;
+        inputActions.Player.Menu.performed -= HandlePlayerMenu;
+
+        inputActions.Menu.Move.started -= HandleMenuMove;
+        inputActions.Menu.Submit.performed -= HandleMenuSubmit;
+        inputActions.Menu.Cancel.performed -= HandleMenuCancel;
     }
 
-    public PlayerAction Player = new();
-    public MenuAction Menu = new();
+    public void SetInputState(InputState state = InputState.None)
+    {
+        currentInputState = state;
+    }
+
+    private void HandlePlayerMove(InputAction.CallbackContext context)
+    {
+        if (currentInputState != InputState.Player)
+        {
+            inputHandler.Player.Move?.Invoke(Vector2.zero);
+            return;
+        }
+        Vector2 move = context.ReadValue<Vector2>();
+        inputHandler.Player.Move?.Invoke(move);
+    }
+
+    private void HandlePlayerJump(InputAction.CallbackContext context)
+    {
+        if (currentInputState != InputState.Player) return;
+        inputHandler.Player.Jump?.Invoke();
+    }
+
+    private void HandlePlayerDrag(InputAction.CallbackContext context)
+    {
+        if (currentInputState != InputState.Player) return;
+        inputHandler.Player.Drag?.Invoke();
+    }
+
+    private void HandlePlayerSuicide(InputAction.CallbackContext context)
+    {
+        if (currentInputState != InputState.Player) return;
+        inputHandler.Player.Suicide?.Invoke();
+    }
+
+    private void HandlePlayerMenu(InputAction.CallbackContext context)
+    {
+        if (currentInputState != InputState.Player) return;
+        inputHandler.Player.Menu?.Invoke();
+    }
+
+    private void HandleMenuMove(InputAction.CallbackContext context)
+    {
+        if (currentInputState != InputState.Menu)
+        {
+            inputHandler.Menu.Move?.Invoke(Vector2.zero);
+            return;
+        }
+        Vector2 move = context.ReadValue<Vector2>();
+        inputHandler.Menu.Move?.Invoke(move);
+    }
+
+    private void HandleMenuSubmit(InputAction.CallbackContext context)
+    {
+        if (currentInputState != InputState.Menu) return;
+        inputHandler.Menu.Submit?.Invoke();
+    }
+
+    private void HandleMenuCancel(InputAction.CallbackContext context)
+    {
+        if (currentInputState != InputState.Menu) return;
+        inputHandler.Menu.Cancel?.Invoke();
+    }
 }
