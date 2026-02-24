@@ -49,12 +49,12 @@ public class UnityInputProvider : MonoBehaviour
         inputActions.Player.Move.performed += HandlePlayerMove;
         inputActions.Player.Jump.performed += HandlePlayerJump;
         inputActions.Player.Drag.performed += HandlePlayerDrag;
-        inputActions.Player.Suicide.performed -= HandlePlayerSuicide;
-        inputActions.Player.Menu.performed -= HandlePlayerMenu;
+        inputActions.Player.Suicide.performed += HandlePlayerSuicide;
+        inputActions.Player.Menu.performed += HandlePlayerMenu;
 
-        inputActions.Menu.Move.started -= HandleMenuMove;
-        inputActions.Menu.Submit.performed -= HandleMenuSubmit;
-        inputActions.Menu.Cancel.performed -= HandleMenuCancel;
+        inputActions.Menu.Move.started += HandleMenuMove;
+        inputActions.Menu.Submit.performed += HandleMenuSubmit;
+        inputActions.Menu.Cancel.performed += HandleMenuCancel;
     }
 
     private void OnDisable()
