@@ -1,13 +1,7 @@
 using System;
 using UnityEngine;
 
-[SerializeField]
-public enum InputState
-{
-    None,
-    Player,
-    Menu,
-}
+
 public class InputHandler
 {
     private static InputHandler _instance;
@@ -41,15 +35,13 @@ public class InputHandler
     public PlayerAction Player = new();
     public MenuAction Menu = new();
 
-    private InputState _currentInputState = InputState.None;
-    public InputState CurrentInputState
-    {
-        get { return _currentInputState; }
-        set {  _currentInputState = value; }
-    }
-
     public void SetInputState(InputState state = InputState.None)
     {
-        CurrentInputState = state;
+        if (UnityInputProvider.Instance == null)
+        {
+            Debug.LogWarning("UnityInputProviderのインスタンスが見つかりません！");
+            return;
+        }
+        UnityInputProvider.Instance.CurrentInputState = state;
     }
 }
