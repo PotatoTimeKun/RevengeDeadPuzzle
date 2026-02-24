@@ -74,11 +74,7 @@ public class UnityInputProvider : MonoBehaviour
 
     private void HandlePlayerMove(InputAction.CallbackContext context)
     {
-        if (CurrentInputState != InputState.Player)
-        {
-            inputHandler.Player.Move?.Invoke(Vector2.zero);
-            return;
-        }
+        if (CurrentInputState != InputState.Player) return;
         Vector2 move = context.ReadValue<Vector2>();
         inputHandler.Player.Move?.Invoke(move);
     }
@@ -109,11 +105,7 @@ public class UnityInputProvider : MonoBehaviour
 
     private void HandleMenuMove(InputAction.CallbackContext context)
     {
-        if (CurrentInputState != InputState.Menu)
-        {
-            inputHandler.Menu.Move?.Invoke(Vector2.zero);
-            return;
-        }
+        if (CurrentInputState != InputState.Menu) return;
         Vector2 move = context.ReadValue<Vector2>();
         inputHandler.Menu.Move?.Invoke(move);
     }
