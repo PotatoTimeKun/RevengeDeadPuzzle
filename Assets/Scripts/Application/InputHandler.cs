@@ -11,9 +11,16 @@ public enum InputState
 public class InputHandler : MonoBehaviour
 {
     public static InputHandler Instance {  get; private set; }
-    InputState currentInputState = InputState.None;
+    private InputState currentInputState = InputState.None;
     private UnityInputProvider inputProvider;
     private InputActions inputActions;
+
+    /*
+     * 
+     * 
+     * 
+     * 
+     */
 
     private InputHandler()
     {
@@ -34,15 +41,15 @@ public class InputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        inputActions.Player.Move.performed += OnPlayerMove;
-        inputActions.Player.Jump.performed += OnPlayerJump;
-        inputActions.Player.Drag.performed += OnPlayerDrag;
-        inputActions.Player.Suicide.performed += OnPlayerSuicide;
-        inputActions.Player.Menu.performed += OnPlayerMenu;
+        inputActions.Player.Move.performed += HandlePlayerMove;
+        inputActions.Player.Jump.performed += HandlePlayerJump;
+        inputActions.Player.Drag.performed += HandlePlayerDrag;
+        inputActions.Player.Suicide.performed -= HandlePlayerSuicide;
+        inputActions.Player.Menu.performed -= HandlePlayerMenu;
 
-        inputActions.Menu.Move.started += OnMenuMove;
-        inputActions.Menu.Submit.performed += OnMenuSubmit;
-        inputActions.Menu.Cancel.performed += OnMenuCancel;
+        inputActions.Menu.Move.started -= HandleMenuMove;
+        inputActions.Menu.Submit.performed -= HandleMenuSubmit;
+        inputActions.Menu.Cancel.performed -= HandleMenuCancel;
 
         inputActions.Enable();
     }
@@ -51,15 +58,15 @@ public class InputHandler : MonoBehaviour
     {
         inputActions.Disable();
 
-        inputActions.Player.Move.performed -= OnPlayerMove;
-        inputActions.Player.Jump.performed -= OnPlayerJump;
-        inputActions.Player.Drag.performed -= OnPlayerDrag;
-        inputActions.Player.Suicide.performed -= OnPlayerSuicide;
-        inputActions.Player.Menu.performed -= OnPlayerMenu;
+        inputActions.Player.Move.performed -= HandlePlayerMove;
+        inputActions.Player.Jump.performed -= HandlePlayerJump;
+        inputActions.Player.Drag.performed -= HandlePlayerDrag;
+        inputActions.Player.Suicide.performed -= HandlePlayerSuicide;
+        inputActions.Player.Menu.performed -= HandlePlayerMenu;
 
-        inputActions.Menu.Move.started -= OnMenuMove;
-        inputActions.Menu.Submit.performed -= OnMenuSubmit;
-        inputActions.Menu.Cancel.performed -= OnMenuCancel;
+        inputActions.Menu.Move.started -= HandleMenuMove;
+        inputActions.Menu.Submit.performed -= HandleMenuSubmit;
+        inputActions.Menu.Cancel.performed -= HandleMenuCancel;
     }
 
     public void SetInputState(InputState state = InputState.None)
@@ -67,7 +74,7 @@ public class InputHandler : MonoBehaviour
         currentInputState = state;
     }
 
-    public void OnPlayerMove(InputAction.CallbackContext context)
+    private void HandlePlayerMove(InputAction.CallbackContext context)
     {
         if (currentInputState != InputState.Player)
         {
@@ -78,31 +85,31 @@ public class InputHandler : MonoBehaviour
         inputProvider.Player.Move?.Invoke(move);
     }
 
-    public void OnPlayerJump(InputAction.CallbackContext context)
+    private void HandlePlayerJump(InputAction.CallbackContext context)
     {
         if (currentInputState != InputState.Player) return;
         inputProvider.Player.Jump?.Invoke();
     }
 
-    public void OnPlayerDrag(InputAction.CallbackContext context)
+    private void HandlePlayerDrag(InputAction.CallbackContext context)
     {
         if (currentInputState != InputState.Player) return;
         inputProvider.Player.Drag?.Invoke();
     }
 
-    public void OnPlayerSuicide(InputAction.CallbackContext context)
+    private void HandlePlayerSuicide(InputAction.CallbackContext context)
     {
         if (currentInputState != InputState.Player) return;
         inputProvider.Player.Suicide?.Invoke();
     }
 
-    public void OnPlayerMenu(InputAction.CallbackContext context)
+    private void HandlePlayerMenu(InputAction.CallbackContext context)
     {
         if (currentInputState != InputState.Player) return;
         inputProvider.Player.Menu?.Invoke();
     }
 
-    public void OnMenuMove(InputAction.CallbackContext context)
+    private void HandleMenuMove(InputAction.CallbackContext context)
     {
         if (currentInputState != InputState.Menu)
         {
@@ -113,13 +120,13 @@ public class InputHandler : MonoBehaviour
         inputProvider.Menu.Move?.Invoke(move);
     }
 
-    public void OnMenuSubmit(InputAction.CallbackContext context)
+    private void HandleMenuSubmit(InputAction.CallbackContext context)
     {
         if (currentInputState != InputState.Menu) return;
         inputProvider.Menu.Submit?.Invoke();
     }
 
-    public void OnMenuCancel(InputAction.CallbackContext context)
+    private void HandleMenuCancel(InputAction.CallbackContext context)
     {
         if (currentInputState != InputState.Menu) return;
         inputProvider.Menu.Cancel?.Invoke();
