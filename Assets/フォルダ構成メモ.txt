@@ -1,0 +1,8 @@
+Images : 画像ファイル
+Audio : BGM/SEの音声ファイル
+Prefab : プレハブ
+Costume : CostumeDefで作ったコスチューム
+Stage : StageDefで作ったステージデータ
+Scripts : スクリプト 「スクリプト以外を入れない」
+Scenes : シーン
+Resources : Resourcesを使わないといけないとき用
