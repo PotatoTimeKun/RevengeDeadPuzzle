@@ -5,7 +5,6 @@ public class UnityInputProvider : MonoBehaviour
 {
     public static UnityInputProvider Instance { get; private set; }
 
-    private InputState currentInputState = InputState.None;
     private InputHandler inputHandler;
     private InputActions inputActions;
 
@@ -56,14 +55,9 @@ public class UnityInputProvider : MonoBehaviour
         inputActions.Menu.Cancel.performed -= HandleMenuCancel;
     }
 
-    public void SetInputState(InputState state = InputState.None)
-    {
-        currentInputState = state;
-    }
-
     private void HandlePlayerMove(InputAction.CallbackContext context)
     {
-        if (currentInputState != InputState.Player)
+        if (inputHandler.CurrentInputState != InputState.Player)
         {
             inputHandler.Player.Move?.Invoke(Vector2.zero);
             return;
@@ -74,31 +68,31 @@ public class UnityInputProvider : MonoBehaviour
 
     private void HandlePlayerJump(InputAction.CallbackContext context)
     {
-        if (currentInputState != InputState.Player) return;
+        if (inputHandler.CurrentInputState != InputState.Player) return;
         inputHandler.Player.Jump?.Invoke();
     }
 
     private void HandlePlayerDrag(InputAction.CallbackContext context)
     {
-        if (currentInputState != InputState.Player) return;
+        if (inputHandler.CurrentInputState != InputState.Player) return;
         inputHandler.Player.Drag?.Invoke();
     }
 
     private void HandlePlayerSuicide(InputAction.CallbackContext context)
     {
-        if (currentInputState != InputState.Player) return;
+        if (inputHandler.CurrentInputState != InputState.Player) return;
         inputHandler.Player.Suicide?.Invoke();
     }
 
     private void HandlePlayerMenu(InputAction.CallbackContext context)
     {
-        if (currentInputState != InputState.Player) return;
+        if (inputHandler.CurrentInputState != InputState.Player) return;
         inputHandler.Player.Menu?.Invoke();
     }
 
     private void HandleMenuMove(InputAction.CallbackContext context)
     {
-        if (currentInputState != InputState.Menu)
+        if (inputHandler.CurrentInputState != InputState.Menu)
         {
             inputHandler.Menu.Move?.Invoke(Vector2.zero);
             return;
@@ -109,13 +103,13 @@ public class UnityInputProvider : MonoBehaviour
 
     private void HandleMenuSubmit(InputAction.CallbackContext context)
     {
-        if (currentInputState != InputState.Menu) return;
+        if (inputHandler.CurrentInputState != InputState.Menu) return;
         inputHandler.Menu.Submit?.Invoke();
     }
 
     private void HandleMenuCancel(InputAction.CallbackContext context)
     {
-        if (currentInputState != InputState.Menu) return;
+        if (inputHandler.CurrentInputState != InputState.Menu) return;
         inputHandler.Menu.Cancel?.Invoke();
     }
 }

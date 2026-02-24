@@ -40,4 +40,16 @@ public class InputHandler
 
     public PlayerAction Player = new();
     public MenuAction Menu = new();
+
+    private InputState _currentInputState = InputState.None;
+    public InputState CurrentInputState
+    {
+        get { return _currentInputState; }
+        set {  _currentInputState = value; }
+    }
+
+    public void SetInputState(InputState state = InputState.None)
+    {
+        CurrentInputState = state;
+    }
 }
