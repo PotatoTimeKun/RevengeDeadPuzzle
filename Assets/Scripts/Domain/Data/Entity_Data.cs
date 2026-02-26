@@ -2,4 +2,7 @@
 
 public class Entity_Data
 {
+    public enum DeathType {
+        
+    }
 }

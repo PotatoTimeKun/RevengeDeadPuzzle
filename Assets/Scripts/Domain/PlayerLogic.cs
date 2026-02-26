@@ -1,5 +1,7 @@
 // UnityEngine禁止
 
-public class PlayerLogic
+public class PlayerLogic : ITickable
 {
+    public int HP;
+    
 }
