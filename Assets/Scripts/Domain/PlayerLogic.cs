@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerLogic : ITickable
 {
-    public float moveSpeed = 5f;
-    public float jumpPower = 10f;
     private PlayerController _controller;
     public PlayerLogic(PlayerController controller){
         _controller = controller;

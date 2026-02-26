@@ -11,9 +11,11 @@ public enum GroundState
 
 public class PlayerController : MonoBehaviour, ITickable
 {
+    public float moveSpeed = 5f;
+    public float jumpPower = 10f;
     public HitCheck ground;
     public Rigidbody rb;
-    public PlayerLogic playerLogic;
+    private PlayerLogic playerLogic;
     private PlayerController grabbedObject;
     private GroundState groundState;
     private bool isGrabbing = false;
@@ -21,11 +23,11 @@ public class PlayerController : MonoBehaviour, ITickable
     private void Awake()
     {
         playerLogic = new PlayerLogic(this);
+        InputHandler.Instance.SetInputState(InputState.Player);
     }
 
     public void Tick(float deltaTime)
     {
-        if (ground.IsHit("Ground"))
         {
             if (groundState != GroundState.Grounded)
             {
@@ -37,7 +39,8 @@ public class PlayerController : MonoBehaviour, ITickable
     //ˆÚ“®
     public void Move(Vector2 moveValue)
     {
-        Vector2 _moveValue = moveValue * playerLogic.moveSpeed;
+        Debug.Log(moveValue);
+        Vector2 _moveValue = moveValue * moveSpeed;
         Vector2 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
         rb.linearVelocity = transform.rotation * velocity;
     }
@@ -45,12 +48,11 @@ public class PlayerController : MonoBehaviour, ITickable
     //ƒWƒƒƒ“ƒv
     public void Jump()
     {
-
         switch (groundState)
         {
             case GroundState.Grounded:
                 groundState = GroundState.Jumping;
-                rb.AddForce(Vector3.up * playerLogic.jumpPower, ForceMode.Impulse);
+                rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
                 break;
 
             case GroundState.Jumping:
