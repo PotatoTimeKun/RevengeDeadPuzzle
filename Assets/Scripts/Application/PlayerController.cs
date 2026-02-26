@@ -76,6 +76,5 @@ public class PlayerController : MonoBehaviour, ITickable
     public void Suicide()
     {
         rb.constraints = RigidbodyConstraints.None;
-        enabled = false;
     }
 }
