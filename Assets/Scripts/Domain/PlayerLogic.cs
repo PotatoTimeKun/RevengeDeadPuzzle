@@ -1,7 +1,11 @@
 // UnityEngine禁止
 
+using UnityEngine;
+
 public class PlayerLogic : ITickable
 {
+    public float moveSpeed = 5f;
+    public float jumpPower = 10f;
     private PlayerController _controller;
     public PlayerLogic(PlayerController controller){
         _controller = controller;
@@ -20,26 +24,26 @@ public class PlayerLogic : ITickable
     public Entity_Data.DeathType Type;
     public void Tick(float deltaTime){}
     public void Die(Entity_Data.DeathType deathType){
-        Type = DeathType;
-        State = Entity_Data.DeathType.DeathAnimationWait;
+        Type = deathType;
+        State = Entity_Data.PlayerState.DeathAnimationWait;
 
         // メンタルを減らす処理を書く
 
     }
-    private void Move(){
-        if (State != Entity_Data.DeathType.Alive) return;
-        _controller.Move();
+    private void Move(Vector2 moveValue){
+        if (State != Entity_Data.PlayerState.Alive) return;
+        _controller.Move(moveValue);
     }
     private void Jump(){
-        if (State != Entity_Data.DeathType.Alive) return;
+        if (State != Entity_Data.PlayerState.Alive) return;
         _controller.Jump();
     }
     private void Grab(){
-        if (State != Entity_Data.DeathType.Alive) return;
+        if (State != Entity_Data.PlayerState.Alive) return;
         _controller.Grab();
     }
     private void Suicide(){
-        if (State != Entity_Data.DeathType.Alive) return;
+        if (State != Entity_Data.PlayerState.Alive) return;
         Die(Entity_Data.DeathType.None);
 
         // メンタルを追加で減らす処理を書く

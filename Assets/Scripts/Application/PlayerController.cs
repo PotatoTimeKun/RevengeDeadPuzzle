@@ -18,6 +18,11 @@ public class PlayerController : MonoBehaviour, ITickable
     private GroundState groundState;
     private bool isGrabbing = false;
 
+    private void Awake()
+    {
+        playerLogic = new PlayerLogic(this);
+    }
+
     public void Tick(float deltaTime)
     {
         if (ground.IsHit("Ground"))
