@@ -47,6 +47,7 @@ public class UnityInputProvider : MonoBehaviour
         inputActions.Enable();
 
         inputActions.Player.Move.performed += HandlePlayerMove;
+        inputActions.Player.Move.canceled += HandlePlayerMove;
         inputActions.Player.Jump.performed += HandlePlayerJump;
         inputActions.Player.Drag.performed += HandlePlayerDrag;
         inputActions.Player.Suicide.performed += HandlePlayerSuicide;
