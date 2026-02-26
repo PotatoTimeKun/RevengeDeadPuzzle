@@ -9,13 +9,25 @@ public enum GroundState
     //OnWall      // •Ç’£‚è•t‚«
 }
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ITickable
 {
+    public HitCheck ground;
     public Rigidbody rb;
     public PlayerLogic playerLogic;
     private PlayerController grabbedObject;
     private GroundState groundState;
     private bool isGrabbing = false;
+
+    public void Tick(float deltaTime)
+    {
+        if (ground.IsHit())
+        {
+            if (groundState != GroundState.Grounded)
+            {
+                groundState = GroundState.Grounded;
+            }
+        }
+    }
 
     //ˆÚ“®
     public void Move(Vector2 moveValue)
