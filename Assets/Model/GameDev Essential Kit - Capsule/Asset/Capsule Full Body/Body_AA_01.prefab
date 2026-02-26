@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3915051772141399427}
   - component: {fileID: 5280126008769886905}
-  - component: {fileID: 237578178504422238}
+  - component: {fileID: 4585206288463776766}
   m_Layer: 0
   m_Name: GroundCheck
   m_TagString: Untagged
@@ -54,7 +54,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.4
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &237578178504422238
+--- !u!114 &4585206288463776766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -63,9 +63,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4042601431199321651}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9915d127463904479712a95df58947f, type: 3}
+  m_Script: {fileID: 11500000, guid: 2026b8b8e90237646afaae4dfdb17291, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerGroundCheck
+  m_EditorClassIdentifier: Assembly-CSharp::HitCheck
 --- !u!1001 &4480676201808211489
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -131,29 +131,16 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ade63e7fd92c26342a35feb67fcc8d9a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9108221308981350012}
+      addedObject: {fileID: 2266166637718129745}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ade63e7fd92c26342a35feb67fcc8d9a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2266166637718129745}
+      addedObject: {fileID: 6543489017828265867}
   m_SourcePrefab: {fileID: 100100000, guid: ade63e7fd92c26342a35feb67fcc8d9a, type: 3}
 --- !u!1 &3670405753088119664 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ade63e7fd92c26342a35feb67fcc8d9a, type: 3}
   m_PrefabInstance: {fileID: 4480676201808211489}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9108221308981350012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3670405753088119664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bc638bd1e359ea4791c08c1e5caf0e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  rb: {fileID: 0}
 --- !u!54 &2266166637718129745
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -181,6 +168,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &6543489017828265867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670405753088119664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210a14dac999c97448ed8bc8b296da3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  ground: {fileID: 4585206288463776766}
+  rb: {fileID: 0}
 --- !u!4 &4153504376611031498 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ade63e7fd92c26342a35feb67fcc8d9a, type: 3}
