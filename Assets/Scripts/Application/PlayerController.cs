@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
-        if (ground.IsHit())
+        if (ground.IsHit("Ground"))
         {
             if (groundState != GroundState.Grounded)
             {
@@ -32,8 +32,9 @@ public class PlayerController : MonoBehaviour, ITickable
     //à⁄ìÆ
     public void Move(Vector2 moveValue)
     {
-        Vector2 velocity = new Vector3(moveValue.x, 0, moveValue.y);
-        transform.position = transform.rotation * velocity;
+        Vector2 _moveValue = moveValue * playerLogic.moveSpeed;
+        Vector2 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
+        transform.position = transform.rotation * velocity * Time.deltaTime;
     }
 
     //ÉWÉÉÉìÉv
@@ -44,7 +45,7 @@ public class PlayerController : MonoBehaviour, ITickable
         {
             case GroundState.Grounded:
                 groundState = GroundState.Jumping;
-                rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
+                rb.AddForce(Vector3.up * playerLogic.jumpPower, ForceMode.Impulse);
                 break;
 
             case GroundState.Jumping:
@@ -60,10 +61,13 @@ public class PlayerController : MonoBehaviour, ITickable
     {
         if (!isGrabbing)
         {
+            isGrabbing = true;
             //íÕÇﬁèàóù
+
         }
         else
         {
+            isGrabbing = false;
             //ó£Ç∑èàóù
         }
     }
