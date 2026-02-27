@@ -36,12 +36,14 @@ public class PlayerController : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
+        if (rb.linearVelocity.y < -0.1f && groundState != GroundState.Jumping)
         {
-            if (groundState != GroundState.Grounded)
-            {
-                groundState = GroundState.Grounded;
-            }
+            groundState = GroundState.Falling;
         }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        groundState = GroundState.Grounded;
     }
 
     //移動
@@ -51,7 +53,6 @@ public class PlayerController : MonoBehaviour, ITickable
         Vector3 velocity = new Vector3(_moveValue.x, rb.linearVelocity.y, _moveValue.y);
         rb.linearVelocity = transform.rotation * velocity;
     }
-
     //ジャンプ
     public void Jump()
     {
@@ -77,7 +78,6 @@ public class PlayerController : MonoBehaviour, ITickable
         {
             isGrabbing = true;
             //掴む処理
-
         }
         else
         {
