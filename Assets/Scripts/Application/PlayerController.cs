@@ -13,14 +13,14 @@ public class PlayerController : MonoBehaviour, ITickable
 {
     #region //インスペクター設定
     public HitCheck ground;
-    public Rigidbody rb;
-    public Collider collider;
     public PhysicsMaterial zeroFriction;
     #endregion
 
     #region //プライベート変数
     private float moveSpeed = 5f;
     private float jumpPower = 10f;
+    private Rigidbody rb;
+    private Collider collider;
     private PlayerLogic playerLogic;
     private PlayerController grabbedObject;
     private GroundState groundState;
@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour, ITickable
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
+        collider = GetComponent<Collider>();
         playerLogic = new PlayerLogic(this);
         InputHandler.Instance.SetInputState(InputState.Player);
         collider.material = zeroFriction;
