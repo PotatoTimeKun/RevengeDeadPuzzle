@@ -33,6 +33,15 @@ public class PlayerController : MonoBehaviour, ITickable
         playerLogic = new PlayerLogic(this);
         InputHandler.Instance.SetInputState(InputState.Player);
     }
+    private void OnEnable()
+    {
+        ground.IsHit += IsHitGround;
+    }
+
+    private void OnDisable()
+    {
+        ground.IsHit -= IsHitGround;
+    }
 
     public void Tick(float deltaTime)
     {
@@ -41,9 +50,16 @@ public class PlayerController : MonoBehaviour, ITickable
             groundState = GroundState.Falling;
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    private void IsHitGround(bool isHit, Collider other)
     {
-        groundState = GroundState.Grounded;
+        if (isHit)
+        {
+            groundState = GroundState.Grounded;
+        }
+        else
+        {
+            groundState = GroundState.Jumping;
+        }
     }
 
     //移動
