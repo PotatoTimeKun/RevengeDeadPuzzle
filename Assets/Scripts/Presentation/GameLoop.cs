@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class GameLoop : MonoBehaviour
 {
+    public static GameLoop Instance { get; private set; }
+
+    void start(){
+        Instance = this;
+        DontDestroyOnLoad(transform.gameObject);
+    }
+
     // 更新リスト（ITickableを実装したクラスをここに入れる）
     private readonly List<ITickable> _tickables = new List<ITickable>();
 
