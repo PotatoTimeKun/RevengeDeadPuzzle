@@ -8,3 +8,4 @@
 /.vs/
 /.vscode/
 Assembly-CSharp.csproj
+*.sln
