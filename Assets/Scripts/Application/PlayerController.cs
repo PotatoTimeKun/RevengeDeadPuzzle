@@ -2,29 +2,36 @@ using UnityEngine;
 
 public enum GroundState
 {
-    Grounded,   // ’n–Êi’Êíj
-    Jumping,    // ƒWƒƒƒ“ƒv’†
-    Falling,    // —‰º’†
-    //OnSlope,    // Î–Êi‹““®‚ğ•Ï‚¦‚éê‡j
-    //OnWall      // •Ç’£‚è•t‚«
+    Grounded,
+    Jumping,
+    Falling,
+    //OnSlope,
+    //OnWall
 }
 
 public class PlayerController : MonoBehaviour, ITickable
 {
-    public float moveSpeed = 5f;
-    public float jumpPower = 10f;
+    #region //ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼è¨­å®š
     public HitCheck ground;
     public Rigidbody rb;
     public Collider collider;
+    public PhysicsMaterial zeroFriction;
+    #endregion
+
+    #region //ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆå¤‰æ•°
+    private float moveSpeed = 5f;
+    private float jumpPower = 10f;
     private PlayerLogic playerLogic;
     private PlayerController grabbedObject;
     private GroundState groundState;
     private bool isGrabbing = false;
+    #endregion
 
     private void Awake()
     {
         playerLogic = new PlayerLogic(this);
         InputHandler.Instance.SetInputState(InputState.Player);
+        collider.material = zeroFriction;
     }
 
     public void Tick(float deltaTime)
@@ -37,7 +44,7 @@ public class PlayerController : MonoBehaviour, ITickable
         }
     }
 
-    //ˆÚ“®
+    //ç§»å‹•
     public void Move(Vector2 moveValue)
     {
         Vector2 _moveValue = moveValue * moveSpeed;
@@ -45,7 +52,7 @@ public class PlayerController : MonoBehaviour, ITickable
         rb.linearVelocity = transform.rotation * velocity;
     }
 
-    //ƒWƒƒƒ“ƒv
+    //ã‚¸ãƒ£ãƒ³ãƒ—
     public void Jump()
     {
         switch (groundState)
@@ -63,26 +70,27 @@ public class PlayerController : MonoBehaviour, ITickable
         }
     }
 
-    //’Í‚Ş‚Æ—£‚·
+    //æ´ã‚€ãƒ»é›¢ã™
     public void Grab()
     {
         if (!isGrabbing)
         {
             isGrabbing = true;
-            //’Í‚Şˆ—
+            //æ´ã‚€å‡¦ç†
 
         }
         else
         {
             isGrabbing = false;
-            //—£‚·ˆ—
+            //é›¢ã™å‡¦ç†
         }
     }
 
-    //©E
+    //è‡ªæ®º
     public void Suicide()
     {
         rb.constraints = RigidbodyConstraints.None;
         collider.material = null;
+        rb.AddForce(transform.forward, ForceMode.Impulse);
     }
 }

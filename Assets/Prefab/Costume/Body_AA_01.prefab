@@ -199,11 +199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210a14dac999c97448ed8bc8b296da3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 5
-  jumpPower: 10
   ground: {fileID: 1441188753071779752}
   rb: {fileID: 6293872049373514944}
   collider: {fileID: 6988851473124063242}
+  zeroFriction: {fileID: 13400000, guid: 39b75f46cea017047b933dc4c03d1205, type: 2}
 --- !u!136 &6988851473124063242
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -211,7 +210,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471732835536531315}
-  m_Material: {fileID: 13400000, guid: 39b75f46cea017047b933dc4c03d1205, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
