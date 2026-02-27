@@ -5,13 +5,13 @@ public class InputTest : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //InputHandler.Instance.SetInputState(InputState.Player);
+        InputHandler.Instance.SetInputState(InputState.Player);
         InputHandler.Instance.Player.Move += PlayerMove;
         InputHandler.Instance.Player.Jump += PlayerJump;
         InputHandler.Instance.Player.Drag += PlayerDrag;
         InputHandler.Instance.Player.Suicide += PlayerSuicide;
         InputHandler.Instance.Player.Menu += PlayerMenu;
-        InputHandler.Instance.SetInputState(InputState.Menu);
+        //InputHandler.Instance.SetInputState(InputState.Menu);
         InputHandler.Instance.Menu.Move += MenuMove;
         InputHandler.Instance.Menu.Submit += MenuSubmit;
         InputHandler.Instance.Menu.Cancel += MenuCancel;
