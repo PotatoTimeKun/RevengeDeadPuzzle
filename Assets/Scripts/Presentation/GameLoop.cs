@@ -5,7 +5,7 @@ public class GameLoop : MonoBehaviour
 {
     public static GameLoop Instance { get; private set; }
 
-    void start(){
+    void Awake(){
         Instance = this;
         DontDestroyOnLoad(transform.gameObject);
     }
