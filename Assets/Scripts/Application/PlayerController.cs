@@ -35,12 +35,12 @@ public class PlayerController : MonoBehaviour, ITickable
     }
     private void OnEnable()
     {
-        ground.IsHit += IsHitGround;
+        ground.IsHit += OnHitGround;
     }
 
     private void OnDisable()
     {
-        ground.IsHit -= IsHitGround;
+        ground.IsHit -= OnHitGround;
     }
 
     public void Tick(float deltaTime)
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour, ITickable
             groundState = GroundState.Falling;
         }
     }
-    private void IsHitGround(bool isHit, Collider other)
+    private void OnHitGround(bool isHit, Collider other)
     {
         if (isHit)
         {
