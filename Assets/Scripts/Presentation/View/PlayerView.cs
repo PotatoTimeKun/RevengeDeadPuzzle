@@ -1,50 +1,51 @@
 using UnityEngine;
 
-namespace Presentation
+namespace RevengeDeadPuzzle.Presentation
 {
-    /// <summary>
-    /// 役割：プレイヤーの見た目（衣装）を管理する
-    /// 規約：座標の同期は行わず、衣装の動的生成・破棄のみを担当する
-    /// </summary>
     public class PlayerView : MonoBehaviour
     {
-        private PlayerLogic _playerLogic;
+        private PlayerLogic _logic;
+        private bool _isInitialized = false;
 
-        [Header("コスチューム設定")]
-        [SerializeField] private Transform _costumeAnchor; // 衣装モデルを配置する親オブジェクト
-        
+        [SerializeField] private Transform _costumeAnchor; // 衣装Prefabを生成する親
         private GameObject _currentCostumeInstance;
 
-        /// <summary>
-        /// 規約：初期化時にDomain層の参照を受け取る
-        /// </summary>
         public void Initialize(PlayerLogic logic)
         {
-            _playerLogic = logic;
+            _logic = logic;
+            _isInitialized = true;
         }
 
         /// <summary>
-        /// 新しい衣装（ランダムに選ばれたPrefab）を設定する
-        /// 死ぬたびにApplication層から呼ばれることを想定
+        /// 死亡・復活時にApplication層から呼ばれ、ランダムな衣装を反映する
         /// </summary>
-        /// <param name="costumePrefab">新しく表示する衣装のプレハブ</param>
         public void SetCostume(GameObject costumePrefab)
         {
-            // 1. 前回の衣装（死ぬ前の姿）を削除
+            // 古い衣装を破棄
             if (_currentCostumeInstance != null)
             {
                 Destroy(_currentCostumeInstance);
             }
 
-            // 2. 新しい衣装を生成して装着
+            // 新しい衣装を生成してアンカーに配置
             if (costumePrefab != null)
             {
-                // アンカーの子として生成
                 _currentCostumeInstance = Instantiate(costumePrefab, _costumeAnchor);
-                
-                // 座標と回転をリセットして親に固定
                 _currentCostumeInstance.transform.localPosition = Vector3.zero;
                 _currentCostumeInstance.transform.localRotation = Quaternion.identity;
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (!_isInitialized || _logic == null) return;
+
+            // LogicのStateに合わせて表示・非表示を切り替え
+            // 死亡中はモデルを隠し、復活(Alive)したら表示する
+            bool shouldShow = _logic.State == Entity_Data.PlayerState.Alive;
+            if (_costumeAnchor.gameObject.activeSelf != shouldShow)
+            {
+                _costumeAnchor.gameObject.SetActive(shouldShow);
             }
         }
     }
