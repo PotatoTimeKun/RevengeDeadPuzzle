@@ -35,6 +35,15 @@ public class PlayerController : MonoBehaviour, ITickable
         // あとでTickシステムの修正
         GameObject.Find("GameLoop").GetComponent<GameLoop>().Register(this);
     }
+    private void OnEnable()
+    {
+        ground.IsHit += OnHitGround;
+    }
+
+    private void OnDisable()
+    {
+        ground.IsHit -= OnHitGround;
+    }
 
     public void Tick(float deltaTime)
     {
@@ -45,9 +54,16 @@ public class PlayerController : MonoBehaviour, ITickable
             groundState = GroundState.Falling;
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnHitGround(bool isHit, Collider other)
     {
-        groundState = GroundState.Grounded;
+        if (isHit)
+        {
+            groundState = GroundState.Grounded;
+        }
+        else
+        {
+            groundState = GroundState.Jumping;
+        }
     }
 
     private Vector2 _moveValue;
