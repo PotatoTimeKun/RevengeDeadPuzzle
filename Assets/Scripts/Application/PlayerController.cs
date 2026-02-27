@@ -47,8 +47,10 @@ public class PlayerController : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
-        Vector3 velocity = new Vector3(_moveValue.x, rb.linearVelocity.y, _moveValue.y);
-        rb.linearVelocity = transform.rotation * velocity;
+        Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
+        velocity = transform.rotation * velocity;
+        velocity.y = rb.linearVelocity.y;
+        rb.linearVelocity = velocity;
         if (rb.linearVelocity.y < -0.1f && groundState != GroundState.Jumping)
         {
             groundState = GroundState.Falling;
