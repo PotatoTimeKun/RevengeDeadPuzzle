@@ -2,11 +2,11 @@ using UnityEngine;
 
 public enum GroundState
 {
-    Grounded,   // ’n–Êi’Êíj
-    Jumping,    // ƒWƒƒƒ“ƒv’†
-    Falling,    // —‰º’†
-    //OnSlope,    // Î–Êi‹““®‚ğ•Ï‚¦‚éê‡j
-    //OnWall      // •Ç’£‚è•t‚«
+    Grounded,   // ï¿½nï¿½Êiï¿½Êï¿½j
+    Jumping,    // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½
+    Falling,    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //OnSlope,    // ï¿½Î–Êiï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ê‡ï¿½j
+    //OnWall      // ï¿½Ç’ï¿½ï¿½ï¿½tï¿½ï¿½
 }
 
 public class PlayerController : MonoBehaviour, ITickable
@@ -29,15 +29,17 @@ public class PlayerController : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
+        if (rb.linearVelocity.y < -0.1f && groundState != GroundState.Jumping)
         {
-            if (groundState != GroundState.Grounded)
-            {
-                groundState = GroundState.Grounded;
-            }
+            groundState = GroundState.Falling;
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        groundState = GroundState.Grounded;
+    }
 
-    //ˆÚ“®
+    //ï¿½Ú“ï¿½
     public void Move(Vector2 moveValue)
     {
         Vector2 _moveValue = moveValue * moveSpeed;
@@ -45,7 +47,7 @@ public class PlayerController : MonoBehaviour, ITickable
         rb.linearVelocity = transform.rotation * velocity;
     }
 
-    //ƒWƒƒƒ“ƒv
+    //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
     public void Jump()
     {
         switch (groundState)
@@ -63,23 +65,23 @@ public class PlayerController : MonoBehaviour, ITickable
         }
     }
 
-    //’Í‚Ş‚Æ—£‚·
+    //ï¿½Í‚Ş‚Æ—ï¿½ï¿½ï¿½
     public void Grab()
     {
         if (!isGrabbing)
         {
             isGrabbing = true;
-            //’Í‚Şˆ—
+            //ï¿½Í‚Şï¿½ï¿½ï¿½
 
         }
         else
         {
             isGrabbing = false;
-            //—£‚·ˆ—
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
     }
 
-    //©E
+    //ï¿½ï¿½ï¿½E
     public void Suicide()
     {
         rb.constraints = RigidbodyConstraints.None;
