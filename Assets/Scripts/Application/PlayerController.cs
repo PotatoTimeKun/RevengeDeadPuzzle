@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour, ITickable
     private bool isGrabbing = false;
     #endregion
 
-    private void Awake()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
@@ -47,7 +47,10 @@ public class PlayerController : MonoBehaviour, ITickable
     public void Tick(float deltaTime)
     {
         Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
-        velocity = transform.rotation * velocity;
+        if (velocity.sqrMagnitude > 0.001f && rb.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f))
+        {
+            velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
+        }
         velocity.y = rb.linearVelocity.y;
         rb.linearVelocity = velocity;
         if (rb.linearVelocity.y < -0.1f && groundState != GroundState.Jumping)
@@ -72,6 +75,11 @@ public class PlayerController : MonoBehaviour, ITickable
     public void Move(Vector2 moveValue)
     {
         _moveValue = moveValue * moveSpeed;
+        if(moveValue.x == 0 && moveValue.y == 0) return;
+        // 2Dの(x, y)を3Dの(x, 0, z)に変換
+        Vector3 direction = new Vector3(_moveValue.x, 0, _moveValue.y);
+        // その方向を向く回転データを作成して代入
+        transform.rotation = Quaternion.LookRotation(direction);
     }
     //ジャンプ
     public void Jump()
