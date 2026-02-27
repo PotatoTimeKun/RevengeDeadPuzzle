@@ -203,6 +203,7 @@ MonoBehaviour:
   jumpPower: 10
   ground: {fileID: 1441188753071779752}
   rb: {fileID: 6293872049373514944}
+  collider: {fileID: 6988851473124063242}
 --- !u!136 &6988851473124063242
 CapsuleCollider:
   m_ObjectHideFlags: 0

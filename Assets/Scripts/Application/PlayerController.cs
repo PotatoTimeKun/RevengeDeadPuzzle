@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour, ITickable
     public float jumpPower = 10f;
     public HitCheck ground;
     public Rigidbody rb;
+    public Collider collider;
     private PlayerLogic playerLogic;
     private PlayerController grabbedObject;
     private GroundState groundState;
@@ -82,5 +83,6 @@ public class PlayerController : MonoBehaviour, ITickable
     public void Suicide()
     {
         rb.constraints = RigidbodyConstraints.None;
+        collider.material = null;
     }
 }
