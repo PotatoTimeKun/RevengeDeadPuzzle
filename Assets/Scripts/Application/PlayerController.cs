@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour, ITickable
 {
     #region //インスペクター設定
     public HitCheck ground;
-    public PhysicsMaterial zeroFriction;
     #endregion
 
     #region //プライベート変数
@@ -33,7 +32,6 @@ public class PlayerController : MonoBehaviour, ITickable
         collider = GetComponent<Collider>();
         playerLogic = new PlayerLogic(this);
         InputHandler.Instance.SetInputState(InputState.Player);
-        collider.material = zeroFriction;
     }
 
     public void Tick(float deltaTime)
