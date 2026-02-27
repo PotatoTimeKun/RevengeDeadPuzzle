@@ -47,6 +47,10 @@ public class PlayerController : MonoBehaviour, ITickable
     public void Tick(float deltaTime)
     {
         Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
+        if (velocity.sqrMagnitude > 0.001f && rb.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f))
+        {
+            velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
+        }
         velocity.y = rb.linearVelocity.y;
         rb.linearVelocity = velocity;
         if (rb.linearVelocity.y < -0.1f && groundState != GroundState.Jumping)
