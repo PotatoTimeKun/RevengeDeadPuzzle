@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   ground: {fileID: 4585206288463776766}
-  rb: {fileID: 0}
+  rb: {fileID: 2266166637718129745}
 --- !u!4 &4153504376611031498 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ade63e7fd92c26342a35feb67fcc8d9a, type: 3}
