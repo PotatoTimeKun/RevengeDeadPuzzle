@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerLogic : ITickable
 {
     private PlayerController _controller;
+
+    // 入力の登録
     public PlayerLogic(PlayerController controller){
         _controller = controller;
         InputHandler.Instance.Player.Move += Move;
@@ -12,12 +14,15 @@ public class PlayerLogic : ITickable
         InputHandler.Instance.Player.Drag += Grab;
         InputHandler.Instance.Player.Suicide += Suicide;
     }
+
+    // 入力の削除
     ~PlayerLogic(){
         InputHandler.Instance.Player.Move -= Move;
         InputHandler.Instance.Player.Jump -= Jump;
         InputHandler.Instance.Player.Drag -= Grab;
         InputHandler.Instance.Player.Suicide -= Suicide;
     }
+    
     public Entity_Data.PlayerState State;
     public Entity_Data.DeathType Type;
     public void Tick(float deltaTime){}
