@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour, ITickable
 
     #region //プライベート変数
     private float moveSpeed = 5f;
-    private float jumpPower = 10f;
+    private float jumpPower = 6f;
     private Rigidbody rb;
     private Collider collider;
     private PlayerLogic playerLogic;
