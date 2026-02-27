@@ -32,8 +32,7 @@ public class PlayerController : MonoBehaviour, ITickable
         collider = GetComponent<Collider>();
         playerLogic = new PlayerLogic(this);
         InputHandler.Instance.SetInputState(InputState.Player);
-        // あとでTickシステムの修正
-        GameObject.Find("GameLoop").GetComponent<GameLoop>().Register(this);
+        GameLoop.Instance.Register(this);
     }
     private void OnEnable()
     {
