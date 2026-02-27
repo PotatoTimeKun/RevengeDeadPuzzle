@@ -2,9 +2,6 @@ using UnityEngine;
 
 namespace RevengeDeadPuzzle.Presentation
 {
-    /// <summary>
-
-    /// </summary>
     public class PlayerView : MonoBehaviour
     {
                private PlayerLogic _logic;
