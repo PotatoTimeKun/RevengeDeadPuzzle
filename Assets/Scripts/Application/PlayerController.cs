@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour, ITickable
     private bool isGrabbing = false;
     #endregion
 
-    private void Awake()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
