@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour, ITickable
     public void Move(Vector2 moveValue)
     {
         Vector2 _moveValue = moveValue * moveSpeed;
-        Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
+        Vector3 velocity = new Vector3(_moveValue.x, rb.linearVelocity.y, _moveValue.y);
         rb.linearVelocity = transform.rotation * velocity;
     }
 
