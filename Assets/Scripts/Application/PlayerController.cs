@@ -32,10 +32,14 @@ public class PlayerController : MonoBehaviour, ITickable
         collider = GetComponent<Collider>();
         playerLogic = new PlayerLogic(this);
         InputHandler.Instance.SetInputState(InputState.Player);
+        // あとでTickシステムの修正
+        GameObject.Find("GameLoop").GetComponent<GameLoop>().Register(this);
     }
 
     public void Tick(float deltaTime)
     {
+        Vector3 velocity = new Vector3(_moveValue.x, rb.linearVelocity.y, _moveValue.y);
+        rb.linearVelocity = transform.rotation * velocity;
         if (rb.linearVelocity.y < -0.1f && groundState != GroundState.Jumping)
         {
             groundState = GroundState.Falling;
@@ -46,12 +50,11 @@ public class PlayerController : MonoBehaviour, ITickable
         groundState = GroundState.Grounded;
     }
 
+    private Vector2 _moveValue;
     //移動
     public void Move(Vector2 moveValue)
     {
-        Vector2 _moveValue = moveValue * moveSpeed;
-        Vector3 velocity = new Vector3(_moveValue.x, rb.linearVelocity.y, _moveValue.y);
-        rb.linearVelocity = transform.rotation * velocity;
+        _moveValue = moveValue * moveSpeed;
     }
     //ジャンプ
     public void Jump()
@@ -90,7 +93,7 @@ public class PlayerController : MonoBehaviour, ITickable
     public void Suicide()
     {
         rb.constraints = RigidbodyConstraints.None;
-        collider.material = null;
-        rb.AddForce(transform.forward, ForceMode.Impulse);
+        _moveValue = new Vector2(0,0);
+        transform.Rotate(30f, 0, 0, Space.Self);
     }
 }
