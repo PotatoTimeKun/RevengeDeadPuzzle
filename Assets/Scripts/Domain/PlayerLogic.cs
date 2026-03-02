@@ -28,7 +28,14 @@ public class PlayerLogic : ITickable
     
     public Entity_Data.PlayerState State;
     public Entity_Data.DeathType Type;
-    public void Tick(float deltaTime){}
+    private float _deathAnimationTimer = 0;
+    private float DEATH_ANIMATION_LENGTH = 3; // 死亡アニメーションの長さ
+    public void Tick(float deltaTime){
+        // 指定時間後にアニメーション状態を解除
+        if (State != Entity_Data.PlayerState.DeathAnimationWait) return;
+        _deathAnimationTimer += deltaTime;
+        if (_deathAnimationTimer >= DEATH_ANIMATION_LENGTH) State = Entity_Data.PlayerState.Dead;
+    }
     public void Die(Entity_Data.DeathType deathType){
         Type = deathType;
         State = Entity_Data.PlayerState.DeathAnimationWait;
