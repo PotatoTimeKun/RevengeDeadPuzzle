@@ -2,15 +2,18 @@ using UnityEngine;
 
 public class SaveDataStore : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void SaveAll()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void LoadUnlockedCostumes()
     {
-        
+
+    }
+
+    public void LoadStageProgress()
+    {
+
     }
 }

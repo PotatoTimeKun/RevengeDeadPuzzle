@@ -2,15 +2,19 @@ using UnityEngine;
 
 public class Audio_Data : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public enum BGMType
     {
-        
+        Title,
+        Game,
+        Result
     }
 
-    // Update is called once per frame
-    void Update()
+    public enum SEType
     {
-        
+        Jump,
+        Grab,
+        Release,
+        Damage,
+        Collect
     }
 }

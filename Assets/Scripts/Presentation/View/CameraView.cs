@@ -2,15 +2,18 @@ using UnityEngine;
 
 public class CameraView : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void To3rdPerson()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void To1stPerson()
     {
-        
+
+    }
+
+    public void PlayDeathEffect(Entity_Data.DeathType type)
+    {
+
     }
 }

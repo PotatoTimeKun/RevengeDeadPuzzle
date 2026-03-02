@@ -2,15 +2,28 @@ using UnityEngine;
 
 public class HUDView : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void UpdateMental(int value)
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateDeadCount(int count)
     {
-        
+
+    }
+
+    public void UpdateEvaluation(bool timeEval, bool countEval, bool typeEval)
+    {
+
+    }
+
+    public void UpdateTimer(int minute, int second)
+    {
+
+    }
+
+    public void UpdateStageName(string name)
+    {
+
     }
 }
