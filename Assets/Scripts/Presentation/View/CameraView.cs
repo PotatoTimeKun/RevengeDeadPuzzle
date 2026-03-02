@@ -4,9 +4,20 @@ using UnityEngine;
 public class CameraView : MonoBehaviour, ITickable
 {
     private PlayerController _controller;
+    private CinemachineCamera _vcam;
+
+    private void Awake()
+    {
+        _vcam = gameObject.AddComponent<CinemachineCamera>();
+    }
 
     public void Initialize(PlayerController controller)
     {
+        if (_vcam == null)
+        {
+            Debug.LogWarning("CinemachineCameraÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÅI");
+            return;
+        }
         if (controller == null)
         {
             Debug.LogWarning("PlayerControllerÇ™ë∂ç›ÇµÇ‹ÇπÇÒÅI");
@@ -14,8 +25,8 @@ public class CameraView : MonoBehaviour, ITickable
         }
         _controller = controller;
         Transform transform = controller.gameObject.transform;
-        controller.vcam.Follow = transform;
-        controller.vcam.LookAt = transform;
+        _vcam.Follow = transform;
+        _vcam.LookAt = transform;
     }
     public void To3rdPerson()
     {
