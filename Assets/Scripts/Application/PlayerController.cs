@@ -15,6 +15,12 @@ public class PlayerController : MonoBehaviour, ITickable
     #region //インスペクター設定
     public HitCheck ground;
     [HideInInspector] public PlayerLogic PlayerLogic;
+    private CinemachineCamera _vcam;
+    public CinemachineCamera vcam
+    {
+        get { return _vcam; }
+        set { _vcam = value; }
+    }
     #endregion
 
     #region //プライベート変数

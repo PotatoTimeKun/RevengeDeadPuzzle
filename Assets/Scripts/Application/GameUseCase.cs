@@ -6,6 +6,7 @@ public class GameUseCase : MonoBehaviour , ITickable
     private PlayerController _playerController;
     private StageDef _stageDef;
     [SerializeField] private GameObject _startPos;
+    [SerializeField] private CinemachineCamera _camera;
     public GameObject DEBUGPlayerPrefab; // 仮置き、実際にはCostumeRedistoryから持ってこれるようにする
     void Start(){
         StartGame();
@@ -17,11 +18,13 @@ public class GameUseCase : MonoBehaviour , ITickable
     public void StartGame(){
         GameObject PlayerObj = Instantiate(DEBUGPlayerPrefab);
         _playerController = PlayerObj.GetComponent<PlayerController>();
+        _playerController.vcam = _camera;
         PlayerObj.transform.position = _startPos.transform.position;
     }
     public void OnPlayerDead(Entity_Data.DeathType deathType){
         GameObject PlayerObj = Instantiate(DEBUGPlayerPrefab);
         _playerController = PlayerObj.GetComponent<PlayerController>();
+        _playerController.vcam = _camera;
         PlayerObj.transform.position = _startPos.transform.position;
     }
     public void OnGoal(){}
