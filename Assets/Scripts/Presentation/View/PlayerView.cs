@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
-    private PlayerLogic _logic;
+    private PlayerController _controller;
 
-    public void Initialize(PlayerLogic logic)
+    public PlayerView(PlayerController controller)
     {
-        _logic = logic;
+        _controller = controller;
     }
 
     public void SetCostume(string costumeId)

@@ -5,13 +5,12 @@ using UnityEngine;
 public class PlayerLogic : ITickable
 {
     private PlayerController _controller;
-    private PlayerView view;
 
     // 入力の登録
     public PlayerLogic(PlayerController controller){
         GameLoop.Instance.Register(this);
-        view = new PlayerView();
-        view.Initialize(this);
+        new PlayerView(controller);
+        new CameraView(controller);
         _controller = controller;
         InputHandler.Instance.Player.Move += Move;
         InputHandler.Instance.Player.Jump += Jump;
