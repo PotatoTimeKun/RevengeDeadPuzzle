@@ -4,7 +4,7 @@ public class PlayerView : MonoBehaviour
 {
     private PlayerController _controller;
 
-    public PlayerView(PlayerController controller)
+    public void Initialize(PlayerController controller)
     {
         _controller = controller;
     }

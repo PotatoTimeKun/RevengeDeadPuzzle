@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public enum GroundState
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour, ITickable
 {
     #region //インスペクター設定
     public HitCheck ground;
+    public CinemachineCamera vcam;
     [HideInInspector] public PlayerLogic PlayerLogic;
     #endregion
 
@@ -25,12 +27,19 @@ public class PlayerController : MonoBehaviour, ITickable
     private bool isGrabbing = false;
     #endregion
 
+    private void Awake()
+    {
+        PlayerLogic = new PlayerLogic(this);
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        PlayerLogic = new PlayerLogic(this);
+        Debug.Log(PlayerLogic);
         InputHandler.Instance.SetInputState(InputState.Player);
         GameLoop.Instance.Register(this);
+        gameObject.AddComponent<PlayerView>().Initialize(this);
+        gameObject.AddComponent<CameraView>().Initialize(this);
     }
     private void OnEnable()
     {

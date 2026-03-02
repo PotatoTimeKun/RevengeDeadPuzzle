@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class CameraView : MonoBehaviour, ITickable
 {
-    public CinemachineCamera vcam;
-
     private PlayerController _controller;
 
-    public CameraView(PlayerController controller)
+    public void Initialize(PlayerController controller)
     {
         if (controller == null)
         {
@@ -16,8 +14,8 @@ public class CameraView : MonoBehaviour, ITickable
         }
         _controller = controller;
         Transform transform = controller.gameObject.transform;
-        vcam.Follow = transform;
-        vcam.LookAt = transform;
+        controller.vcam.Follow = transform;
+        controller.vcam.LookAt = transform;
     }
     public void To3rdPerson()
     {

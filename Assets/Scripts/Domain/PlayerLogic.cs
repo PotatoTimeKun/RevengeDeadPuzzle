@@ -1,5 +1,6 @@
 // UnityEngine禁止
 
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerLogic : ITickable
@@ -9,8 +10,6 @@ public class PlayerLogic : ITickable
     // 入力の登録
     public PlayerLogic(PlayerController controller){
         GameLoop.Instance.Register(this);
-        new PlayerView(controller);
-        new CameraView(controller);
         _controller = controller;
         InputHandler.Instance.Player.Move += Move;
         InputHandler.Instance.Player.Jump += Jump;
