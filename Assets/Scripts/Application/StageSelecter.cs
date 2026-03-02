@@ -1,16 +1,16 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-public class StageSelecter : MonoBehaviour
+public class StageSelecter
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+    private StageSelecter(){}
+    private static StageSelecter _instance;
+    public static StageSelecter Instance{
+        get{
+            if (_instance == null) _instance = new StageSelecter();
+            return _instance;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public List<string> UnlockedStageList = new List<string>();
+    public void UnlockStage(string id){}
 }

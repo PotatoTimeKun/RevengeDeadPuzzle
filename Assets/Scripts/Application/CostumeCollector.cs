@@ -1,16 +1,16 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-public class CostumeCollector : MonoBehaviour
+public class CostumeCollector
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+    private CostumeCollector(){}
+    private static CostumeCollector _instance;
+    public static CostumeCollector Instance{
+        get{
+            if (_instance == null) _instance = new CostumeCollector();
+            return _instance;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public List<string> UnlockedIdList = new List<string>();
+    public string UnlockRandomId(){return "";}
 }

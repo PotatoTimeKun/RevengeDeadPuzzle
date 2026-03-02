@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour, ITickable
     private float moveSpeed = 5f;
     private float jumpPower = 6f;
     private Rigidbody rb;
-    private Collider collider;
     private PlayerLogic playerLogic;
     private PlayerController grabbedObject;
     private GroundState groundState;
@@ -29,7 +28,6 @@ public class PlayerController : MonoBehaviour, ITickable
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        collider = GetComponent<Collider>();
         playerLogic = new PlayerLogic(this);
         InputHandler.Instance.SetInputState(InputState.Player);
         GameLoop.Instance.Register(this);

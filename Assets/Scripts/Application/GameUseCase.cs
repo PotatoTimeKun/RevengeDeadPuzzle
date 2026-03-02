@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class GameUseCase : MonoBehaviour
+public class GameUseCase : MonoBehaviour , ITickable
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private PlayerController _playerController;
+    private StageDef _stageDef;
+    public void StartGame(){}
+    public void OnPlayerDead(Entity_Data.DeathType deathType){}
+    public void OnGoal(){}
+    public void Tick(float deltaTIme){}
 }
