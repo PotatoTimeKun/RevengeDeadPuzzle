@@ -13,13 +13,13 @@ public class PlayerController : MonoBehaviour, ITickable
 {
     #region //インスペクター設定
     public HitCheck ground;
+    [HideInInspector] public PlayerLogic PlayerLogic;
     #endregion
 
     #region //プライベート変数
     private float moveSpeed = 5f;
     private float jumpPower = 6f;
     private Rigidbody rb;
-    private PlayerLogic playerLogic;
     private PlayerController grabbedObject;
     private GroundState groundState;
     private bool isGrabbing = false;
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour, ITickable
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        playerLogic = new PlayerLogic(this);
+        PlayerLogic = new PlayerLogic(this);
         InputHandler.Instance.SetInputState(InputState.Player);
         GameLoop.Instance.Register(this);
     }
