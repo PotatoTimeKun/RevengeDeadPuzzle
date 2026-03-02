@@ -21,6 +21,13 @@ public class PlayerController : MonoBehaviour, ITickable
         get { return _vcam; }
         set { _vcam = value; }
     }
+
+    private CinemachineFollow _follow;
+    public CinemachineFollow follow
+    {
+        get { return _follow; }
+        set { _follow = value; }
+    }
     #endregion
 
     #region //プライベート変数
@@ -40,7 +47,6 @@ public class PlayerController : MonoBehaviour, ITickable
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Debug.Log(PlayerLogic);
         InputHandler.Instance.SetInputState(InputState.Player);
         GameLoop.Instance.Register(this);
         gameObject.AddComponent<PlayerView>().Initialize(this);
