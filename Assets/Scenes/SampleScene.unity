@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameUseCase
   _startPos: {fileID: 1744330776}
-  _camera: {fileID: 1420912624}
+  _cameraObj: {fileID: 1420912623}
   DEBUGPlayerPrefab: {fileID: 5872428142847945224, guid: 579872e69f3c7ff468aba8b0f204162b, type: 3}
 --- !u!4 &638583553
 Transform:
