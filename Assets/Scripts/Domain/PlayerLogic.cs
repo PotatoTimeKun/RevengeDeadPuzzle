@@ -9,6 +9,7 @@ public class PlayerLogic : ITickable
 
     // 入力の登録
     public PlayerLogic(PlayerController controller){
+        GameLoop.Instance.Register(this);
         view = new PlayerView();
         view.Initialize(this);
         _controller = controller;
@@ -20,6 +21,7 @@ public class PlayerLogic : ITickable
 
     // 入力の削除
     ~PlayerLogic(){
+        GameLoop.Instance.Unregister(this);
         InputHandler.Instance.Player.Move -= Move;
         InputHandler.Instance.Player.Jump -= Jump;
         InputHandler.Instance.Player.Drag -= Grab;
