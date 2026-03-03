@@ -17,6 +17,12 @@ public class CostumeRegistry : ScriptableObject
 
     private void Initialize()
     {
+        if (AllCostume == null)
+        {
+            Debug.LogWarning("コスチュームが一つも設定されていません！");
+            return;
+        }
+
         AllCostumeDic = new();
         foreach (var costume in AllCostume)
         {
