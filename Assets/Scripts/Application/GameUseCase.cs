@@ -13,6 +13,7 @@ public class GameUseCase : MonoBehaviour , ITickable
     void Start(){
         StartGame();
         GameLoop.Instance.Register(this);
+        InputHandler.Instance.SetInputState(InputState.Player);
     }
     void OnDestroy(){
         GameLoop.Instance.Unregister(this);

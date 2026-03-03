@@ -47,7 +47,6 @@ public class PlayerController : MonoBehaviour, ITickable
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        InputHandler.Instance.SetInputState(InputState.Player);
         GameLoop.Instance.Register(this);
         gameObject.AddComponent<PlayerView>().Initialize(this);
         gameObject.AddComponent<CameraView>().Initialize(this);
