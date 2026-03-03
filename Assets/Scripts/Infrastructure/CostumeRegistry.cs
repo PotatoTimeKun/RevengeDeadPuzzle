@@ -20,14 +20,26 @@ public class CostumeRegistry : ScriptableObject
         AllCostumeDic = null;
         if (AllCostume == null)
         {
-            Debug.LogWarning("コスチュームが一つも設定されていません！");
+            Debug.LogWarning($"{name}: コスチュームが一つも設定されていません！");
             return;
         }
 
         AllCostumeDic = new();
         foreach (var costume in AllCostume)
         {
-            AllCostumeDic[costume.Id] = costume;
+            if (costume == null) continue;
+            if (string.IsNullOrEmpty(costume.Id))
+            {
+                Debug.LogWarning($"{name}: IDが空の要素があります");
+                continue;
+            }
+            if (AllCostumeDic.ContainsKey(costume.Id))
+            {
+                Debug.LogError($"{name}: ID '{costume.Id}' が重複しています！確認してください。");
+                continue;
+            }
+
+            AllCostumeDic.Add(costume.Id, costume);
         }
     }
 
