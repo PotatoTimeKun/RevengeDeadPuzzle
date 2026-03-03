@@ -27,13 +27,13 @@ public class CostumeRegistry : ScriptableObject
         AllCostumeDic = new();
         foreach (var costume in AllCostume)
         {
-            AllCostumeDic.Add(costume.Id, costume);
+            AllCostumeDic[costume.Id] = costume;
         }
     }
 
     public CostumeDef GetById(string id)
     {
-        if (AllCostumeDic.Count <= 0) Initialize();
+        if (AllCostumeDic == null) Initialize();
 
         if (AllCostumeDic.ContainsKey(id))
         {
