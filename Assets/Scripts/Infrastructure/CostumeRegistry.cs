@@ -31,13 +31,13 @@ public class CostumeRegistry : ScriptableObject
         }
     }
 
-    public CostumeDef GetById(string id)
+    public GameObject GetById(string id)
     {
         if (AllCostumeDic == null) Initialize();
 
         if (AllCostumeDic.ContainsKey(id))
         {
-            return AllCostumeDic[id];
+            return AllCostumeDic[id].Prefab;
         }
         return null;
     }
