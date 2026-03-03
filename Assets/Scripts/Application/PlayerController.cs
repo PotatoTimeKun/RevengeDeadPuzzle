@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour, ITickable
     private GroundState groundState;
     private bool isGrabbing = false;
     #endregion
-
+    private Renderer[] _allRenderers;
     private void Awake()
     {
         PlayerLogic = new PlayerLogic(this);
@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour, ITickable
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        _allRenderers = GetComponentsInChildren<Renderer>(true);
         InputHandler.Instance.SetInputState(InputState.Player);
         GameLoop.Instance.Register(this);
         gameObject.AddComponent<PlayerView>().Initialize(this);
@@ -60,6 +61,18 @@ public class PlayerController : MonoBehaviour, ITickable
     private void OnDisable()
     {
         ground.IsHit -= OnHitGround;
+    }
+    public void SetModelVisibility(bool visible)
+    {
+        if (_allRenderers == null) return;
+    
+        foreach (var r in _allRenderers)
+        {
+            if (r != null)
+            {
+                r.enabled = visible;
+            }
+        }
     }
 
     public void Tick(float deltaTime)

@@ -1,19 +1,27 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
+
 public class CameraView : MonoBehaviour, ITickable
 {
     private PlayerController _controller;
     private Vector3 defaultFollow;
+    private Transform _eyeAnchor;
+    private bool _isFirstPerson;
 
     public void Initialize(PlayerController controller)
     {
         if (controller == null)
         {
-            Debug.LogWarning("PlayerController‚ª‘¶İ‚µ‚Ü‚¹‚ñI");
+            Debug.LogWarning("PlayerControllerï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I");
             return;
         }
         _controller = controller;
+        GameObject eyeObj = new GameObject("TemporaryEye");
+        _eyeAnchor = eyeObj.transform;
+        _eyeAnchor.SetParent(_controller.transform);
+        _eyeAnchor.localPosition = new Vector3(0, 1.5f, 0.2f); 
+        _eyeAnchor.localRotation = Quaternion.identity;
         Transform transform = controller.gameObject.transform;
         controller.vcam.Follow = transform;
         controller.vcam.LookAt = transform;
@@ -21,10 +29,14 @@ public class CameraView : MonoBehaviour, ITickable
     }
     public void To3rdPerson()
     {
-        if (_controller == null)
+        if (_controller == null || !_isFirstPerson) return;
         {
-            Debug.LogWarning("PlayerController‚ª‘¶İ‚µ‚Ü‚¹‚ñI");
-            return;
+            _controller.SetModelVisibility(true);
+            _controller.vcam.Follow = _controller.transform;
+            _controller.vcam.LookAt = _controller.transform;
+
+            ResetCameraOffset();
+            _isFirstPerson = false;
         }
 
         ResetCameraOffset();
@@ -32,13 +44,15 @@ public class CameraView : MonoBehaviour, ITickable
 
     public void To1stPerson()
     {
-        if (_controller == null)
+        if (_controller == null || _isFirstPerson) return;
         {
-            Debug.LogWarning("PlayerController‚ª‘¶İ‚µ‚Ü‚¹‚ñI");
-            return;
+            _controller.SetModelVisibility(false);
+            _controller.vcam.Follow = _eyeAnchor;
+            _controller.vcam.LookAt = _eyeAnchor;
         }
 
-        SetCameraOffset(new Vector3(0, 2f, 2f));
+        SetCameraOffset(Vector3.zero);
+        _isFirstPerson = true;
     }
 
     public void PlayDeathEffect(Entity_Data.DeathType type)
@@ -50,12 +64,12 @@ public class CameraView : MonoBehaviour, ITickable
     {
         if (_controller == null)
         {
-            Debug.LogWarning("PlayerController‚ª‘¶İ‚µ‚Ü‚¹‚ñI");
+            Debug.LogWarning("PlayerControllerï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I");
             return;
         }
         if (_controller.follow == null)
         {
-            Debug.LogWarning("CinemachineFollow‚ª‘¶İ‚µ‚Ü‚¹‚ñI");
+            Debug.LogWarning("CinemachineFollowï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I");
             return;
         }
 
@@ -66,12 +80,12 @@ public class CameraView : MonoBehaviour, ITickable
     {
         if (_controller == null)
         {
-            Debug.LogWarning("PlayerController‚ª‘¶İ‚µ‚Ü‚¹‚ñI");
+            Debug.LogWarning("PlayerControllerï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I");
             return;
         }
         if (_controller.follow == null)
         {
-            Debug.LogWarning("CinemachineFollow‚ª‘¶İ‚µ‚Ü‚¹‚ñI");
+            Debug.LogWarning("CinemachineFollowï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I");
             return;
         }
         _controller.follow.FollowOffset = defaultFollow;
@@ -84,7 +98,7 @@ public class CameraView : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
-        // €‚ñ‚¾‚Æ‚«‚Éˆ—‚ğÀs
+        // ï¿½ï¿½ï¿½ñ‚¾‚Æ‚ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½s
         if (_controller.PlayerLogic.State != Entity_Data.PlayerState.DeathAnimationWait) return;
         To1stPerson();
     }
