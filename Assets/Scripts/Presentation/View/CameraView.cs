@@ -1,7 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-
 public class CameraView : MonoBehaviour, ITickable
 {
     private PlayerController _controller;
@@ -13,7 +12,7 @@ public class CameraView : MonoBehaviour, ITickable
     {
         if (controller == null)
         {
-            Debug.LogWarning("PlayerController�����݂��܂���I");
+            Debug.LogWarning("PlayerControllerが存在しません！");
             return;
         }
         _controller = controller;
@@ -27,29 +26,26 @@ public class CameraView : MonoBehaviour, ITickable
         controller.vcam.LookAt = transform;
         defaultFollow = controller.follow.FollowOffset;
     }
+
     public void To3rdPerson()
     {
         if (_controller == null || !_isFirstPerson) return;
-        {
-            _controller.SetModelVisibility(true);
-            _controller.vcam.Follow = _controller.transform;
-            _controller.vcam.LookAt = _controller.transform;
-
-            ResetCameraOffset();
-            _isFirstPerson = false;
-        }
+        
+        _controller.SetModelVisibility(true);
+        _controller.vcam.Follow = _controller.transform;
+        _controller.vcam.LookAt = _controller.transform;
 
         ResetCameraOffset();
+        _isFirstPerson = false;
     }
 
     public void To1stPerson()
     {
         if (_controller == null || _isFirstPerson) return;
-        {
-            _controller.SetModelVisibility(false);
-            _controller.vcam.Follow = _eyeAnchor;
-            _controller.vcam.LookAt = _eyeAnchor;
-        }
+        
+        _controller.SetModelVisibility(false);
+        _controller.vcam.Follow = _eyeAnchor;
+        _controller.vcam.LookAt = _eyeAnchor;
 
         SetCameraOffset(Vector3.zero);
         _isFirstPerson = true;
@@ -57,19 +53,19 @@ public class CameraView : MonoBehaviour, ITickable
 
     public void PlayDeathEffect(Entity_Data.DeathType type)
     {
-
+        // 処理
     }
 
     public void SetCameraOffset(Vector3 offset)
     {
         if (_controller == null)
         {
-            Debug.LogWarning("PlayerController�����݂��܂���I");
+            Debug.LogWarning("PlayerControllerが存在しません！");
             return;
         }
         if (_controller.follow == null)
         {
-            Debug.LogWarning("CinemachineFollow�����݂��܂���I");
+            Debug.LogWarning("CinemachineFollowが存在しません！");
             return;
         }
 
@@ -80,12 +76,12 @@ public class CameraView : MonoBehaviour, ITickable
     {
         if (_controller == null)
         {
-            Debug.LogWarning("PlayerController�����݂��܂���I");
+            Debug.LogWarning("PlayerControllerが存在しません！");
             return;
         }
         if (_controller.follow == null)
         {
-            Debug.LogWarning("CinemachineFollow�����݂��܂���I");
+            Debug.LogWarning("CinemachineFollowが存在しません！");
             return;
         }
         _controller.follow.FollowOffset = defaultFollow;
@@ -98,7 +94,7 @@ public class CameraView : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
-        // ���񂾂Ƃ��ɏ��������s
+        // 死んだときに処理を実行
         if (_controller.PlayerLogic.State != Entity_Data.PlayerState.DeathAnimationWait) return;
         To1stPerson();
     }
