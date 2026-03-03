@@ -7,8 +7,30 @@ public class CostumeRegistry : ScriptableObject
 {
     public List<CostumeDef> AllCostume = new();
 
-    public void GetById(string id)
-    {
+    private Dictionary<string, CostumeDef> AllCostumeDic = new();
 
+
+    private void Awake()
+    {
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        foreach(var costume in AllCostume)
+        {
+            AllCostumeDic.Add(costume.Id, costume);
+        }
+    }
+
+    public CostumeDef GetById(string id)
+    {
+        if (AllCostumeDic.Count <= 0) Initialize();
+
+        if (AllCostumeDic.ContainsKey(id))
+        {
+            return AllCostumeDic[id];
+        }
+        return null;
     }
 }
