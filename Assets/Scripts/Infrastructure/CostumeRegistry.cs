@@ -5,9 +5,9 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "CostumeRegistry", menuName = "Scriptable Objects/CostumeRegistry")]
 public class CostumeRegistry : ScriptableObject
 {
-    public List<CostumeDef> AllCostume = new();
+    public List<CostumeDef> AllCostume;
 
-    private Dictionary<string, CostumeDef> AllCostumeDic = new();
+    private Dictionary<string, CostumeDef> AllCostumeDic;
 
 
     private void Awake()
@@ -17,7 +17,8 @@ public class CostumeRegistry : ScriptableObject
 
     private void Initialize()
     {
-        foreach(var costume in AllCostume)
+        AllCostumeDic = new();
+        foreach (var costume in AllCostume)
         {
             AllCostumeDic.Add(costume.Id, costume);
         }
