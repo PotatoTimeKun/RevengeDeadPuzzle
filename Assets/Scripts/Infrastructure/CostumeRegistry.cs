@@ -10,13 +10,14 @@ public class CostumeRegistry : ScriptableObject
     private Dictionary<string, CostumeDef> AllCostumeDic;
 
 
-    private void Awake()
+    private void OnEnable()
     {
         Initialize();
     }
 
     private void Initialize()
     {
+        AllCostumeDic = null;
         if (AllCostume == null)
         {
             Debug.LogWarning("コスチュームが一つも設定されていません！");
