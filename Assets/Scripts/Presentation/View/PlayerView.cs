@@ -15,5 +15,5 @@ public class PlayerView : MonoBehaviour
         Debug.Log($"[View] Visual Updated: {costumeId}");
     }
 
-    // 死んだあと死因のコスチュームに合わせたり初期化時にコスチュームを変更したりする処理を追加する
+    // 死んだあと死因のコスチュームに合わせる処理を追加する
 }
