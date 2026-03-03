@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public enum GroundState
@@ -13,24 +14,44 @@ public class PlayerController : MonoBehaviour, ITickable
 {
     #region //インスペクター設定
     public HitCheck ground;
+    [HideInInspector] public PlayerLogic PlayerLogic;
+    private CinemachineCamera _vcam;
+    public CinemachineCamera vcam
+    {
+        get { return _vcam; }
+        set { _vcam = value; }
+    }
+
+    private CinemachineFollow _follow;
+    public CinemachineFollow follow
+    {
+        get { return _follow; }
+        set { _follow = value; }
+    }
     #endregion
 
     #region //プライベート変数
     private float moveSpeed = 5f;
     private float jumpPower = 6f;
     private Rigidbody rb;
-    private PlayerLogic playerLogic;
     private PlayerController grabbedObject;
     private GroundState groundState;
     private bool isGrabbing = false;
     #endregion
+    private Renderer[] _allRenderers;
+    private void Awake()
+    {
+        PlayerLogic = new PlayerLogic(this);
+    }
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        playerLogic = new PlayerLogic(this);
+        _allRenderers = GetComponentsInChildren<Renderer>(true);
         InputHandler.Instance.SetInputState(InputState.Player);
         GameLoop.Instance.Register(this);
+        gameObject.AddComponent<PlayerView>().Initialize(this);
+        gameObject.AddComponent<CameraView>().Initialize(this);
     }
     private void OnEnable()
     {
@@ -40,6 +61,18 @@ public class PlayerController : MonoBehaviour, ITickable
     private void OnDisable()
     {
         ground.IsHit -= OnHitGround;
+    }
+    public void SetModelVisibility(bool visible)
+    {
+        if (_allRenderers == null) return;
+    
+        foreach (var r in _allRenderers)
+        {
+            if (r != null)
+            {
+                r.enabled = visible;
+            }
+        }
     }
 
     public void Tick(float deltaTime)
