@@ -12,5 +12,16 @@ public class StageSelecter
         }
     }
     public List<string> UnlockedStageList = new List<string>();
-    public void UnlockStage(string id){}
+    public void UnlockStage(string id)
+    {
+        if (!UnlockedStageList.Contains(id))
+        {
+            UnlockedStageList.Add(id);
+            Debug.Log($"新しいステージをアンロック: {id}");
+        }
+        else
+        {
+            Debug.Log($"ステージ '{id}' はすでにアンロックされています。");
+        }
+    }
 }
