@@ -15,6 +15,7 @@ MonoBehaviour:
   Id: Test
   DisplayName: "\u30C6\u30B9\u30C8"
   Scene: TestStage1
+  MaxMental: 10
   TimerSecondTarget: 30
   DeathCountTarget: 10
   AcceptedDeathTypeTarget: 00000000

@@ -28,6 +28,7 @@ public class StageDef : ScriptableObject
     public string Id = "";
     public string DisplayName = "";
     public string Scene = "";
+    public int MaxMental;
     public int TimerSecondTarget = 0;
     public int DeathCountTarget = 0;
     public List<Entity_Data.DeathType> AcceptedDeathTypeTarget = new();
