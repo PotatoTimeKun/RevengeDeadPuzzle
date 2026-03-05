@@ -21,7 +21,7 @@ public class ScoreLogic : ITickable
         _currentTime += deltaTime;
     }
 
-    public void AddDeathCount(Entity_Data.DeathType deathType = Entity_Data.DeathType.None)
+    public void AddDeath(Entity_Data.DeathType deathType = Entity_Data.DeathType.None)
     {
         DeathCount++;
         DeathTypeHistory.Add(deathType);
