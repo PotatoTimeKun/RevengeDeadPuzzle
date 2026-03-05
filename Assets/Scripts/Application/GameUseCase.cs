@@ -32,8 +32,12 @@ public class GameUseCase : MonoBehaviour , ITickable
         _playerController = PlayerObj.GetComponent<PlayerController>();
         PlayerObj.transform.position = _startPos.transform.position;
     }
-    public void PauseGame(){}
-    public void ResumeGame(){}
+    public void PauseGame(){
+        Score.StopTimer();
+    }
+    public void ResumeGame(){
+        Score.ResumeTimer();
+    }
     public void OnPlayerDead(Entity_Data.DeathType deathType){ // 
         GameObject PlayerObj = Instantiate(_playerPrefab);
         _playerController = PlayerObj.GetComponent<PlayerController>();
