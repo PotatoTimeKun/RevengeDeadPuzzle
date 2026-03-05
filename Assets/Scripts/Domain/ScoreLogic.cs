@@ -16,6 +16,7 @@ public class ScoreLogic : ITickable
         _currentTime = 0f;
         _isTimerEnabled = true;
         DeathCount = 0;
+        GameLoop.Instance.Register(this);
     }
 
     public void Tick(float deltaTime)
