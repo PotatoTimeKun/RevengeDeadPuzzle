@@ -37,6 +37,9 @@ public class PlayerController : MonoBehaviour, ITickable
     private PlayerController grabbedObject;
     private GroundState groundState;
     private bool isGrabbing = false;
+    private float _grabRange = 1.5f;
+    private Transform _grabAnchor;
+    private float _throwForce = 10f;
     #endregion
     private Renderer[] _allRenderers;
     private void Awake()
@@ -59,6 +62,14 @@ public class PlayerController : MonoBehaviour, ITickable
         else
         {
             Debug.LogWarning("Scene内にCinemachineCameraが見つかりません。");
+        }
+
+        if (_grabAnchor == null)
+        {
+            GameObject anchorObj = new GameObject("GrabAnchor");
+            _grabAnchor = anchorObj.transform;
+            _grabAnchor.SetParent(transform);
+            _grabAnchor.localPosition = new Vector3(0, 1f, 1f); // プレイヤーの少し前方に配置
         }
 
         GameLoop.Instance.Register(this);
@@ -89,6 +100,10 @@ public class PlayerController : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
+        if (PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait && isGrabbing)
+        {
+            Grab();
+        }
         if (PlayerLogic.State == Entity_Data.PlayerState.Dead)
         {
             GameLoop.Instance.Unregister(this);
@@ -153,13 +168,52 @@ public class PlayerController : MonoBehaviour, ITickable
     {
         if (!isGrabbing)
         {
-            isGrabbing = true;
-            //掴む処理
+            // 周囲の死体を検索して掴む処理
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, _grabRange);
+            foreach (var hitCollider in hitColliders)
+            {
+                PlayerController target = hitCollider.GetComponent<PlayerController>();
+                if (target != null && target != this && target.PlayerLogic.State == Entity_Data.PlayerState.Dead)
+                {
+                    grabbedObject = target;
+                    isGrabbing = true;
+
+                    // 掴んだオブジェクトをアンカーに固定
+                    grabbedObject.transform.SetParent(_grabAnchor);
+                    grabbedObject.transform.localPosition = Vector3.zero;
+                    
+                    // 物理挙動を無効化して持ち運びやすくする
+                    if (grabbedObject.rb != null)
+                    {
+                        grabbedObject.rb.isKinematic = true;
+                    }
+                    break;
+                }
+            }
         }
         else
         {
+        if (grabbedObject != null)
+        {
+            // 物理挙動を元に戻す
+            if (grabbedObject.rb != null)
+            {
+                grabbedObject.rb.isKinematic = false;
+                
+                // 死因が「切断」の場合は前方に吹き飛ばす
+                if (grabbedObject.PlayerLogic.Type == Entity_Data.DeathType.Dismembered)
+                {
+                    grabbedObject.rb.AddForce(transform.forward * _throwForce + Vector3.up * (_throwForce * 0.5f), ForceMode.Impulse);
+                }
+            }
+
+            // 親子関係を解除してその場に少し浮かせて置く
+            grabbedObject.transform.SetParent(null);
+            grabbedObject.transform.position += Vector3.up * 0.5f;
+            }
+
+            grabbedObject = null;
             isGrabbing = false;
-            //離す処理
         }
     }
 
