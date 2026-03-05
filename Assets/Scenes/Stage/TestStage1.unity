@@ -663,8 +663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameUseCase
   _startPos: {fileID: 6054983442152854788}
-  _cameraObj: {fileID: 6604528392872729849}
-  DEBUGPlayerPrefab: {fileID: 5872428142847945224, guid: 579872e69f3c7ff468aba8b0f204162b, type: 3}
+  CostumeRegistry: {fileID: 0}
 --- !u!1 &6604528392872729849
 GameObject:
   m_ObjectHideFlags: 0
