@@ -39,9 +39,10 @@ public class PlayerLogic : ITickable
     public void Die(Entity_Data.DeathType deathType){
         Type = deathType;
         State = Entity_Data.PlayerState.DeathAnimationWait;
-
-        // メンタルを減らす処理を書く
-
+        // メンタルを減らす
+        GameUseCase.Instance.Mental.Decrease(1);
+        // スコアに反映
+        GameUseCase.Instance.Score.AddDeath(deathType);
     }
     private void Move(Vector2 moveValue){
         if (State != Entity_Data.PlayerState.Alive) return;
@@ -58,9 +59,8 @@ public class PlayerLogic : ITickable
     private void Suicide(){
         if (State != Entity_Data.PlayerState.Alive) return;
         Die(Entity_Data.DeathType.None);
-
-        // メンタルを追加で減らす処理を書く
-
+        // メンタルを追加で減らす
+        GameUseCase.Instance.Mental.Decrease(1);
         _controller.Suicide();
     }
 }

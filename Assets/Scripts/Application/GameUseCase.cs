@@ -3,14 +3,23 @@ using Unity.Cinemachine;
 
 public class GameUseCase : MonoBehaviour , ITickable
 {
+    public static GameUseCase Instance { get; private set; }
+    private void Awake() {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
     private PlayerController _playerController;
-    private StageDef _stageDef;
+    public StageDef Stage;
     private CinemachineCamera _cinemachineCamera;
     private CinemachineFollow _cinemachineFollow;
     [SerializeField] private GameObject _startPos;
     private GameObject _playerPrefab; 
     public CostumeRegistry CostumeRegistry;
+    [HideInInspector] public MentalLogic Mental;
+    [HideInInspector] public ScoreLogic Score;
     void Start(){
+        Mental = new MentalLogic(Stage.MaxMental);
+        Score = new ScoreLogic(Stage);
         _playerPrefab = CostumeRegistry.GetById("Default");
         StartGame();
         GameLoop.Instance.Register(this);
@@ -23,6 +32,8 @@ public class GameUseCase : MonoBehaviour , ITickable
         _playerController = PlayerObj.GetComponent<PlayerController>();
         PlayerObj.transform.position = _startPos.transform.position;
     }
+    public void PauseGame(){}
+    public void ResumeGame(){}
     public void OnPlayerDead(Entity_Data.DeathType deathType){ // 
         GameObject PlayerObj = Instantiate(_playerPrefab);
         _playerController = PlayerObj.GetComponent<PlayerController>();
