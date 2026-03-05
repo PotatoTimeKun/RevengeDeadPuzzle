@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class CostumeCollector
+public class CostumeCollector : MonoBehaviour
 {
     public CostumeRegistry CostumeRegistry;
 
@@ -12,6 +12,7 @@ public class CostumeCollector
             return _instance;
         }
     }
+    [System.NonSerialized]
     public List<string> UnlockedIdList;
 
     private CostumeCollector()
