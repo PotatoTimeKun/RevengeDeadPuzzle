@@ -5,6 +5,7 @@ public class ScoreLogic : ITickable
 {
     private float _currentTime;
     private StageDef _currentStage;
+    private bool _isTimerEnabled;
     public float CurrentTime { get { return _currentTime; } }
     public int DeathCount;
     public List<Entity_Data.DeathType> DeathTypeHistory = new();
@@ -13,12 +14,24 @@ public class ScoreLogic : ITickable
     {
         _currentStage = stage;
         _currentTime = 0f;
+        _isTimerEnabled = true;
         DeathCount = 0;
     }
 
     public void Tick(float deltaTime)
     {
+        if (!_isTimerEnabled) return;
         _currentTime += deltaTime;
+    }
+
+    public void StopTimer()
+    {
+        _isTimerEnabled = false;
+    }
+
+    public void ResumeTimer()
+    {
+        _isTimerEnabled = true;
     }
 
     public void AddDeath(Entity_Data.DeathType deathType = Entity_Data.DeathType.None)
