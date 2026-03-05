@@ -10,7 +10,7 @@ public class StageSelecter
             return _instance;
         }
     }
-    public List<string> UnlockedStageList = new List<string>();
+    public List<string> UnlockedStageList;
 
     private StageSelecter()
     {
