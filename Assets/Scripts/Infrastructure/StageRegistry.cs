@@ -1,6 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+
+[CustomEditor(typeof(StageRegistry))]
+public class StageRegistryEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+        DrawDefaultInspector();
+        serializedObject.ApplyModifiedProperties();
+    }
+}
+#endif
+
 [CreateAssetMenu(fileName = "StageRegistry", menuName = "Scriptable Objects/StageRegistry")]
 public class StageRegistry : ScriptableObject
 {
