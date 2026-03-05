@@ -20,8 +20,8 @@ public class SEData
 public class AudioController : MonoBehaviour
 {
     public static AudioController Instance { get; private set; }
-    public float BGMVolume = 1f;
-    public float SEVolume = 1f;
+    public float defaultBGMVolume = 1f;
+    public float defaultSEVolume = 1f;
     public AudioSource bgmAudioSource;
     public AudioSource seAudioSource;
     public List<BGMData> bgmDataList;
@@ -46,6 +46,9 @@ public class AudioController : MonoBehaviour
 
     private void Initialize()
     {
+        SetBGMVolume(defaultBGMVolume);
+        SetSEVolume(defaultSEVolume);
+
         _bgmDic = new();
         foreach (var data in bgmDataList)
         {
@@ -68,13 +71,30 @@ public class AudioController : MonoBehaviour
         }
     }
 
+    public void SetMasterVolume(float volume)
+    {
+        if (bgmAudioSource != null) bgmAudioSource.volume = volume;
+        if (seAudioSource != null) seAudioSource.volume = volume;
+    }
+
+    public void SetBGMVolume(float volume)
+    {
+        if (bgmAudioSource == null) return;
+        bgmAudioSource.volume = volume;
+    }
+
+    public void SetSEVolume(float volume)
+    {
+        if (seAudioSource == null) return;
+        seAudioSource.volume = volume;
+    }
+
     public void PlayBGM(Audio_Data.BGMType type)
     {
         if (bgmAudioSource == null) return;
         if (_bgmDic.ContainsKey(type)) return;
         AudioClip clip = _bgmDic[type];
         bgmAudioSource.clip = clip;
-        bgmAudioSource.volume = BGMVolume;
         bgmAudioSource.Play();
     }
 
@@ -89,6 +109,6 @@ public class AudioController : MonoBehaviour
         if (seAudioSource == null) return;
         if (_seDic.ContainsKey(type)) return;
         AudioClip clip = _seDic[type];
-        seAudioSource.PlayOneShot(clip, SEVolume);
+        seAudioSource.PlayOneShot(clip);
     }
 }
