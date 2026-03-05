@@ -4,9 +4,10 @@ using UnityEngine;
 public class CameraView : MonoBehaviour, ITickable
 {
     private PlayerController _controller;
-    private Vector3 defaultFollow;
+    private static Vector3 defaultFollow;
+    private static bool hasDefaultFollow = false;
     private Transform _eyeAnchor;
-    private bool _isFirstPerson;
+    private bool _isFirstPerson = true;
 
     public void Initialize(PlayerController controller)
     {
@@ -24,7 +25,11 @@ public class CameraView : MonoBehaviour, ITickable
         Transform transform = controller.gameObject.transform;
         controller.vcam.Follow = transform;
         controller.vcam.LookAt = transform;
-        defaultFollow = controller.follow.FollowOffset;
+        if (!hasDefaultFollow && controller.follow != null)
+        {
+            defaultFollow = controller.follow.FollowOffset;
+            hasDefaultFollow = true;
+        }
     }
 
     public void To3rdPerson()
@@ -92,9 +97,23 @@ public class CameraView : MonoBehaviour, ITickable
         GameLoop.Instance.Register(this);
     }
 
+    private bool _isDead = false;
     public void Tick(float deltaTime)
     {
-        // 死んだときに処理を実行
+        if (_isDead) return;
+        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Alive) {
+            // 生きていたら三人称に
+            To3rdPerson();
+            return;
+        }
+        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
+            // 死亡したら死体が見えるようにする
+            _controller.SetModelVisibility(true);
+            _isDead = true;
+            GameLoop.Instance.Unregister(this);
+            return;
+        }
+        // 死亡アニメーション中は1人称に
         if (_controller.PlayerLogic.State != Entity_Data.PlayerState.DeathAnimationWait) return;
         To1stPerson();
     }

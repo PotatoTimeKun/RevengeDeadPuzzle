@@ -8,9 +8,10 @@ public class GameUseCase : MonoBehaviour , ITickable
     private CinemachineCamera _cinemachineCamera;
     private CinemachineFollow _cinemachineFollow;
     [SerializeField] private GameObject _startPos;
-    [SerializeField] private GameObject _cameraObj;
-    public GameObject DEBUGPlayerPrefab; // 仮置き、実際にはCostumeRedistoryから持ってこれるようにする
+    private GameObject _playerPrefab; 
+    public CostumeRegistry CostumeRegistry;
     void Start(){
+        _playerPrefab = CostumeRegistry.GetById("Default");
         StartGame();
         GameLoop.Instance.Register(this);
     }
@@ -18,19 +19,13 @@ public class GameUseCase : MonoBehaviour , ITickable
         GameLoop.Instance.Unregister(this);
     }
     public void StartGame(){
-        GameObject PlayerObj = Instantiate(DEBUGPlayerPrefab);
+        GameObject PlayerObj = Instantiate(_playerPrefab);
         _playerController = PlayerObj.GetComponent<PlayerController>();
-        _playerController.vcam = _cameraObj.GetComponent<CinemachineCamera>();
-        _playerController.follow = _cameraObj.GetComponent<CinemachineFollow>();
         PlayerObj.transform.position = _startPos.transform.position;
     }
-    public void OnPlayerDead(Entity_Data.DeathType deathType){
-        CameraView view = _playerController.GetComponent<CameraView>();
-        view.To3rdPerson();
-        GameObject PlayerObj = Instantiate(DEBUGPlayerPrefab);
+    public void OnPlayerDead(Entity_Data.DeathType deathType){ // 
+        GameObject PlayerObj = Instantiate(_playerPrefab);
         _playerController = PlayerObj.GetComponent<PlayerController>();
-        _playerController.vcam = _cameraObj.GetComponent<CinemachineCamera>();
-        _playerController.follow = _cameraObj.GetComponent<CinemachineFollow>();
         PlayerObj.transform.position = _startPos.transform.position;
     }
     public void OnGoal(){}
