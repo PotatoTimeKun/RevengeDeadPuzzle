@@ -6,7 +6,6 @@ public class StageRegistry : ScriptableObject
 {
     public List<StageDef> AllStages = new();
 
-    [System.NonSerialized]
     private Dictionary<string, StageDef> _stageCache;
 
     private void OnEnable() => Initialize();
@@ -14,7 +13,7 @@ public class StageRegistry : ScriptableObject
 
     private void Initialize()
     {
-        _stageCache = new Dictionary<string, StageDef>();
+        _stageCache = new();
         
         if (AllStages == null) return;
 
