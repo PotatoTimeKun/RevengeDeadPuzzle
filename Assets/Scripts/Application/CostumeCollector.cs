@@ -15,7 +15,7 @@ public class CostumeCollector : MonoBehaviour
     [System.NonSerialized]
     public List<string> UnlockedIdList;
 
-    private CostumeCollector()
+    private void Awake()
     {
         CostumeData data = SaveDataStore.Instance.LoadUnlockedCostumes();
         if (data != null && data.UnlockedIdList != null)
