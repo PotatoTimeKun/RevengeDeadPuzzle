@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class StageSelecter
 {
-    private StageSelecter(){}
     private static StageSelecter _instance;
     public static StageSelecter Instance{
         get{
@@ -12,6 +11,16 @@ public class StageSelecter
         }
     }
     public List<string> UnlockedStageList = new List<string>();
+
+    private StageSelecter()
+    {
+        StageProgressData data = SaveDataStore.Instance.LoadStageProgress();
+        if (data != null && data.UnlockedIdList != null)
+        {
+            UnlockedStageList = data.UnlockedIdList;
+        }
+    }
+
     public void UnlockStage(string id)
     {
         if (!UnlockedStageList.Contains(id))
