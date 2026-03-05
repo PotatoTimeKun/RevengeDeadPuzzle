@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class CostumeCollector
 {
     public CostumeRegistry CostumeRegistry;
-    private CostumeCollector(){}
+
     private static CostumeCollector _instance;
     public static CostumeCollector Instance{
         get{
@@ -12,7 +12,16 @@ public class CostumeCollector
             return _instance;
         }
     }
-    public List<string> UnlockedIdList = new List<string>();
+    public List<string> UnlockedIdList;
+
+    private CostumeCollector()
+    {
+        CostumeData data = SaveDataStore.Instance.LoadUnlockedCostumes();
+        if (data != null && data.UnlockedIdList != null)
+        {
+            UnlockedIdList = data.UnlockedIdList;
+        }
+    }
     public string UnlockRandomId()
     {
         if (CostumeRegistry == null || CostumeRegistry.AllCostume == null || CostumeRegistry.AllCostume.Count == 0)
