@@ -49,6 +49,18 @@ public class PlayerController : MonoBehaviour, ITickable
         rb = GetComponent<Rigidbody>();
         _allRenderers = GetComponentsInChildren<Renderer>(true);
         InputHandler.Instance.SetInputState(InputState.Player);
+        
+        // Find existing main CinemachineCamera in the scene
+        _vcam = FindAnyObjectByType<CinemachineCamera>();
+        if (_vcam != null)
+        {
+            _follow = _vcam.GetComponent<CinemachineFollow>();
+        }
+        else
+        {
+            Debug.LogWarning("Scene内にCinemachineCameraが見つかりません。");
+        }
+
         GameLoop.Instance.Register(this);
         gameObject.AddComponent<PlayerView>().Initialize(this);
         gameObject.AddComponent<CameraView>().Initialize(this);
@@ -77,6 +89,12 @@ public class PlayerController : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
+        if (PlayerLogic.State == Entity_Data.PlayerState.Dead)
+        {
+            GameLoop.Instance.Unregister(this);
+            return;
+        }
+
         Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
         if (velocity.sqrMagnitude > 0.001f && rb.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f))
         {
