@@ -13,37 +13,45 @@ public class GameUseCase : MonoBehaviour , ITickable
     private CinemachineCamera _cinemachineCamera;
     private CinemachineFollow _cinemachineFollow;
     [SerializeField] private GameObject _startPos;
-    private GameObject _playerPrefab; 
+    public GameObject PlayerPrefab; 
     public CostumeRegistry CostumeRegistry;
     [HideInInspector] public MentalLogic Mental;
     [HideInInspector] public ScoreLogic Score;
     void Start(){
         Mental = new MentalLogic(Stage.MaxMental);
         Score = new ScoreLogic(Stage);
-        _playerPrefab = CostumeRegistry.GetById("Default");
         StartGame();
         GameLoop.Instance.Register(this);
     }
     void OnDestroy(){
         GameLoop.Instance.Unregister(this);
     }
-    public void StartGame(){
-        GameObject PlayerObj = Instantiate(_playerPrefab);
-        _playerController = PlayerObj.GetComponent<PlayerController>();
-        PlayerObj.transform.position = _startPos.transform.position;
+
+    private void SpawnPlayer(){
+        GameObject playerObj = Instantiate(PlayerPrefab);
+        _playerController = playerObj.GetComponent<PlayerController>();
+        _playerController.Initialize(this);
+        playerObj.transform.position = _startPos.transform.position;
     }
+
+    public void StartGame(){
+        SpawnPlayer();
+    }
+
     public void PauseGame(){
         Score.StopTimer();
     }
+
     public void ResumeGame(){
         Score.ResumeTimer();
     }
+
     public void OnPlayerDead(Entity_Data.DeathType deathType){ // 
-        GameObject PlayerObj = Instantiate(_playerPrefab);
-        _playerController = PlayerObj.GetComponent<PlayerController>();
-        PlayerObj.transform.position = _startPos.transform.position;
+        SpawnPlayer();
     }
+
     public void OnGoal(){}
+
     public void Tick(float deltaTime){
         // 死んだときに処理を実行
         if (_playerController.PlayerLogic.State != Entity_Data.PlayerState.Dead) return;

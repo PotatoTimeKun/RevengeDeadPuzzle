@@ -9,27 +9,28 @@ public class CameraView : MonoBehaviour, ITickable
     private Transform _eyeAnchor;
     private bool _isFirstPerson = true;
 
-    public void Initialize(PlayerController controller)
+    private void Start()
     {
-        if (controller == null)
+        _controller = GetComponent<PlayerController>();
+        if (_controller == null)
         {
             Debug.LogWarning("PlayerControllerが存在しません！");
             return;
         }
-        _controller = controller;
         GameObject eyeObj = new GameObject("TemporaryEye");
         _eyeAnchor = eyeObj.transform;
         _eyeAnchor.SetParent(_controller.transform);
         _eyeAnchor.localPosition = new Vector3(0, 1.5f, 0.2f); 
         _eyeAnchor.localRotation = Quaternion.identity;
-        Transform transform = controller.gameObject.transform;
-        controller.vcam.Follow = transform;
-        controller.vcam.LookAt = transform;
-        if (!hasDefaultFollow && controller.follow != null)
+        Transform transform = _controller.gameObject.transform;
+        _controller.vcam.Follow = transform;
+        _controller.vcam.LookAt = transform;
+        if (!hasDefaultFollow && _controller.follow != null)
         {
-            defaultFollow = controller.follow.FollowOffset;
+            defaultFollow = _controller.follow.FollowOffset;
             hasDefaultFollow = true;
         }
+        GameLoop.Instance.Register(this);
     }
 
     public void To3rdPerson()
@@ -90,11 +91,6 @@ public class CameraView : MonoBehaviour, ITickable
             return;
         }
         _controller.follow.FollowOffset = defaultFollow;
-    }
-
-    private void Start()
-    {
-        GameLoop.Instance.Register(this);
     }
 
     private bool _isDead = false;

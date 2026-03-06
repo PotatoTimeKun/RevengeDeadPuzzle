@@ -13,19 +13,30 @@ public enum GroundState
 public class PlayerController : MonoBehaviour, ITickable
 {
     #region //インスペクター設定
-    public HitCheck ground;
+    [HideInInspector] public HitCheck ground;
     [HideInInspector] public PlayerLogic PlayerLogic;
+    [HideInInspector] public GameUseCase GameUseCase;
     private CinemachineCamera _vcam;
     public CinemachineCamera vcam
     {
-        get { return _vcam; }
+        get { 
+            if (_vcam == null) {
+                _vcam = FindAnyObjectByType<CinemachineCamera>();
+            }
+            return _vcam; 
+        }
         set { _vcam = value; }
     }
 
     private CinemachineFollow _follow;
     public CinemachineFollow follow
     {
-        get { return _follow; }
+        get { 
+            if (_follow == null) {
+                _follow = FindAnyObjectByType<CinemachineFollow>();
+            }
+            return _follow;
+         }
         set { _follow = value; }
     }
     #endregion
@@ -47,22 +58,23 @@ public class PlayerController : MonoBehaviour, ITickable
         PlayerLogic = new PlayerLogic(this);
     }
 
+    public void Initialize(GameUseCase gameUseCase)
+    {
+        GameUseCase = gameUseCase;
+    }
+
     private void Start()
     {
+        ground = GetComponentInChildren<HitCheck>();
+        ground.IsHit += OnHitGround;
         rb = GetComponent<Rigidbody>();
+        if (rb == null) {
+            rb = gameObject.AddComponent<Rigidbody>();
+            rb.freezeRotation = true;
+        }
+
         _allRenderers = GetComponentsInChildren<Renderer>(true);
         InputHandler.Instance.SetInputState(InputState.Player);
-        
-        // Find existing main CinemachineCamera in the scene
-        _vcam = FindAnyObjectByType<CinemachineCamera>();
-        if (_vcam != null)
-        {
-            _follow = _vcam.GetComponent<CinemachineFollow>();
-        }
-        else
-        {
-            Debug.LogWarning("Scene内にCinemachineCameraが見つかりません。");
-        }
 
         if (_grabAnchor == null)
         {
@@ -73,12 +85,6 @@ public class PlayerController : MonoBehaviour, ITickable
         }
 
         GameLoop.Instance.Register(this);
-        gameObject.AddComponent<PlayerView>().Initialize(this);
-        gameObject.AddComponent<CameraView>().Initialize(this);
-    }
-    private void OnEnable()
-    {
-        ground.IsHit += OnHitGround;
     }
 
     private void OnDisable()
@@ -108,6 +114,10 @@ public class PlayerController : MonoBehaviour, ITickable
         {
             GameLoop.Instance.Unregister(this);
             return;
+        }
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody>();
         }
 
         Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);

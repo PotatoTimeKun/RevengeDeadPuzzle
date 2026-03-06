@@ -664,6 +664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameUseCase
   Stage: {fileID: 11400000, guid: b0fe622eab627ec489d24481009078a4, type: 2}
   _startPos: {fileID: 6054983442152854788}
+  PlayerPrefab: {fileID: 4561269876711536481, guid: 3aa64a99ba331bf42a4cb725ef9667bc, type: 3}
   CostumeRegistry: {fileID: 11400000, guid: 4f20edece43920d4cbe0f0a6e2a5a63a, type: 2}
 --- !u!1 &6604528392872729849
 GameObject:
