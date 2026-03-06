@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c8c63c2e500f54b955697d0b2ac66b, type: 3}
   m_Name: CrushedDef
   m_EditorClassIdentifier: Assembly-CSharp::CostumeDef
-  Id: 
-  Prefab: {fileID: 0}
+  Id: Crushed
+  Prefab: {fileID: 6360403807028670059, guid: ac80d67dd8a934945bdc8bdbf712ef3e, type: 3}

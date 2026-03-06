@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c8c63c2e500f54b955697d0b2ac66b, type: 3}
   m_Name: DismemberedDef
   m_EditorClassIdentifier: Assembly-CSharp::CostumeDef
-  Id: 
-  Prefab: {fileID: 0}
+  Id: Dismembered
+  Prefab: {fileID: 4183364622449569605, guid: 849116a1071be8c42b008f4135d6218d, type: 3}

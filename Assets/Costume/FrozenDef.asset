@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c8c63c2e500f54b955697d0b2ac66b, type: 3}
   m_Name: FrozenDef
   m_EditorClassIdentifier: Assembly-CSharp::CostumeDef
-  Id: 
-  Prefab: {fileID: 0}
+  Id: Frozen
+  Prefab: {fileID: 6140659983215260260, guid: 25cfc8237de35c24bb9366aa29b9198e, type: 3}
