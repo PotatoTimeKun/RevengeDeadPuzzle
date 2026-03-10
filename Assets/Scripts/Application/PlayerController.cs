@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour, ITickable
         }
 
         Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
-        if (velocity.sqrMagnitude > 0.001f && rb.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f))
+        if (velocity.sqrMagnitude > 0.001f && rb.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f, QueryTriggerInteraction.Ignore))
         {
             velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
         }
