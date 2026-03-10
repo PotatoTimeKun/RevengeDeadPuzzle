@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59c8c63c2e500f54b955697d0b2ac66b, type: 3}
+  m_Name: WobleDef
+  m_EditorClassIdentifier: Assembly-CSharp::CostumeDef
+  Id: Woble
+  Prefab: {fileID: 3993345540120371445, guid: 2111f6b65a417774d9a8f18c3470ee0b, type: 3}
