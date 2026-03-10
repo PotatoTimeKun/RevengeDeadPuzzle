@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour, ITickable
             GameObject anchorObj = new GameObject("GrabAnchor");
             _grabAnchor = anchorObj.transform;
             _grabAnchor.SetParent(transform);
-            _grabAnchor.localPosition = new Vector3(0, 1f, 1f); // プレイヤーの少し前方に配置
+            _grabAnchor.localPosition = new Vector3(0, 1f, 1.8f); // プレイヤーの少し前方に配置
         }
 
         GameLoop.Instance.Register(this);
@@ -178,6 +178,19 @@ public class PlayerController : MonoBehaviour, ITickable
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        // 判定の色を設定（半透明の黄色などが見やすいです）
+        Gizmos.color = new Color(1, 1, 0, 0.3f);
+
+        // 実際の判定と同じ位置・半径で球体を描画
+        Gizmos.DrawSphere(transform.position, _grabRange);
+
+        // 輪郭線も描くと範囲がよりハッキリします
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _grabRange);
+    }
+
     //掴む・離す
     public void Grab()
     {
@@ -187,7 +200,7 @@ public class PlayerController : MonoBehaviour, ITickable
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, _grabRange);
             foreach (var hitCollider in hitColliders)
             {
-                PlayerController target = hitCollider.GetComponent<PlayerController>();
+                PlayerController target = hitCollider.GetComponentInParent<PlayerController>();
                 if (target != null && target != this && target.PlayerLogic.State == Entity_Data.PlayerState.Dead)
                 {
                     grabbedObject = target;
@@ -203,7 +216,8 @@ public class PlayerController : MonoBehaviour, ITickable
                         grabbedObject.rb.isKinematic = true;
                     }
 
-                    Collider collider = hitCollider.GetComponent<Collider>();
+                    PlayerView view = grabbedObject.GetComponent<PlayerView>();
+                    Collider collider = view.currentCostumeObj.GetComponent<Collider>();
                     if (collider != null)
                     {
                         collider.isTrigger = true;
@@ -232,7 +246,8 @@ public class PlayerController : MonoBehaviour, ITickable
                 grabbedObject.transform.SetParent(null);
                 grabbedObject.transform.position += Vector3.up * 0.5f;
 
-                Collider collider = grabbedObject.GetComponent<Collider>();
+                PlayerView view = grabbedObject.GetComponent<PlayerView>();
+                Collider collider = view.currentCostumeObj.GetComponent<Collider>();
                 if (collider != null)
                 {
                     collider.isTrigger = false;
