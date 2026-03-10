@@ -56,6 +56,7 @@
     <Compile Include="Assets\Scripts\Presentation\View\HUDView.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\CostumeDef.cs" />
     <Compile Include="Assets\Scripts\Domain\MentalLogic.cs" />
+    <Compile Include="Assets\Scripts\Application\Gimmick\DeathGimmick.cs" />
     <Compile Include="Assets\Scripts\Application\InputHandler.cs" />
     <Compile Include="Assets\Scripts\Application\ITickable.cs" />
     <Compile Include="Assets\Scripts\Presentation\View\TitleView.cs" />
@@ -1103,12 +1104,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Splines.Editor">

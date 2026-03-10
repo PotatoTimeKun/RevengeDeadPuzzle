@@ -1,19 +1,89 @@
 using UnityEngine;
 
-public class PlayerView : MonoBehaviour
+public class PlayerView : MonoBehaviour , ITickable
 {
     private PlayerController _controller;
+    public CostumeRegistry CostumeRegistry;
 
-    public void Initialize(PlayerController controller)
+    private void Awake()
     {
-        _controller = controller;
+        _controller = GetComponent<PlayerController>();
+        SetCostume("Default");
     }
+
+    private void Start()
+    {
+        GameLoop.Instance.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        GameLoop.Instance.Unregister(this);
+    }
+
+    private GameObject _currentCostumeObj;
 
     public void SetCostume(string costumeId)
     {
-        // コスチュームのクラスが完成後埋める
-        Debug.Log($"[View] Visual Updated: {costumeId}");
+        // コスチュームのプレハブをResources等からロードしてインスタンス化
+        GameObject newPrefab = CostumeRegistry.GetById(costumeId);
+        if (newPrefab == null)
+        {
+            Debug.LogError($"[View] Costume Prefab not found: {costumeId}");
+            return;
+        }
+
+        // 古いコスチュームオブジェクトがあれば破棄
+        if (_currentCostumeObj != null)
+        {
+            Destroy(_currentCostumeObj);
+        }
+
+        // 新しいコスチュームを子オブジェクトとして生成
+        _currentCostumeObj = Instantiate(newPrefab, transform);
+        _currentCostumeObj.transform.localPosition = Vector3.zero;
+        _currentCostumeObj.transform.localRotation = Quaternion.identity;
+
+        // コスチュームプレハブに付随している不要なコンポーネントを削除
+        var c = _currentCostumeObj.GetComponent<PlayerController>();
+        if (c != null) DestroyImmediate(c);
+        
+        var pv = _currentCostumeObj.GetComponent<PlayerView>();
+        if (pv != null) DestroyImmediate(pv);
+        
+        var cv = _currentCostumeObj.GetComponent<CameraView>();
+        if (cv != null) DestroyImmediate(cv);
+
+        // 物理挙動が二重にならないように子オブジェクトのRigidbodyのプロパティを親にコピーして削除
+        var childRb = _currentCostumeObj.GetComponent<Rigidbody>();
+        if (childRb != null) {
+            var parentRb = gameObject.GetComponent<Rigidbody>();
+            if (parentRb == null) parentRb = gameObject.AddComponent<Rigidbody>();
+            
+            // 設定を親にコピー
+            parentRb.mass = childRb.mass;
+            parentRb.linearDamping = childRb.linearDamping;
+            parentRb.angularDamping = childRb.angularDamping;
+            parentRb.useGravity = childRb.useGravity;
+            parentRb.isKinematic = childRb.isKinematic;
+            parentRb.interpolation = childRb.interpolation;
+            parentRb.collisionDetectionMode = childRb.collisionDetectionMode;
+            parentRb.constraints = childRb.constraints;
+
+            DestroyImmediate(childRb);
+        }
+
+        // PlayerControllerの参照を更新（HitCheckなど）
+        _controller.ground = _currentCostumeObj.GetComponentInChildren<HitCheck>();
+
+        Debug.Log($"[View] Visual Updated: {costumeId} (子オブジェクトとして生成完了)");
     }
 
-    // 死んだあと死因のコスチュームに合わせたり初期化時にコスチュームを変更したりする処理を追加する
+    private bool _deathCostumeChanged = false;
+    public void Tick(float deltaTime){
+        if (_controller.PlayerLogic.State != Entity_Data.PlayerState.Dead) return;
+        if (_deathCostumeChanged) return;
+        SetCostume(_controller.PlayerLogic.Type.ToString());
+        _deathCostumeChanged = true;
+    }
 }
