@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c8c63c2e500f54b955697d0b2ac66b, type: 3}
   m_Name: VikingDef
   m_EditorClassIdentifier: Assembly-CSharp::CostumeDef
-  Id: 
-  Prefab: {fileID: 0}
+  Id: Viking
+  Prefab: {fileID: 5836520904471565294, guid: d10fd0f1a2715c54096281f133e208ce, type: 3}

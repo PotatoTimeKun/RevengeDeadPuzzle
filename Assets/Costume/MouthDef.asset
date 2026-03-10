@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c8c63c2e500f54b955697d0b2ac66b, type: 3}
   m_Name: MouthDef
   m_EditorClassIdentifier: Assembly-CSharp::CostumeDef
-  Id: 
-  Prefab: {fileID: 0}
+  Id: Mouth
+  Prefab: {fileID: 537936909915666189, guid: 37189b95e96560e4d9dedf33f9f5e276, type: 3}

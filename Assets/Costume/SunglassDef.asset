@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c8c63c2e500f54b955697d0b2ac66b, type: 3}
   m_Name: SunglassDef
   m_EditorClassIdentifier: Assembly-CSharp::CostumeDef
-  Id: 
-  Prefab: {fileID: 0}
+  Id: Sunglass
+  Prefab: {fileID: 117334163107630960, guid: 634a245ba5b38cc4ca0c4d66a7e61bb4, type: 3}
