@@ -32,6 +32,8 @@ public class GameUseCase : MonoBehaviour , ITickable
         _playerController = playerObj.GetComponent<PlayerController>();
         _playerController.Initialize(this);
         playerObj.transform.position = _startPos.transform.position;
+        string costumeId = CostumeCollector.Instance.UnlockRandomId();
+        playerObj.GetComponent<PlayerView>().SetCostume(costumeId);
     }
 
     public void StartGame(){

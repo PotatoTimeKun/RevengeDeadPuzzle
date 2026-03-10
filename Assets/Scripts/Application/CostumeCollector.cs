@@ -8,7 +8,6 @@ public class CostumeCollector : MonoBehaviour
     private static CostumeCollector _instance;
     public static CostumeCollector Instance{
         get{
-            if (_instance == null) _instance = new CostumeCollector();
             return _instance;
         }
     }
@@ -17,6 +16,7 @@ public class CostumeCollector : MonoBehaviour
 
     private void Awake()
     {
+        _instance = this;
         CostumeData data = SaveDataStore.Instance.LoadUnlockedCostumes();
         if (data != null && data.UnlockedIdList != null)
         {
