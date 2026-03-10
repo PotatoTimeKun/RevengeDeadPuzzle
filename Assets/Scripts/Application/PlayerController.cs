@@ -180,12 +180,18 @@ public class PlayerController : MonoBehaviour, ITickable
 
                     // 掴んだオブジェクトをアンカーに固定
                     grabbedObject.transform.SetParent(_grabAnchor);
-                    grabbedObject.transform.localPosition = Vector3.zero;
-                    
+                    grabbedObject.transform.localPosition = grabbedObject.transform.localRotation * new Vector3(0, -1.0f, 0);
+
                     // 物理挙動を無効化して持ち運びやすくする
                     if (grabbedObject.rb != null)
                     {
                         grabbedObject.rb.isKinematic = true;
+                    }
+
+                    Collider collider = hitCollider.GetComponent<Collider>();
+                    if (collider != null)
+                    {
+                        collider.isTrigger = true;
                     }
                     break;
                 }
@@ -193,23 +199,29 @@ public class PlayerController : MonoBehaviour, ITickable
         }
         else
         {
-        if (grabbedObject != null)
-        {
-            // 物理挙動を元に戻す
-            if (grabbedObject.rb != null)
+            if (grabbedObject != null)
             {
-                grabbedObject.rb.isKinematic = false;
-                
-                // 死因が「切断」の場合は前方に吹き飛ばす
-                if (grabbedObject.PlayerLogic.Type == Entity_Data.DeathType.Dismembered)
+                // 物理挙動を元に戻す
+                if (grabbedObject.rb != null)
                 {
-                    grabbedObject.rb.AddForce(transform.forward * _throwForce + Vector3.up * (_throwForce * 0.5f), ForceMode.Impulse);
+                    grabbedObject.rb.isKinematic = false;
+                
+                    // 死因が「切断」の場合は前方に吹き飛ばす
+                    if (grabbedObject.PlayerLogic.Type == Entity_Data.DeathType.Dismembered)
+                    {
+                        grabbedObject.rb.AddForce(transform.forward * _throwForce + Vector3.up * (_throwForce * 0.5f), ForceMode.Impulse);
+                    }
                 }
-            }
 
-            // 親子関係を解除してその場に少し浮かせて置く
-            grabbedObject.transform.SetParent(null);
-            grabbedObject.transform.position += Vector3.up * 0.5f;
+                // 親子関係を解除してその場に少し浮かせて置く
+                grabbedObject.transform.SetParent(null);
+                grabbedObject.transform.position += Vector3.up * 0.5f;
+
+                Collider collider = grabbedObject.GetComponent<Collider>();
+                if (collider != null)
+                {
+                    collider.isTrigger = false;
+                }
             }
 
             grabbedObject = null;
