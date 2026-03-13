@@ -7,7 +7,6 @@ public class GameLoop : MonoBehaviour
 
     void Awake(){
         Instance = this;
-        DontDestroyOnLoad(transform.gameObject);
     }
 
     // 更新リスト（ITickableを実装したクラスをここに入れる）
