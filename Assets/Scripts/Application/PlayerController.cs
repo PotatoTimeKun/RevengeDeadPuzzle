@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour, ITickable
             GameObject anchorObj = new GameObject("GrabAnchor");
             _grabAnchor = anchorObj.transform;
             _grabAnchor.SetParent(transform);
-            _grabAnchor.localPosition = new Vector3(0, 1f, 1f); // プレイヤーの少し前方に配置
+            _grabAnchor.localPosition = new Vector3(0, 1f, 1.8f); // プレイヤーの少し前方に配置
         }
 
         GameLoop.Instance.Register(this);
@@ -178,6 +178,19 @@ public class PlayerController : MonoBehaviour, ITickable
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        // 判定の色を設定（半透明の黄色などが見やすいです）
+        Gizmos.color = new Color(1, 1, 0, 0.3f);
+
+        // 実際の判定と同じ位置・半径で球体を描画
+        Gizmos.DrawSphere(transform.position, _grabRange);
+
+        // 輪郭線も描くと範囲がよりハッキリします
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _grabRange);
+    }
+
     //掴む・離す
     public void Grab()
     {
@@ -187,7 +200,7 @@ public class PlayerController : MonoBehaviour, ITickable
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, _grabRange);
             foreach (var hitCollider in hitColliders)
             {
-                PlayerController target = hitCollider.GetComponent<PlayerController>();
+                PlayerController target = hitCollider.GetComponentInParent<PlayerController>();
                 if (target != null && target != this && target.PlayerLogic.State == Entity_Data.PlayerState.Dead)
                 {
                     grabbedObject = target;
@@ -195,12 +208,19 @@ public class PlayerController : MonoBehaviour, ITickable
 
                     // 掴んだオブジェクトをアンカーに固定
                     grabbedObject.transform.SetParent(_grabAnchor);
-                    grabbedObject.transform.localPosition = Vector3.zero;
-                    
+                    grabbedObject.transform.localPosition = grabbedObject.transform.localRotation * new Vector3(0, -1.0f, 0);
+
                     // 物理挙動を無効化して持ち運びやすくする
                     if (grabbedObject.rb != null)
                     {
                         grabbedObject.rb.isKinematic = true;
+                    }
+
+                    PlayerView view = grabbedObject.GetComponent<PlayerView>();
+                    Collider collider = view.currentCostumeObj.GetComponent<Collider>();
+                    if (collider != null)
+                    {
+                        collider.isTrigger = true;
                     }
                     break;
                 }
@@ -208,23 +228,30 @@ public class PlayerController : MonoBehaviour, ITickable
         }
         else
         {
-        if (grabbedObject != null)
-        {
-            // 物理挙動を元に戻す
-            if (grabbedObject.rb != null)
+            if (grabbedObject != null)
             {
-                grabbedObject.rb.isKinematic = false;
-                
-                // 死因が「切断」の場合は前方に吹き飛ばす
-                if (grabbedObject.PlayerLogic.Type == Entity_Data.DeathType.Dismembered)
+                // 物理挙動を元に戻す
+                if (grabbedObject.rb != null)
                 {
-                    grabbedObject.rb.AddForce(transform.forward * _throwForce + Vector3.up * (_throwForce * 0.5f), ForceMode.Impulse);
+                    grabbedObject.rb.isKinematic = false;
+                
+                    // 死因が「切断」の場合は前方に吹き飛ばす
+                    if (grabbedObject.PlayerLogic.Type == Entity_Data.DeathType.Dismembered)
+                    {
+                        grabbedObject.rb.AddForce(transform.forward * _throwForce + Vector3.up * (_throwForce * 0.5f), ForceMode.Impulse);
+                    }
                 }
-            }
 
-            // 親子関係を解除してその場に少し浮かせて置く
-            grabbedObject.transform.SetParent(null);
-            grabbedObject.transform.position += Vector3.up * 0.5f;
+                // 親子関係を解除してその場に少し浮かせて置く
+                grabbedObject.transform.SetParent(null);
+                grabbedObject.transform.position += Vector3.up * 0.5f;
+
+                PlayerView view = grabbedObject.GetComponent<PlayerView>();
+                Collider collider = view.currentCostumeObj.GetComponent<Collider>();
+                if (collider != null)
+                {
+                    collider.isTrigger = false;
+                }
             }
 
             grabbedObject = null;
