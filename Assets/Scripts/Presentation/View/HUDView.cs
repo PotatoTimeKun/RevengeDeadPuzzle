@@ -4,6 +4,18 @@ using System.Collections.Generic;
 
 public class HUDView : MonoBehaviour
 {
+    public static HUDView Instance { get; private set; }
+    private void Awake() {
+        Instance = this;
+    }
+    public void ToggleMenuPanel(){
+        MenuPanel.SetActive(!MenuPanel.activeSelf);
+        InputHandler.Instance.SetInputState(MenuPanel.activeSelf ? InputState.Menu : InputState.Player);
+    }
+    void OnDestroy(){
+        InputHandler.Instance.Player.Menu -= ToggleMenuPanel;
+    }
+    public GameObject MenuPanel;
     public Slider MentalSlider;
     public Text DeadCountText;
     public Text TimerText;
@@ -68,6 +80,8 @@ public class HUDView : MonoBehaviour
 
     void Start()
     {
+        MenuPanel.SetActive(false);
+        InputHandler.Instance.Player.Menu += ToggleMenuPanel;
         UpdateStageName(GameUseCase.Instance.Stage.DisplayName);
         UpdateEvaluationText();
     }
