@@ -19,7 +19,6 @@ public class UnityInputProvider : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {

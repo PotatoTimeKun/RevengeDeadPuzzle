@@ -1,19 +1,20 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class StageSelecter
+public class StageSelecter : MonoBehaviour
 {
     private static StageSelecter _instance;
     public static StageSelecter Instance{
         get{
-            if (_instance == null) _instance = new StageSelecter();
             return _instance;
         }
     }
-    public List<string> UnlockedStageList;
+    [HideInInspector] public List<string> UnlockedStageList = new();
+    public StageRegistry StageRegistry;
 
-    private StageSelecter()
-    {
+    private void Awake() {
+        if (_instance == null) _instance = this;
+        else Destroy(gameObject);
         StageProgressData data = SaveDataStore.Instance.LoadStageProgress();
         if (data != null && data.UnlockedIdList != null)
         {
@@ -26,11 +27,11 @@ public class StageSelecter
         if (!UnlockedStageList.Contains(id))
         {
             UnlockedStageList.Add(id);
-            Debug.Log($"V‚µ‚¢ƒXƒe[ƒW‚ðƒAƒ“ƒƒbƒN: {id}");
+            Debug.Log($"æ–°ã—ã„ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ã‚¢ãƒ³ãƒ­ãƒƒã‚¯: {id}");
         }
         else
         {
-            Debug.Log($"ƒXƒe[ƒW '{id}' ‚Í‚·‚Å‚ÉƒAƒ“ƒƒbƒN‚³‚ê‚Ä‚¢‚Ü‚·B");
+            Debug.Log($"ã‚¹ãƒ†ãƒ¼ã‚¸ '{id}' ã¯ã™ã§ã«ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ã•ã‚Œã¦ã„ã¾ã™ã€‚");
         }
     }
 }
