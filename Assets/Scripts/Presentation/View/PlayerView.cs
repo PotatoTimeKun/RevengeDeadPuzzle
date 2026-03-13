@@ -22,6 +22,11 @@ public class PlayerView : MonoBehaviour , ITickable
     }
 
     private GameObject _currentCostumeObj;
+    public GameObject currentCostumeObj
+    {
+        get { return _currentCostumeObj; }
+        private set { _currentCostumeObj = value; }
+    }
 
     public void SetCostume(string costumeId)
     {
@@ -34,28 +39,28 @@ public class PlayerView : MonoBehaviour , ITickable
         }
 
         // 古いコスチュームオブジェクトがあれば破棄
-        if (_currentCostumeObj != null)
+        if (currentCostumeObj != null)
         {
             Destroy(_currentCostumeObj);
         }
 
         // 新しいコスチュームを子オブジェクトとして生成
-        _currentCostumeObj = Instantiate(newPrefab, transform);
-        _currentCostumeObj.transform.localPosition = Vector3.zero;
-        _currentCostumeObj.transform.localRotation = Quaternion.identity;
+        currentCostumeObj = Instantiate(newPrefab, transform);
+        currentCostumeObj.transform.localPosition = Vector3.zero;
+        currentCostumeObj.transform.localRotation = Quaternion.identity;
 
         // コスチュームプレハブに付随している不要なコンポーネントを削除
-        var c = _currentCostumeObj.GetComponent<PlayerController>();
+        var c = currentCostumeObj.GetComponent<PlayerController>();
         if (c != null) DestroyImmediate(c);
         
-        var pv = _currentCostumeObj.GetComponent<PlayerView>();
+        var pv = currentCostumeObj.GetComponent<PlayerView>();
         if (pv != null) DestroyImmediate(pv);
         
-        var cv = _currentCostumeObj.GetComponent<CameraView>();
+        var cv = currentCostumeObj.GetComponent<CameraView>();
         if (cv != null) DestroyImmediate(cv);
 
         // 物理挙動が二重にならないように子オブジェクトのRigidbodyのプロパティを親にコピーして削除
-        var childRb = _currentCostumeObj.GetComponent<Rigidbody>();
+        var childRb = currentCostumeObj.GetComponent<Rigidbody>();
         if (childRb != null) {
             var parentRb = gameObject.GetComponent<Rigidbody>();
             if (parentRb == null) parentRb = gameObject.AddComponent<Rigidbody>();
