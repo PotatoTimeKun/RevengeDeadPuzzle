@@ -63,8 +63,17 @@ public class UnityInputProvider : MonoBehaviour
         inputActions.Disable();
     }
 
+    private void UpdateDevice(InputAction.CallbackContext context)
+    {
+        if (context.control != null)
+        {
+            inputHandler.IsGamepad = context.control.device is Gamepad;
+        }
+    }
+
     private void HandlePlayerMove(InputAction.CallbackContext context)
     {
+        UpdateDevice(context);
         if (InputHandler.Instance.CurrentInputState != InputState.Player) return;
         Vector2 move = context.ReadValue<Vector2>();
         inputHandler.Player.Move?.Invoke(move);
@@ -72,30 +81,35 @@ public class UnityInputProvider : MonoBehaviour
 
     private void HandlePlayerJump(InputAction.CallbackContext context)
     {
+        UpdateDevice(context);
         if (InputHandler.Instance.CurrentInputState != InputState.Player) return;
         inputHandler.Player.Jump?.Invoke();
     }
 
     private void HandlePlayerDrag(InputAction.CallbackContext context)
     {
+        UpdateDevice(context);
         if (InputHandler.Instance.CurrentInputState != InputState.Player) return;
         inputHandler.Player.Drag?.Invoke();
     }
 
     private void HandlePlayerSuicide(InputAction.CallbackContext context)
     {
+        UpdateDevice(context);
         if (InputHandler.Instance.CurrentInputState != InputState.Player) return;
         inputHandler.Player.Suicide?.Invoke();
     }
 
     private void HandlePlayerMenu(InputAction.CallbackContext context)
     {
+        UpdateDevice(context);
         if (InputHandler.Instance.CurrentInputState != InputState.Player) return;
         inputHandler.Player.Menu?.Invoke();
     }
 
     private void HandleMenuMove(InputAction.CallbackContext context)
     {
+        UpdateDevice(context);
         if (InputHandler.Instance.CurrentInputState != InputState.Menu) return;
         Vector2 move = context.ReadValue<Vector2>();
         inputHandler.Menu.Move?.Invoke(move);
@@ -103,12 +117,14 @@ public class UnityInputProvider : MonoBehaviour
 
     private void HandleMenuSubmit(InputAction.CallbackContext context)
     {
+        UpdateDevice(context);
         if (InputHandler.Instance.CurrentInputState != InputState.Menu) return;
         inputHandler.Menu.Submit?.Invoke();
     }
 
     private void HandleMenuCancel(InputAction.CallbackContext context)
     {
+        UpdateDevice(context);
         if (InputHandler.Instance.CurrentInputState != InputState.Menu) return;
         inputHandler.Menu.Cancel?.Invoke();
     }

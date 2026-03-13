@@ -27,6 +27,9 @@ public class InputHandler
         set { _currentInputState = value; }
     }
 
+    public bool IsGamepad { get; set; }
+
+
     [SerializeField]
     public class PlayerAction
     {
