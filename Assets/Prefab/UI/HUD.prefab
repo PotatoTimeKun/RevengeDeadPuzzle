@@ -3510,7 +3510,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5712899912091921967, guid: 731e2c05e2fb43c4999116bcd303398b, type: 3}
       propertyPath: OnSubmitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleMenuPanel
+      value: CloseMenuPanel
       objectReference: {fileID: 0}
     - target: {fileID: 5712899912091921967, guid: 731e2c05e2fb43c4999116bcd303398b, type: 3}
       propertyPath: OnSubmitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

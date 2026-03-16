@@ -9,15 +9,20 @@ public class HUDView : MonoBehaviour
         Instance = this;
         MenuPanel.SetActive(false);
     }
-    public void ToggleMenuPanel(){
-        if(isSettingViewOpen) return;
-        MenuPanel.SetActive(!MenuPanel.activeSelf);
-        InputHandler.Instance.SetInputState(MenuPanel.activeSelf ? InputState.Menu : InputState.Player);
-        if(MenuPanel.activeSelf) {
-            GameUseCase.Instance.PauseGame();
-        } else {
-            GameUseCase.Instance.ResumeGame();
-        }
+    private int _lastFrame = -1; // 連続呼び出しを防ぐ
+    public void CloseMenuPanel(){
+        if(isSettingViewOpen || !MenuPanel.activeSelf || Time.frameCount == _lastFrame) return;
+        _lastFrame = Time.frameCount;
+        MenuPanel.SetActive(false);
+        InputHandler.Instance.SetInputState(InputState.Player);
+        GameUseCase.Instance.ResumeGame();
+    }
+    public void OpenMenuPanel(){
+        if(isSettingViewOpen || MenuPanel.activeSelf || Time.frameCount == _lastFrame) return;
+        _lastFrame = Time.frameCount;
+        MenuPanel.SetActive(true);
+        InputHandler.Instance.SetInputState(InputState.Menu);
+        GameUseCase.Instance.PauseGame();
     }
     private bool isSettingViewOpen = false;
     public void OpenSettingView() {
@@ -30,7 +35,14 @@ public class HUDView : MonoBehaviour
         StageSelectView.OpenScene();
     }
     void OnDestroy(){
-        InputHandler.Instance.Player.Menu -= ToggleMenuPanel;
+        InputHandler.Instance.Player.Menu -= OpenMenuPanel;
+        InputHandler.Instance.Menu.Cancel -= CloseMenuPanel;
+        UnityEngine.SceneManagement.SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+    private void OnSceneUnloaded(UnityEngine.SceneManagement.Scene scene) {
+        if (scene.name == "setting") {
+            isSettingViewOpen = false;
+        }
     }
     public GameObject MenuPanel;
     public Slider MentalSlider;
@@ -98,7 +110,9 @@ public class HUDView : MonoBehaviour
     void Start()
     {
         MenuPanel.SetActive(false);
-        InputHandler.Instance.Player.Menu += ToggleMenuPanel;
+        InputHandler.Instance.Player.Menu += OpenMenuPanel;
+        InputHandler.Instance.Menu.Cancel += CloseMenuPanel;
+        UnityEngine.SceneManagement.SceneManager.sceneUnloaded += OnSceneUnloaded;
         UpdateStageName(GameUseCase.Instance.Stage.DisplayName);
         UpdateEvaluationText();
     }
