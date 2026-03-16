@@ -1,6 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+
+[CustomEditor(typeof(Application.View.UI.UIListNavigator))]
+public class UIListNavigatorEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+        DrawDefaultInspector();
+        serializedObject.ApplyModifiedProperties();
+    }
+}
+#endif
+
 namespace Application.View.UI
 {
     public class UIListNavigator : MonoBehaviour

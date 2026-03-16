@@ -7,10 +7,27 @@ public class HUDView : MonoBehaviour
     public static HUDView Instance { get; private set; }
     private void Awake() {
         Instance = this;
+        MenuPanel.SetActive(false);
     }
     public void ToggleMenuPanel(){
+        if(isSettingViewOpen) return;
         MenuPanel.SetActive(!MenuPanel.activeSelf);
         InputHandler.Instance.SetInputState(MenuPanel.activeSelf ? InputState.Menu : InputState.Player);
+        if(MenuPanel.activeSelf) {
+            GameUseCase.Instance.PauseGame();
+        } else {
+            GameUseCase.Instance.ResumeGame();
+        }
+    }
+    private bool isSettingViewOpen = false;
+    public void OpenSettingView() {
+        if(isSettingViewOpen) return;
+        SettingView.OpenScene();
+        isSettingViewOpen = true;
+    }
+    public void OpenStageSelectView() {
+        if(isSettingViewOpen) return;
+        StageSelectView.OpenScene();
     }
     void OnDestroy(){
         InputHandler.Instance.Player.Menu -= ToggleMenuPanel;
@@ -88,6 +105,7 @@ public class HUDView : MonoBehaviour
 
     void Update()
     {
+        // ゲームの状態を監視してHUDに反映
         float mental = GameUseCase.Instance.Mental.CurrentValue / GameUseCase.Instance.Mental.MaxValue;
         UpdateMental(mental);
         UpdateDeadCount(GameUseCase.Instance.Score.DeathCount);
