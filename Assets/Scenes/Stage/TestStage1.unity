@@ -1085,7 +1085,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1017039067398925321, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1043561032956053703, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
       propertyPath: m_Pivot.x
@@ -1551,6 +1551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7677621206d69e04b9bacd2b9ce9c094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameUseCase
+  PlayerController: {fileID: 0}
   Stage: {fileID: 11400000, guid: b0fe622eab627ec489d24481009078a4, type: 2}
   _startPos: {fileID: 6054983442152854788}
   PlayerPrefab: {fileID: 4561269876711536481, guid: 3aa64a99ba331bf42a4cb725ef9667bc, type: 3}
