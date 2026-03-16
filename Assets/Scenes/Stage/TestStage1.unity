@@ -743,6 +743,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1486501948 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1017039067398925321, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
+  m_PrefabInstance: {fileID: 1748980058}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1748980058
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -834,6 +839,22 @@ PrefabInstance:
     - target: {fileID: 1043561032956053703, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2610685188846260719, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
+      propertyPath: MenuPanel
+      value: 
+      objectReference: {fileID: 1486501948}
+    - target: {fileID: 8294235631897463436, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8294235631897463436, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8294235631897463436, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8332170060096192430, guid: c8d5dacb6024a6c4da429f1b0134c026, type: 3}
       propertyPath: m_AnchorMax.x

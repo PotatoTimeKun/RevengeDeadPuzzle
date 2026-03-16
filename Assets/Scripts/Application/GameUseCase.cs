@@ -36,15 +36,22 @@ public class GameUseCase : MonoBehaviour , ITickable
     }
 
     public void StartGame(){
+        InputHandler.Instance.SetInputState(InputState.Player);
         SpawnPlayer();
     }
 
     public void PauseGame(){
+        InputHandler.Instance.SetInputState(InputState.Menu);
+        // タイマー、物理エンジン等を停止
         Score.StopTimer();
+        Time.timeScale = 0f;
     }
 
     public void ResumeGame(){
+        InputHandler.Instance.SetInputState(InputState.Player);
+        // タイマー、物理エンジン等を再開
         Score.ResumeTimer();
+        Time.timeScale = 1f;
     }
 
     public void OnPlayerDead(Entity_Data.DeathType deathType){ // 
