@@ -57,6 +57,7 @@ public class HUDView : MonoBehaviour
     public Text TypeEvaluationText;
     public GameObject KeybordGuide;
     public GameObject GamepadGuide;
+    public Animator ClearTextAnimator;
     public void UpdateMental(float value)
     {
         MentalSlider.value = value;
@@ -107,6 +108,10 @@ public class HUDView : MonoBehaviour
         }
     }
 
+    public void ShowClearEffect(){
+        ClearTextAnimator.SetBool("Goal", true);
+    }
+
     void Start()
     {
         MenuPanel.SetActive(false);
@@ -129,5 +134,8 @@ public class HUDView : MonoBehaviour
         int second = (int)(GameUseCase.Instance.Score.CurrentTime % 60);
         UpdateTimer(minute, second);
         UpdateGuide();
+        if(GameUseCase.Instance.PlayerController.PlayerLogic.State == Entity_Data.PlayerState.Goal){
+            ShowClearEffect();
+        }
     }
 }

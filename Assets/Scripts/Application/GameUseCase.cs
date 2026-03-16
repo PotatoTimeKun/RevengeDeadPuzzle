@@ -7,7 +7,7 @@ public class GameUseCase : MonoBehaviour , ITickable
     private void Awake() {
         Instance = this;
     }
-    private PlayerController _playerController;
+    public PlayerController PlayerController;
     public StageDef Stage;
     private CinemachineCamera _cinemachineCamera;
     private CinemachineFollow _cinemachineFollow;
@@ -28,8 +28,8 @@ public class GameUseCase : MonoBehaviour , ITickable
 
     private void SpawnPlayer(){
         GameObject playerObj = Instantiate(PlayerPrefab);
-        _playerController = playerObj.GetComponent<PlayerController>();
-        _playerController.Initialize(this);
+        PlayerController = playerObj.GetComponent<PlayerController>();
+        PlayerController.Initialize(this);
         playerObj.transform.position = _startPos.transform.position;
         string costumeId = CostumeCollector.Instance.UnlockRandomId();
         playerObj.GetComponent<PlayerView>().SetCostume(costumeId);
@@ -58,11 +58,29 @@ public class GameUseCase : MonoBehaviour , ITickable
         SpawnPlayer();
     }
 
-    public void OnGoal(){}
+    private bool _goalFlag = false;
+    private float _goalWaitTime = 3.0f;
+    public void OnGoal(){
+        // ゴール演出を待機
+        if (_goalFlag) return;
+        _goalFlag = true;
+        Score.StopTimer();
+        PlayerController.PlayerLogic.State = Entity_Data.PlayerState.Goal;
+    }
 
     public void Tick(float deltaTime){
         // 死んだときに処理を実行
-        if (_playerController.PlayerLogic.State != Entity_Data.PlayerState.Dead) return;
-        OnPlayerDead(_playerController.PlayerLogic.Type);
+        if (PlayerController.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
+            OnPlayerDead(PlayerController.PlayerLogic.Type);
+            return;
+        }
+
+        // ゴールしたときに処理を実行
+        if (_goalFlag) {
+            _goalWaitTime -= deltaTime;
+            if (_goalWaitTime <= 0) {
+                ResultView.OpenScene();
+            }
+        }
     }
 }

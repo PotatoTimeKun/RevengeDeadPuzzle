@@ -37,6 +37,7 @@ public class PlayerLogic : ITickable
         if (_deathAnimationTimer >= DEATH_ANIMATION_LENGTH) State = Entity_Data.PlayerState.Dead;
     }
     public void Die(Entity_Data.DeathType deathType){
+        if (State == Entity_Data.PlayerState.Goal) return; // ゴールしていたら死なない
         Type = deathType;
         State = Entity_Data.PlayerState.DeathAnimationWait;
         // メンタルを減らす

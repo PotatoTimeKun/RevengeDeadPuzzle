@@ -12,6 +12,7 @@ public class Entity_Data
     public enum PlayerState { // プレイヤーの状態
         Alive,
         DeathAnimationWait,
-        Dead
+        Dead,
+        Goal
     }
 }

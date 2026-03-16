@@ -143,5 +143,10 @@ namespace Application.View.UI
                 }
             }
         }
+
+        void Start(){
+            _currentIndex = 0;
+            UpdateSelectionVisuals();
+        }
     }
 }
