@@ -207,7 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75514f5ac7c95074cb183888a62048ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HUDView
-  MenuPanel: {fileID: 0}
+  MenuPanel: {fileID: 1017039067398925321}
   MentalSlider: {fileID: 7606548755818376941}
   DeadCountText: {fileID: 3477183007560236418}
   TimerText: {fileID: 7435576915141805744}
