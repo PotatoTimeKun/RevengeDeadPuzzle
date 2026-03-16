@@ -242,8 +242,19 @@
                 },
                 {
                     "name": "",
-                    "id": "23600de7-84b7-41c3-a164-83cfc75cc0fc",
-                    "path": "<Gamepad>/select",
+                    "id": "bea1e5cb-48dc-411d-93f3-3589a4f5cf99",
+                    "path": "<XInputController>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5ea94381-c66c-4417-afe1-161e1989b152",
+                    "path": "<DualShockGamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
