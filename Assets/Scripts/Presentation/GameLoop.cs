@@ -6,7 +6,14 @@ public class GameLoop : MonoBehaviour
     public static GameLoop Instance { get; private set; }
 
     void Awake(){
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // 更新リスト（ITickableを実装したクラスをここに入れる）
