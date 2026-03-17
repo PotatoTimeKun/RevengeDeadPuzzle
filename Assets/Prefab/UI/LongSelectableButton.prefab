@@ -90,7 +90,6 @@ GameObject:
   - component: {fileID: 2899493495347083974}
   - component: {fileID: 4909441037234571836}
   - component: {fileID: 7991071116803262983}
-  - component: {fileID: 5849888753425501344}
   m_Layer: 5
   m_Name: Selected
   m_TagString: Untagged
@@ -157,23 +156,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5849888753425501344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 518236256419309740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dda85821d5806d489838a42dbe249b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Application.View.UI.UIButton
-  SelectedObject: {fileID: 0}
-  UnselectedObject: {fileID: 0}
-  OnSubmitEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2152516939511911992
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +167,6 @@ GameObject:
   - component: {fileID: 6629974027285278424}
   - component: {fileID: 5325793060455756801}
   - component: {fileID: 8416072466468279422}
-  - component: {fileID: 7351494730717292028}
   m_Layer: 5
   m_Name: Unselected
   m_TagString: Untagged
@@ -251,23 +232,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7351494730717292028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2152516939511911992}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dda85821d5806d489838a42dbe249b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Application.View.UI.UIButton
-  SelectedObject: {fileID: 0}
-  UnselectedObject: {fileID: 0}
-  OnSubmitEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6000473460210721443
 GameObject:
   m_ObjectHideFlags: 0

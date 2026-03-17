@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class ScoreLogic : ITickable
 {
+    public static ScoreLogic BeforeScore;
     private float _currentTime;
     private StageDef _currentStage;
     private bool _isTimerEnabled;
@@ -12,11 +13,15 @@ public class ScoreLogic : ITickable
 
     public ScoreLogic(StageDef stage)
     {
+        BeforeScore = this;
         _currentStage = stage;
         _currentTime = 0f;
         _isTimerEnabled = true;
         DeathCount = 0;
         GameLoop.Instance.Register(this);
+    }
+    ~ScoreLogic(){
+        GameLoop.Instance.Unregister(this);
     }
 
     public void Tick(float deltaTime)

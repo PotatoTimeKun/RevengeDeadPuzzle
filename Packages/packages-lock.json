@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.hecomi.uchromakey": {
+      "version": "https://github.com/hecomi/uChromaKey.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0d7af7585efc0001d7a664ff78b9429d33263d86"
+    },
     "com.unity.cinemachine": {
       "version": "3.1.6",
       "depth": 0,

@@ -86,11 +86,11 @@ public class PlayerController : MonoBehaviour, ITickable
 
         GameLoop.Instance.Register(this);
     }
-
-    private void OnDisable()
+    private void OnDestroy()
     {
-        ground.IsHit -= OnHitGround;
+        GameLoop.Instance.Unregister(this);
     }
+
     public void SetModelVisibility(bool visible)
     {
         if (_allRenderers == null) return;

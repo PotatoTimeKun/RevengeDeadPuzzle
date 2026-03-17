@@ -48,6 +48,7 @@ public class UnityInputProvider : MonoBehaviour
 
     private void OnDisable()
     {
+        if (inputActions == null) return;
         inputActions.Player.Move.performed -= HandlePlayerMove;
         inputActions.Player.Move.canceled -= HandlePlayerMove;
         inputActions.Player.Jump.performed -= HandlePlayerJump;

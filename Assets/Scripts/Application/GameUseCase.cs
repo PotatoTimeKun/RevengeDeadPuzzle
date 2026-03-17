@@ -6,7 +6,9 @@ public class GameUseCase : MonoBehaviour , ITickable
     public static GameUseCase Instance { get; private set; }
     private void Awake() {
         Instance = this;
+        BeforeStage = Stage;
     }
+    public static StageDef BeforeStage;
     public PlayerController PlayerController;
     public StageDef Stage;
     private CinemachineCamera _cinemachineCamera;
@@ -24,6 +26,10 @@ public class GameUseCase : MonoBehaviour , ITickable
     }
     void OnDestroy(){
         GameLoop.Instance.Unregister(this);
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     private void SpawnPlayer(){
@@ -36,7 +42,9 @@ public class GameUseCase : MonoBehaviour , ITickable
     }
 
     public void StartGame(){
+        Debug.Log("GameUseCase StartGame");
         InputHandler.Instance.SetInputState(InputState.Player);
+        Time.timeScale = 1f;
         SpawnPlayer();
     }
 
@@ -59,7 +67,7 @@ public class GameUseCase : MonoBehaviour , ITickable
     }
 
     private bool _goalFlag = false;
-    private float _goalWaitTime = 3.0f;
+    private float _goalWaitTime = 2.0f;
     public void OnGoal(){
         // ゴール演出を待機
         if (_goalFlag) return;
