@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using System.Collections.Generic;
 
 public class GameUseCase : MonoBehaviour , ITickable
 {
@@ -74,6 +75,8 @@ public class GameUseCase : MonoBehaviour , ITickable
         _goalFlag = true;
         Score.StopTimer();
         PlayerController.PlayerLogic.State = Entity_Data.PlayerState.Goal;
+        List<bool> evaluations = Score.CheckEvaluation();
+        StageSelecter.Instance.ClearStage(Stage.Id,evaluations[0],evaluations[1],evaluations[2]);
     }
 
     public void Tick(float deltaTime){

@@ -10,19 +10,24 @@ public class StageSelecter : MonoBehaviour
         }
     }
     [HideInInspector] public List<string> UnlockedStageList = new();
+    [HideInInspector] public List<ScoreData> ScoreDataList = new();
     public StageRegistry StageRegistry;
 
     private void Awake() {
         if (_instance == null) _instance = this;
-        else Destroy(gameObject);
+        else {
+            Destroy(gameObject);
+            return;
+        }
         StageProgressData data = SaveDataStore.Instance.LoadStageProgress();
         if (data != null && data.UnlockedIdList != null)
         {
             UnlockedStageList = data.UnlockedIdList;
+            ScoreDataList = data.ScoreDataList;
         }
     }
 
-    public void UnlockStage(string id)
+    private void UnlockStage(string id)
     {
         if (!UnlockedStageList.Contains(id))
         {
@@ -33,5 +38,25 @@ public class StageSelecter : MonoBehaviour
         {
             Debug.Log($"ステージ '{id}' はすでにアンロックされています。");
         }
+    }
+
+    private void AddScore(string stageId,bool time,bool count,bool type){
+        var scoreData = ScoreDataList.Find(x => x.StageId == stageId);
+        if (scoreData == null)
+        {
+            scoreData = new ScoreData { StageId = stageId, IsClear = true, TimeTarget = time, CountTarget = count, TypeTarget = type };
+            ScoreDataList.Add(scoreData);
+            return;
+        }
+        scoreData.TimeTarget = scoreData.TimeTarget || time;
+        scoreData.CountTarget = scoreData.CountTarget || count;
+        scoreData.TypeTarget = scoreData.TypeTarget || type;
+    }
+
+    public void ClearStage(string stageId,bool time,bool count,bool type){
+        string nextStageId = StageRegistry.GetNextStageId(stageId);
+        if (nextStageId != null) UnlockStage(nextStageId);
+        AddScore(stageId,time,count,type);
+        SaveDataStore.Instance.SaveAll();
     }
 }

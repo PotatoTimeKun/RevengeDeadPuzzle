@@ -37,6 +37,7 @@ public class CostumeCollector : MonoBehaviour
             !restrictedIds.Contains(c.Id));
         var randomCostume = costumes[Random.Range(0, costumes.Count)];
         if (!UnlockedIdList.Contains(randomCostume.Id)) UnlockedIdList.Add(randomCostume.Id);
+        SaveDataStore.Instance.SaveAll();
         return randomCostume.Id;
     }
 }

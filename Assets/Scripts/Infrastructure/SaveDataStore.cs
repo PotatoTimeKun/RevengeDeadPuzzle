@@ -48,6 +48,10 @@ public class SaveDataStore
 
     public void SaveAll()
     {
+        CurrentData.StageProgress.ScoreDataList = StageSelecter.Instance.ScoreDataList;
+        CurrentData.StageProgress.UnlockedIdList = StageSelecter.Instance.UnlockedStageList;
+        CurrentData.Costume.UnlockedIdList = CostumeCollector.Instance.UnlockedIdList;
+        CurrentData.Setting = SettingDataController.CurrentData;
         SaveToCache(CurrentData);
     }
 
