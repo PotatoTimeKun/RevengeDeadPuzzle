@@ -40,7 +40,7 @@ public class SaveDataStore
 
         return new SaveData
         {
-            StageProgress = new StageProgressData { UnlockedIdList = new System.Collections.Generic.List<string>() },
+            StageProgress = new StageProgressData { UnlockedIdList = new System.Collections.Generic.List<string>() , ScoreDataList = new System.Collections.Generic.List<ScoreData>()},
             Costume = new CostumeData { UnlockedIdList = new System.Collections.Generic.List<string>() },
             Setting = new SettingData { MasterVolume = 1.0f, BgmVolume = 1.0f, SeVolume = 1.0f, RecoveryIsCat = true }
         };
@@ -78,6 +78,16 @@ public class SaveData
 [System.Serializable]
 public class StageProgressData{
     public List<string> UnlockedIdList;
+    public List<ScoreData> ScoreDataList;
+}
+
+[System.Serializable]
+public class ScoreData{
+    public string StageId;
+    public bool IsClear;
+    public bool TimeTarget;
+    public bool CountTarget;
+    public bool TypeTarget;
 }
 
 [System.Serializable]
