@@ -23,21 +23,23 @@ public class CostumeCollector : MonoBehaviour
             UnlockedIdList = data.UnlockedIdList;
         }
     }
+    
     public string UnlockRandomId()
-    { // ランダムなコスチュームのIDを返す
+    { // コスチューム解放
         if (CostumeRegistry == null || CostumeRegistry.AllCostume == null || CostumeRegistry.AllCostume.Count == 0)
         {
             Debug.LogWarning("CostumeRegistryが設定されていないか、コスチュームが一つも登録されていません！");
             return null;
         }
-        var restrictedIds = new HashSet<string> { "None", "Burned", "Frozen", "Crushed", "Dismembered" };
         // 死体のIDを除外
+        var restrictedIds = new HashSet<string> { "None", "Burned", "Frozen", "Crushed", "Dismembered" };
         var costumes = CostumeRegistry.AllCostume.FindAll(c => 
             c != null && 
             !restrictedIds.Contains(c.Id));
+        // ランダムなコスチュームのIDを返す
         var randomCostume = costumes[Random.Range(0, costumes.Count)];
         if (!UnlockedIdList.Contains(randomCostume.Id)) UnlockedIdList.Add(randomCostume.Id);
-        SaveDataStore.Instance.SaveAll();
+        SaveDataStore.Instance.SaveAll(); // 解放したコスチュームの保存
         return randomCostume.Id;
     }
 }

@@ -9,6 +9,30 @@ public class CameraView : MonoBehaviour, ITickable
     private Transform _eyeAnchor;
     private bool _isFirstPerson = true;
 
+    private CinemachineCamera _vcam;
+    public CinemachineCamera vcam
+    {
+        get { 
+            if (_vcam == null) {
+                _vcam = FindAnyObjectByType<CinemachineCamera>();
+            }
+            return _vcam; 
+        }
+        set { _vcam = value; }
+    }
+
+    private CinemachineFollow _follow;
+    public CinemachineFollow follow
+    {
+        get { 
+            if (_follow == null) {
+                _follow = FindAnyObjectByType<CinemachineFollow>();
+            }
+            return _follow;
+         }
+        set { _follow = value; }
+    }
+
     private void Start()
     {
         _controller = GetComponent<PlayerController>();
@@ -23,11 +47,11 @@ public class CameraView : MonoBehaviour, ITickable
         _eyeAnchor.localPosition = new Vector3(0, 1.5f, 0.2f); 
         _eyeAnchor.localRotation = Quaternion.identity;
         Transform transform = _controller.gameObject.transform;
-        _controller.vcam.Follow = transform;
-        _controller.vcam.LookAt = transform;
-        if (!hasDefaultFollow && _controller.follow != null)
+        vcam.Follow = transform;
+        vcam.LookAt = transform;
+        if (!hasDefaultFollow && follow != null)
         {
-            defaultFollow = _controller.follow.FollowOffset;
+            defaultFollow = follow.FollowOffset;
             hasDefaultFollow = true;
         }
         GameLoop.Instance.Register(this);
@@ -38,8 +62,8 @@ public class CameraView : MonoBehaviour, ITickable
         if (_controller == null || !_isFirstPerson) return;
         
         _controller.SetModelVisibility(true);
-        _controller.vcam.Follow = _controller.transform;
-        _controller.vcam.LookAt = _controller.transform;
+        vcam.Follow = _controller.transform;
+        vcam.LookAt = _controller.transform;
 
         ResetCameraOffset();
         _isFirstPerson = false;
@@ -50,8 +74,8 @@ public class CameraView : MonoBehaviour, ITickable
         if (_controller == null || _isFirstPerson) return;
         
         _controller.SetModelVisibility(false);
-        _controller.vcam.Follow = _eyeAnchor;
-        _controller.vcam.LookAt = _eyeAnchor;
+        vcam.Follow = _eyeAnchor;
+        vcam.LookAt = _eyeAnchor;
 
         SetCameraOffset(Vector3.zero);
         _isFirstPerson = true;
@@ -69,13 +93,13 @@ public class CameraView : MonoBehaviour, ITickable
             Debug.LogWarning("PlayerControllerが存在しません！");
             return;
         }
-        if (_controller.follow == null)
+        if (follow == null)
         {
             Debug.LogWarning("CinemachineFollowが存在しません！");
             return;
         }
 
-        _controller.follow.FollowOffset = offset;
+        follow.FollowOffset = offset;
     }
 
     public void ResetCameraOffset()
@@ -85,12 +109,12 @@ public class CameraView : MonoBehaviour, ITickable
             Debug.LogWarning("PlayerControllerが存在しません！");
             return;
         }
-        if (_controller.follow == null)
+        if (follow == null)
         {
             Debug.LogWarning("CinemachineFollowが存在しません！");
             return;
         }
-        _controller.follow.FollowOffset = defaultFollow;
+        follow.FollowOffset = defaultFollow;
     }
 
     private bool _isDead = false;

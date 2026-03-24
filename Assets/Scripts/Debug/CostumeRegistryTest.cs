@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class CostumeRegistryTest : MonoBehaviour
 {
-    public CostumeRegistry registry;
     void Start(){
-        GameObject obj = Instantiate(registry.GetById("Default"));
+        GameObject obj = Instantiate(CostumeCollector.Instance.CostumeRegistry.GetById("Default"));
     }
 }

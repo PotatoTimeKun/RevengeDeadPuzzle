@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerView : MonoBehaviour , ITickable
 {
     private PlayerController _controller;
-    public CostumeRegistry CostumeRegistry;
 
     private void Awake()
     {
@@ -31,7 +30,7 @@ public class PlayerView : MonoBehaviour , ITickable
     public void SetCostume(string costumeId)
     {
         // コスチュームのプレハブをResources等からロードしてインスタンス化
-        GameObject newPrefab = CostumeRegistry.GetById(costumeId);
+        GameObject newPrefab = CostumeCollector.Instance.CostumeRegistry.GetById(costumeId);
         if (newPrefab == null)
         {
             Debug.LogError($"[View] Costume Prefab not found: {costumeId}");
@@ -79,7 +78,7 @@ public class PlayerView : MonoBehaviour , ITickable
         }
 
         // PlayerControllerの参照を更新（HitCheckなど）
-        _controller.ground = _currentCostumeObj.GetComponentInChildren<HitCheck>();
+        _controller.Ground = _currentCostumeObj.GetComponentInChildren<HitCheck>();
 
         Debug.Log($"[View] Visual Updated: {costumeId} (子オブジェクトとして生成完了)");
     }
