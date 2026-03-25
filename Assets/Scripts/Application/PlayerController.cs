@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour, ITickable
         // 死亡時に掴んでいた死体を離す
         if (PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait && _isGrabbing)
         {
-            Grab();
+            EndGrab();
         }
         // 死亡したらループから外す
         if (PlayerLogic.State == Entity_Data.PlayerState.Dead)
@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour, ITickable
             // 物理挙動を無効化して持ち運びやすくする
             if (_grabbedObject._rb != null) _grabbedObject._rb.isKinematic = true;
             PlayerView view = _grabbedObject.GetComponent<PlayerView>();
-            Collider collider = view.currentCostumeObj.GetComponent<Collider>();
+            Collider collider = view.GetCollider();
             if (collider != null) collider.isTrigger = true;
 
             break;
@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour, ITickable
             _grabbedObject.transform.position += Vector3.up * 0.5f;
 
             PlayerView view = _grabbedObject.GetComponent<PlayerView>();
-            Collider collider = view.currentCostumeObj.GetComponent<Collider>();
+            Collider collider = view.GetCollider();
             if (collider != null) collider.isTrigger = false;
         }
 

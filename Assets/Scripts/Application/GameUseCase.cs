@@ -42,7 +42,7 @@ public class GameUseCase : MonoBehaviour , ITickable
         playerObj.transform.position = _startPos.transform.position;
         // コスチューム解放
         string costumeId = CostumeCollector.Instance.UnlockRandomId();
-        playerObj.GetComponent<PlayerView>().SetCostume(costumeId);
+        PlayerController.PlayerLogic.CostumeId = costumeId;
     }
 
     public void StartGame(){
@@ -52,14 +52,12 @@ public class GameUseCase : MonoBehaviour , ITickable
     }
 
     public void PauseGame(){
-        InputHandler.Instance.SetInputState(InputState.Menu);
         // タイマー、物理エンジン等を停止
         Score.StopTimer();
         Time.timeScale = 0f;
     }
 
     public void ResumeGame(){
-        InputHandler.Instance.SetInputState(InputState.Player);
         // タイマー、物理エンジン等を再開
         Score.ResumeTimer();
         Time.timeScale = 1f;

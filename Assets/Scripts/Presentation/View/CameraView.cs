@@ -4,7 +4,6 @@ using UnityEngine;
 public class CameraView : MonoBehaviour, ITickable
 {
     private PlayerController _controller;
-    private PlayerView _playerView;
     private static Vector3 defaultFollow;
     private static bool hasDefaultFollow = false;
     private Transform _eyeAnchor;

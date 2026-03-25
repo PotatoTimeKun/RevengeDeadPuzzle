@@ -14,6 +14,7 @@ public class PlayerLogic : ITickable
     
     public Entity_Data.PlayerState State;
     public Entity_Data.DeathType Type;
+    public string CostumeId = "Default";
     private float _deathAnimationTimer = 0;
     private float DEATH_ANIMATION_LENGTH = 3; // 死亡アニメーションの長さ
     public void Tick(float deltaTime){
