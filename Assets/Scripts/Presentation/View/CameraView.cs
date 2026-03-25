@@ -4,6 +4,7 @@ using UnityEngine;
 public class CameraView : MonoBehaviour, ITickable
 {
     private PlayerController _controller;
+    private PlayerView _playerView;
     private static Vector3 defaultFollow;
     private static bool hasDefaultFollow = false;
     private Transform _eyeAnchor;
@@ -60,8 +61,6 @@ public class CameraView : MonoBehaviour, ITickable
     public void To3rdPerson()
     {
         if (_controller == null || !_isFirstPerson) return;
-        
-        _controller.SetModelVisibility(true);
         vcam.Follow = _controller.transform;
         vcam.LookAt = _controller.transform;
 
@@ -72,8 +71,6 @@ public class CameraView : MonoBehaviour, ITickable
     public void To1stPerson()
     {
         if (_controller == null || _isFirstPerson) return;
-        
-        _controller.SetModelVisibility(false);
         vcam.Follow = _eyeAnchor;
         vcam.LookAt = _eyeAnchor;
 
@@ -128,7 +125,6 @@ public class CameraView : MonoBehaviour, ITickable
         }
         if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
             // 死亡したら死体が見えるようにする
-            _controller.SetModelVisibility(true);
             _isDead = true;
             GameLoop.Instance.Unregister(this);
             return;

@@ -20,6 +20,8 @@ public class PlayerView : MonoBehaviour , ITickable
         GameLoop.Instance.Unregister(this);
     }
 
+    private Renderer[] _allRenderers;
+
     private GameObject _currentCostumeObj;
     public GameObject currentCostumeObj
     {
@@ -80,14 +82,37 @@ public class PlayerView : MonoBehaviour , ITickable
         // PlayerControllerの参照を更新（HitCheckなど）
         _controller.Ground = _currentCostumeObj.GetComponentInChildren<HitCheck>();
 
+        _allRenderers = currentCostumeObj.GetComponentsInChildren<Renderer>(true);
+        SetModelVisibility(_isVisible);
+
         Debug.Log($"[View] Visual Updated: {costumeId} (子オブジェクトとして生成完了)");
+    }
+
+    private bool _isVisible = true;
+    private void SetModelVisibility(bool visible)
+    {
+        _isVisible = visible;
+        if (_allRenderers == null) return;
+    
+        foreach (var r in _allRenderers)
+        {
+            if (r != null) r.enabled = visible;
+        }
     }
 
     private bool _deathCostumeChanged = false;
     public void Tick(float deltaTime){
-        if (_controller.PlayerLogic.State != Entity_Data.PlayerState.Dead) return;
-        if (_deathCostumeChanged) return;
-        SetCostume(_controller.PlayerLogic.Type.ToString());
-        _deathCostumeChanged = true;
+        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Alive) {
+            SetModelVisibility(true);
+        }
+        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait) {
+            SetModelVisibility(false);
+        }
+        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
+            if (_deathCostumeChanged) return;
+            SetModelVisibility(true);
+            SetCostume(_controller.PlayerLogic.Type.ToString());
+            _deathCostumeChanged = true;
+        }
     }
 }

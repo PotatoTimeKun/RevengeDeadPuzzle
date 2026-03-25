@@ -12,12 +12,8 @@ public enum GroundState
 
 public class PlayerController : MonoBehaviour, ITickable
 {
-    #region //インスペクター設定
     [HideInInspector] public HitCheck Ground;
     [HideInInspector] public PlayerLogic PlayerLogic;
-    #endregion
-
-    #region //プライベート変数
     private float moveSpeed = 5f;
     private float jumpPower = 6f;
     private Rigidbody _rb;
@@ -27,8 +23,6 @@ public class PlayerController : MonoBehaviour, ITickable
     private float _grabRange = 1.5f;
     private Transform _grabAnchor;
     private float _throwForce = 10f;
-    #endregion
-    private Renderer[] _allRenderers;
     private void Awake()
     {
         PlayerLogic = new PlayerLogic(this);
@@ -47,8 +41,6 @@ public class PlayerController : MonoBehaviour, ITickable
             _rb.freezeRotation = true;
         }
 
-        _allRenderers = GetComponentsInChildren<Renderer>(true);
-
         // 掴む位置のアンカーの初期化
         GameObject anchorObj = new GameObject("GrabAnchor");
         _grabAnchor = anchorObj.transform;
@@ -60,16 +52,6 @@ public class PlayerController : MonoBehaviour, ITickable
     private void OnDestroy()
     {
         GameLoop.Instance.Unregister(this);
-    }
-
-    public void SetModelVisibility(bool visible)
-    {
-        if (_allRenderers == null) return;
-    
-        foreach (var r in _allRenderers)
-        {
-            if (r != null) r.enabled = visible;
-        }
     }
 
     public void Tick(float deltaTime)
