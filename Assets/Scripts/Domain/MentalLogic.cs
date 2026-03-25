@@ -3,14 +3,17 @@
 public class MentalLogic
 {
     private float _currentValue;
-    public float MaxValue;
+    private float _maxValue;
+    public float MaxValue {
+        get { return _maxValue; }
+    }
     public float CurrentValue {
         get { return _currentValue; }
     }
 
     public MentalLogic(float maxAmount)
     {
-        MaxValue = maxAmount;
+        _maxValue = maxAmount;
         _currentValue = maxAmount;
     }
 
@@ -22,6 +25,6 @@ public class MentalLogic
 
     public void Recover()
     {
-        _currentValue = MaxValue;
+        _currentValue = _maxValue;
     }
 }

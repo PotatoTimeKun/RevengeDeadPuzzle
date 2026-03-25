@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour, ITickable
     private float _throwForce = 10f;
     private void Awake()
     {
-        PlayerLogic = new PlayerLogic(this);
+        PlayerLogic = new PlayerLogic();
     }
 
     private void Start()
@@ -47,10 +47,22 @@ public class PlayerController : MonoBehaviour, ITickable
         _grabAnchor.SetParent(transform);
         _grabAnchor.localPosition = new Vector3(0, 1f, 1.8f); // プレイヤーの少し前方に配置
 
+        // 入力イベントの登録
+        InputHandler.Instance.Player.Move += Move;
+        InputHandler.Instance.Player.Jump += Jump;
+        InputHandler.Instance.Player.Drag += Grab;
+        InputHandler.Instance.Player.Suicide += Suicide;
+
         GameLoop.Instance.Register(this);
     }
     private void OnDestroy()
     {
+        // 入力イベントの登録解除
+        InputHandler.Instance.Player.Move -= Move;
+        InputHandler.Instance.Player.Jump -= Jump;
+        InputHandler.Instance.Player.Drag -= Grab;
+        InputHandler.Instance.Player.Suicide -= Suicide;
+
         GameLoop.Instance.Unregister(this);
     }
 
@@ -105,6 +117,7 @@ public class PlayerController : MonoBehaviour, ITickable
     //移動
     public void Move(Vector2 moveValue)
     {
+        if (PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
         _moveValue = moveValue * moveSpeed;
         if(moveValue.x == 0 && moveValue.y == 0) return;
         // 2Dの(x, y)を3Dの(x, 0, z)に変換
@@ -115,6 +128,7 @@ public class PlayerController : MonoBehaviour, ITickable
     //ジャンプ
     public void Jump()
     {
+        if (PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
         switch (_groundState)
         {
             case GroundState.Grounded:
@@ -133,6 +147,7 @@ public class PlayerController : MonoBehaviour, ITickable
     //掴む・離す
     public void Grab()
     {
+        if (PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
         if (!_isGrabbing)
         {
             StartGrab();
@@ -201,6 +216,8 @@ public class PlayerController : MonoBehaviour, ITickable
     //自殺
     public void Suicide()
     {
+        if (PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
+        PlayerLogic.Die(Entity_Data.DeathType.None, true);
         _rb.constraints = RigidbodyConstraints.None;
         _moveValue = new Vector2(0,0);
         transform.Rotate(30f, 0, 0, Space.Self);
