@@ -46,7 +46,6 @@ public class GameUseCase : MonoBehaviour , ITickable
     }
 
     public void StartGame(){
-        InputHandler.Instance.SetInputState(InputState.Player);
         Time.timeScale = 1f;
         SpawnPlayer();
     }

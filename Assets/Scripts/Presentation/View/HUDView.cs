@@ -8,6 +8,7 @@ public class HUDView : MonoBehaviour, ITickable
     private void Awake() {
         Instance = this;
         MenuPanel.SetActive(false);
+        InputHandler.Instance.SetInputState(InputState.Player);
     }
     private int _lastFrame = -1; // 連続呼び出しを防ぐ
     public void CloseMenuPanel(){

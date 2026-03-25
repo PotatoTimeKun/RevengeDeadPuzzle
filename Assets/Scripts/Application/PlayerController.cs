@@ -6,8 +6,6 @@ public enum GroundState
     Grounded,
     Jumping,
     Falling,
-    //OnSlope,
-    //OnWall
 }
 
 public class PlayerController : MonoBehaviour, ITickable
