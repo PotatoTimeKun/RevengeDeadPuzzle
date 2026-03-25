@@ -11,7 +11,7 @@ public class CameraView : MonoBehaviour, ITickable
     private bool _isFirstPerson = true;
 
     private CinemachineCamera _vcam;
-    public CinemachineCamera vcam
+    private CinemachineCamera vcam
     {
         get { 
             if (_vcam == null) {
@@ -23,7 +23,7 @@ public class CameraView : MonoBehaviour, ITickable
     }
 
     private CinemachineFollow _follow;
-    public CinemachineFollow follow
+    private CinemachineFollow follow
     {
         get { 
             if (_follow == null) {
@@ -58,7 +58,7 @@ public class CameraView : MonoBehaviour, ITickable
         GameLoop.Instance.Register(this);
     }
 
-    public void To3rdPerson()
+    private void To3rdPerson()
     {
         if (_controller == null || !_isFirstPerson) return;
         vcam.Follow = _controller.transform;
@@ -68,7 +68,7 @@ public class CameraView : MonoBehaviour, ITickable
         _isFirstPerson = false;
     }
 
-    public void To1stPerson()
+    private void To1stPerson()
     {
         if (_controller == null || _isFirstPerson) return;
         vcam.Follow = _eyeAnchor;
@@ -78,12 +78,12 @@ public class CameraView : MonoBehaviour, ITickable
         _isFirstPerson = true;
     }
 
-    public void PlayDeathEffect(Entity_Data.DeathType type)
+    private void PlayDeathEffect(Entity_Data.DeathType type)
     {
         // 処理
     }
 
-    public void SetCameraOffset(Vector3 offset)
+    private void SetCameraOffset(Vector3 offset)
     {
         if (_controller == null)
         {
@@ -99,7 +99,7 @@ public class CameraView : MonoBehaviour, ITickable
         follow.FollowOffset = offset;
     }
 
-    public void ResetCameraOffset()
+    private void ResetCameraOffset()
     {
         if (_controller == null)
         {
@@ -115,6 +115,7 @@ public class CameraView : MonoBehaviour, ITickable
     }
 
     private bool _isDead = false;
+    private bool _deathAnimationPlayed = false;
     public void Tick(float deltaTime)
     {
         if (_isDead) return;
@@ -131,6 +132,9 @@ public class CameraView : MonoBehaviour, ITickable
         }
         // 死亡アニメーション中は1人称に
         if (_controller.PlayerLogic.State != Entity_Data.PlayerState.DeathAnimationWait) return;
+        if (_deathAnimationPlayed) return;
+        _deathAnimationPlayed = true;
+        PlayDeathEffect(_controller.PlayerLogic.Type);
         To1stPerson();
     }
 }
