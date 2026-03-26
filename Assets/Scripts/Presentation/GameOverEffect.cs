@@ -12,7 +12,7 @@ public class GameOverEffect : MonoBehaviour
     private bool _isPlayed = false;
     void Update()
     {
-        if (_playerController.PlayerLogic.State == Entity_Data.PlayerState.Dead && GameUseCase.Instance.IsGameOver && !_isPlayed) {
+        if (_playerController.PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait && GameUseCase.Instance.IsGameOver && !_isPlayed) {
             _particleSystem.Play();
             _isPlayed = true;
         }

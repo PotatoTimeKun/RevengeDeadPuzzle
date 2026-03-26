@@ -1028,12 +1028,12 @@ GameObject:
   - component: {fileID: 704918113}
   - component: {fileID: 704918112}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: FailedCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &704918112
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1102,7 +1102,7 @@ Transform:
   m_GameObject: {fileID: 704918111}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20, y: 1, z: -10}
+  m_LocalPosition: {x: -25.41, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1758,7 +1758,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1301174763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2352,7 +2352,7 @@ GameObject:
   - component: {fileID: 1490122644}
   - component: {fileID: 1490122643}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: ClearCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2949,7 +2949,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1155750626649831467, guid: 328dacd81ff105c438c8084e2241973d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20.668516
+      value: -26.57
       objectReference: {fileID: 0}
     - target: {fileID: 1155750626649831467, guid: 328dacd81ff105c438c8084e2241973d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3045,6 +3045,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1490122645}
+  - {fileID: 704918114}
   - {fileID: 1492811249}
   - {fileID: 54473955}
   - {fileID: 736893186}
@@ -3052,5 +3053,4 @@ SceneRoots:
   - {fileID: 1301174766}
   - {fileID: 1341782619}
   - {fileID: 1672047563}
-  - {fileID: 704918114}
   - {fileID: 1953785938}
