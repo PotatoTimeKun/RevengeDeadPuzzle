@@ -21,7 +21,22 @@ public class ResultView : MonoBehaviour
     public GameObject CountEvaluation;
     public GameObject TypeEvaluation;
     public Text DeathHistoryText;
+    public GameObject ClearCamera;
+    public GameObject GameOverCamera;
+    public GameObject ClearPanel;
+    public GameObject GameOverPanel;
     public void Start() {
+        if (ScoreLogic.BeforeScore.IsClear) {
+            ClearCamera.SetActive(true);
+            GameOverCamera.SetActive(false);
+            ClearPanel.SetActive(true);
+            GameOverPanel.SetActive(false);
+        } else {
+            ClearCamera.SetActive(false);
+            GameOverCamera.SetActive(true);
+            ClearPanel.SetActive(false);
+            GameOverPanel.SetActive(true);
+        }
         int minute = (int)(GameUseCase.BeforeStage.TimerSecondTarget / 60);
         int second = (int)(GameUseCase.BeforeStage.TimerSecondTarget % 60);
         TimeText.text = $"{minute:00}分{second:00}秒以内";
