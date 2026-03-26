@@ -125,11 +125,12 @@ public class PlayerView : MonoBehaviour , ITickable
         if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
             // 死亡時にコスチュームを変更
             if (_deathCostumeChanged) return;
+            _deathCostumeChanged = true;
             SetModelVisibility(true);
+            if (_controller.PlayerLogic.Type == Entity_Data.DeathType.None) return;
             SetCostume(_controller.PlayerLogic.Type.ToString());
             _controller.PlayerLogic.CostumeId = _controller.PlayerLogic.Type.ToString();
             _costumeId = _controller.PlayerLogic.Type.ToString();
-            _deathCostumeChanged = true;
         }
     }
 }
