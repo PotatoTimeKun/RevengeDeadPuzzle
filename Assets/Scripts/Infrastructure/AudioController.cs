@@ -46,8 +46,6 @@ public class AudioController : MonoBehaviour
     public List<BGMData> bgmDataList;
     public List<SEData> seDataList;
 
-    private float defaultBGMVolume = 1f;
-    private float defaultSEVolume = 1f;
     private Dictionary<Audio_Data.BGMType, AudioClip> _bgmDic;
     private Dictionary<Audio_Data.SEType, AudioClip> _seDic;
 
@@ -66,9 +64,6 @@ public class AudioController : MonoBehaviour
 
     private void Initialize()
     {
-        SetBGMVolume(defaultBGMVolume);
-        SetSEVolume(defaultSEVolume);
-
         _bgmDic = new();
         foreach (var data in bgmDataList)
         {
@@ -91,22 +86,17 @@ public class AudioController : MonoBehaviour
         }
     }
 
-    public void SetMasterVolume(float volume)
+    private void SetVolume(float volume, float bgmVolume, float seVolume)
     {
-        if (bgmAudioSource != null) bgmAudioSource.volume = volume;
-        if (seAudioSource != null) seAudioSource.volume = volume;
+        if (bgmAudioSource != null) bgmAudioSource.volume = volume * bgmVolume;
+        if (seAudioSource != null) seAudioSource.volume = volume * seVolume;
     }
 
-    public void SetBGMVolume(float volume)
-    {
-        if (bgmAudioSource == null) return;
-        bgmAudioSource.volume = volume;
-    }
-
-    public void SetSEVolume(float volume)
-    {
-        if (seAudioSource == null) return;
-        seAudioSource.volume = volume;
+    void Update(){
+        float masterVolume = SaveDataStore.Instance.CurrentData.Setting.MasterVolume;
+        float bgmVolume = SaveDataStore.Instance.CurrentData.Setting.BgmVolume;
+        float seVolume = SaveDataStore.Instance.CurrentData.Setting.SeVolume;
+        SetVolume(masterVolume, bgmVolume, seVolume);
     }
 
     public void PlayBGM(Audio_Data.BGMType type)

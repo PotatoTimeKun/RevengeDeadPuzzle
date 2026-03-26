@@ -9,14 +9,14 @@ public class GameUseCase : MonoBehaviour , ITickable
         Instance = this;
         BeforeStage = Stage;
     }
-    public static StageDef BeforeStage;
+
+    public static StageDef BeforeStage; // 前のステージをクラス変数に保存
+
     public PlayerController PlayerController;
     public StageDef Stage;
-    private CinemachineCamera _cinemachineCamera;
-    private CinemachineFollow _cinemachineFollow;
+    public GameObject PlayerPrefab;
     [SerializeField] private GameObject _startPos;
-    public GameObject PlayerPrefab; 
-    public CostumeRegistry CostumeRegistry;
+
     [HideInInspector] public MentalLogic Mental;
     [HideInInspector] public ScoreLogic Score;
     [Header("UI設定")]
@@ -38,30 +38,28 @@ public class GameUseCase : MonoBehaviour , ITickable
     }
 
     private void SpawnPlayer(){
+        // プレイヤー生成
         GameObject playerObj = Instantiate(PlayerPrefab);
         PlayerController = playerObj.GetComponent<PlayerController>();
-        PlayerController.Initialize(this);
+        // 位置設定
         playerObj.transform.position = _startPos.transform.position;
+        // コスチューム解放
         string costumeId = CostumeCollector.Instance.UnlockRandomId();
-        playerObj.GetComponent<PlayerView>().SetCostume(costumeId);
+        PlayerController.PlayerLogic.CostumeId = costumeId;
     }
 
     public void StartGame(){
-        Debug.Log("GameUseCase StartGame");
-        InputHandler.Instance.SetInputState(InputState.Player);
         Time.timeScale = 1f;
         SpawnPlayer();
     }
 
     public void PauseGame(){
-        InputHandler.Instance.SetInputState(InputState.Menu);
         // タイマー、物理エンジン等を停止
         Score.StopTimer();
         Time.timeScale = 0f;
     }
 
     public void ResumeGame(){
-        InputHandler.Instance.SetInputState(InputState.Player);
         // タイマー、物理エンジン等を再開
         Score.ResumeTimer();
         Time.timeScale = 1f;
@@ -87,6 +85,7 @@ public class GameUseCase : MonoBehaviour , ITickable
         _goalFlag = true;
         Score.StopTimer();
         PlayerController.PlayerLogic.State = Entity_Data.PlayerState.Goal;
+        // 評価を保存
         List<bool> evaluations = Score.CheckEvaluation();
         StageSelecter.Instance.ClearStage(Stage.Id,evaluations[0],evaluations[1],evaluations[2]);
     }
@@ -110,7 +109,7 @@ public class GameUseCase : MonoBehaviour , ITickable
         if (_goalFlag) {
             _goalWaitTime -= deltaTime;
             if (_goalWaitTime <= 0) {
-                ResultView.OpenScene();
+                ResultView.OpenScene(); // リザルト画面へ
             }
         }
     }

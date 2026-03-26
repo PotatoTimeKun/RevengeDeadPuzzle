@@ -3,17 +3,18 @@ using UnityEngine;
 public class PlayerView : MonoBehaviour , ITickable
 {
     private PlayerController _controller;
-    public CostumeRegistry CostumeRegistry;
 
+    private string _costumeId;
     private void Awake()
     {
         _controller = GetComponent<PlayerController>();
-        SetCostume("Default");
     }
 
     private void Start()
     {
         GameLoop.Instance.Register(this);
+        _costumeId = _controller.PlayerLogic.CostumeId;
+        SetCostume(_costumeId);
     }
 
     private void OnDisable()
@@ -21,17 +22,14 @@ public class PlayerView : MonoBehaviour , ITickable
         GameLoop.Instance.Unregister(this);
     }
 
-    private GameObject _currentCostumeObj;
-    public GameObject currentCostumeObj
-    {
-        get { return _currentCostumeObj; }
-        private set { _currentCostumeObj = value; }
-    }
+    private Renderer[] _allRenderers;
 
-    public void SetCostume(string costumeId)
+    private GameObject _currentCostumeObj;
+
+    private void SetCostume(string costumeId)
     {
         // コスチュームのプレハブをResources等からロードしてインスタンス化
-        GameObject newPrefab = CostumeRegistry.GetById(costumeId);
+        GameObject newPrefab = CostumeCollector.Instance.CostumeRegistry.GetById(costumeId);
         if (newPrefab == null)
         {
             Debug.LogError($"[View] Costume Prefab not found: {costumeId}");
@@ -39,28 +37,28 @@ public class PlayerView : MonoBehaviour , ITickable
         }
 
         // 古いコスチュームオブジェクトがあれば破棄
-        if (currentCostumeObj != null)
+        if (_currentCostumeObj != null)
         {
             Destroy(_currentCostumeObj);
         }
 
         // 新しいコスチュームを子オブジェクトとして生成
-        currentCostumeObj = Instantiate(newPrefab, transform);
-        currentCostumeObj.transform.localPosition = Vector3.zero;
-        currentCostumeObj.transform.localRotation = Quaternion.identity;
+        _currentCostumeObj = Instantiate(newPrefab, transform);
+        _currentCostumeObj.transform.localPosition = Vector3.zero;
+        _currentCostumeObj.transform.localRotation = Quaternion.identity;
 
         // コスチュームプレハブに付随している不要なコンポーネントを削除
-        var c = currentCostumeObj.GetComponent<PlayerController>();
+        var c = _currentCostumeObj.GetComponent<PlayerController>();
         if (c != null) DestroyImmediate(c);
         
-        var pv = currentCostumeObj.GetComponent<PlayerView>();
+        var pv = _currentCostumeObj.GetComponent<PlayerView>();
         if (pv != null) DestroyImmediate(pv);
         
-        var cv = currentCostumeObj.GetComponent<CameraView>();
+        var cv = _currentCostumeObj.GetComponent<CameraView>();
         if (cv != null) DestroyImmediate(cv);
 
         // 物理挙動が二重にならないように子オブジェクトのRigidbodyのプロパティを親にコピーして削除
-        var childRb = currentCostumeObj.GetComponent<Rigidbody>();
+        var childRb = _currentCostumeObj.GetComponent<Rigidbody>();
         if (childRb != null) {
             var parentRb = gameObject.GetComponent<Rigidbody>();
             if (parentRb == null) parentRb = gameObject.AddComponent<Rigidbody>();
@@ -79,16 +77,54 @@ public class PlayerView : MonoBehaviour , ITickable
         }
 
         // PlayerControllerの参照を更新（HitCheckなど）
-        _controller.ground = _currentCostumeObj.GetComponentInChildren<HitCheck>();
+        _controller.Ground = _currentCostumeObj.GetComponentInChildren<HitCheck>();
+
+        _allRenderers = _currentCostumeObj.GetComponentsInChildren<Renderer>(true);
+        SetModelVisibility(_isVisible);
 
         Debug.Log($"[View] Visual Updated: {costumeId} (子オブジェクトとして生成完了)");
     }
 
+    public Collider GetCollider()
+    {
+        return _currentCostumeObj.GetComponent<Collider>();
+    }
+
+    private bool _isVisible = true;
+    private void SetModelVisibility(bool visible)
+    {
+        _isVisible = visible;
+        if (_allRenderers == null) return;
+    
+        foreach (var r in _allRenderers)
+        {
+            if (r != null) r.enabled = visible;
+        }
+    }
+
     private bool _deathCostumeChanged = false;
     public void Tick(float deltaTime){
-        if (_controller.PlayerLogic.State != Entity_Data.PlayerState.Dead) return;
-        if (_deathCostumeChanged) return;
-        SetCostume(_controller.PlayerLogic.Type.ToString());
-        _deathCostumeChanged = true;
+        // コスチュームを変更
+        if (_controller.PlayerLogic.CostumeId != _costumeId) {
+            SetCostume(_controller.PlayerLogic.CostumeId);
+            _costumeId = _controller.PlayerLogic.CostumeId;
+        }
+        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Alive) {
+            // 生存時にモデルを表示
+            SetModelVisibility(true);
+        }
+        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait) {
+            // 死亡アニメーション中にモデルを非表示
+            SetModelVisibility(false);
+        }
+        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
+            // 死亡時にコスチュームを変更
+            if (_deathCostumeChanged) return;
+            SetModelVisibility(true);
+            SetCostume(_controller.PlayerLogic.Type.ToString());
+            _controller.PlayerLogic.CostumeId = _controller.PlayerLogic.Type.ToString();
+            _costumeId = _controller.PlayerLogic.Type.ToString();
+            _deathCostumeChanged = true;
+        }
     }
 }

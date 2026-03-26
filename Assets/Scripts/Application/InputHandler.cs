@@ -51,7 +51,7 @@ public class InputHandler
     public PlayerAction Player = new();
     public MenuAction Menu = new();
 
-    public void SetInputState(InputState state = InputState.None)
+    public void SetInputState(InputState state)
     {
         CurrentInputState = state;
     }

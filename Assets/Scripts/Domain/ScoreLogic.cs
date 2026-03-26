@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 public class ScoreLogic : ITickable
 {
-    public static ScoreLogic BeforeScore;
+    public static ScoreLogic BeforeScore; // 前のステージのスコア
     private float _currentTime;
     private StageDef _currentStage;
     private bool _isTimerEnabled;
     public float CurrentTime { get { return _currentTime; } }
-    public int DeathCount;
+    public int DeathCount { get; private set; }
     public List<Entity_Data.DeathType> DeathTypeHistory = new();
 
     public ScoreLogic(StageDef stage)

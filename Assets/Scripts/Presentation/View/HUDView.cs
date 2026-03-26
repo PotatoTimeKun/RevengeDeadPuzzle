@@ -2,12 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class HUDView : MonoBehaviour
+public class HUDView : MonoBehaviour, ITickable
 {
     public static HUDView Instance { get; private set; }
     private void Awake() {
         Instance = this;
         MenuPanel.SetActive(false);
+        InputHandler.Instance.SetInputState(InputState.Player);
     }
     private int _lastFrame = -1; // 連続呼び出しを防ぐ
     public void CloseMenuPanel(){
@@ -37,12 +38,7 @@ public class HUDView : MonoBehaviour
     void OnDestroy(){
         InputHandler.Instance.Player.Menu -= OpenMenuPanel;
         InputHandler.Instance.Menu.Cancel -= CloseMenuPanel;
-        UnityEngine.SceneManagement.SceneManager.sceneUnloaded -= OnSceneUnloaded;
-    }
-    private void OnSceneUnloaded(UnityEngine.SceneManagement.Scene scene) {
-        if (scene.name == "setting") {
-            isSettingViewOpen = false;
-        }
+        GameLoop.Instance.Unregister(this);
     }
     public GameObject MenuPanel;
     public Slider MentalSlider;
@@ -58,24 +54,24 @@ public class HUDView : MonoBehaviour
     public GameObject KeybordGuide;
     public GameObject GamepadGuide;
     public Animator ClearTextAnimator;
-    public void UpdateMental(float value)
+    private void UpdateMental(float value)
     {
         MentalSlider.value = value;
     }
 
-    public void UpdateDeadCount(int count)
+    private void UpdateDeadCount(int count)
     {
         DeadCountText.text = $"DEAD : {count.ToString()}";
     }
 
-    public void UpdateEvaluation(bool timeEval, bool countEval, bool typeEval)
+    private void UpdateEvaluation(bool timeEval, bool countEval, bool typeEval)
     {
         TimeEvaluation.SetActive(timeEval);
         CountEvaluation.SetActive(countEval);
         TypeEvaluation.SetActive(typeEval);
     }
 
-    public void UpdateEvaluationText()
+    private void UpdateEvaluationText()
     {
         int minute = (int)(GameUseCase.Instance.Stage.TimerSecondTarget / 60);
         int second = (int)(GameUseCase.Instance.Stage.TimerSecondTarget % 60);
@@ -84,17 +80,17 @@ public class HUDView : MonoBehaviour
         TypeEvaluationText.text = GameUseCase.Instance.Stage.DeathTypeTargetExplanation;
     }
 
-    public void UpdateTimer(int minute, int second)
+    private void UpdateTimer(int minute, int second)
     {
         TimerText.text = $"{minute:00}:{second:00}";
     }
 
-    public void UpdateStageName(string name)
+    private void UpdateStageName(string name)
     {
         StageNameText.text = name;
     }
 
-    public void UpdateGuide()
+    private void UpdateGuide()
     {
         if (InputHandler.Instance.IsGamepad)
         {
@@ -108,7 +104,7 @@ public class HUDView : MonoBehaviour
         }
     }
 
-    public void ShowClearEffect(){
+    private void ShowClearEffect(){
         ClearTextAnimator.SetBool("Goal", true);
     }
 
@@ -117,13 +113,12 @@ public class HUDView : MonoBehaviour
         MenuPanel.SetActive(false);
         InputHandler.Instance.Player.Menu += OpenMenuPanel;
         InputHandler.Instance.Menu.Cancel += CloseMenuPanel;
-        UnityEngine.SceneManagement.SceneManager.sceneUnloaded += OnSceneUnloaded;
         UpdateStageName(GameUseCase.Instance.Stage.DisplayName);
         UpdateEvaluationText();
+        GameLoop.Instance.Register(this);
     }
 
-    void Update()
-    {
+    public void Tick(float deltaTime){
         // ゲームの状態を監視してHUDに反映
         float mental = GameUseCase.Instance.Mental.CurrentValue / GameUseCase.Instance.Mental.MaxValue;
         UpdateMental(mental);

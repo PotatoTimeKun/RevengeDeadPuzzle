@@ -9,6 +9,30 @@ public class CameraView : MonoBehaviour, ITickable
     private Transform _eyeAnchor;
     private bool _isFirstPerson = true;
 
+    private CinemachineCamera _vcam;
+    private CinemachineCamera vcam
+    {
+        get { 
+            if (_vcam == null) {
+                _vcam = FindAnyObjectByType<CinemachineCamera>();
+            }
+            return _vcam; 
+        }
+        set { _vcam = value; }
+    }
+
+    private CinemachineFollow _follow;
+    private CinemachineFollow follow
+    {
+        get { 
+            if (_follow == null) {
+                _follow = FindAnyObjectByType<CinemachineFollow>();
+            }
+            return _follow;
+         }
+        set { _follow = value; }
+    }
+
     private void Start()
     {
         _controller = GetComponent<PlayerController>();
@@ -23,77 +47,74 @@ public class CameraView : MonoBehaviour, ITickable
         _eyeAnchor.localPosition = new Vector3(0, 1.5f, 0.2f); 
         _eyeAnchor.localRotation = Quaternion.identity;
         Transform transform = _controller.gameObject.transform;
-        _controller.vcam.Follow = transform;
-        _controller.vcam.LookAt = transform;
-        if (!hasDefaultFollow && _controller.follow != null)
+        vcam.Follow = transform;
+        vcam.LookAt = transform;
+        if (!hasDefaultFollow && follow != null)
         {
-            defaultFollow = _controller.follow.FollowOffset;
+            defaultFollow = follow.FollowOffset;
             hasDefaultFollow = true;
         }
         GameLoop.Instance.Register(this);
     }
 
-    public void To3rdPerson()
+    private void To3rdPerson()
     {
         if (_controller == null || !_isFirstPerson) return;
-        
-        _controller.SetModelVisibility(true);
-        _controller.vcam.Follow = _controller.transform;
-        _controller.vcam.LookAt = _controller.transform;
+        vcam.Follow = _controller.transform;
+        vcam.LookAt = _controller.transform;
 
         ResetCameraOffset();
         _isFirstPerson = false;
     }
 
-    public void To1stPerson()
+    private void To1stPerson()
     {
         if (_controller == null || _isFirstPerson) return;
-        
-        _controller.SetModelVisibility(false);
-        _controller.vcam.Follow = _eyeAnchor;
-        _controller.vcam.LookAt = _eyeAnchor;
+        vcam.Follow = _eyeAnchor;
+        vcam.LookAt = _eyeAnchor;
 
         SetCameraOffset(Vector3.zero);
         _isFirstPerson = true;
     }
 
-    public void PlayDeathEffect(Entity_Data.DeathType type)
+    private void PlayDeathEffect(Entity_Data.DeathType type)
     {
         // 処理
     }
 
-    public void SetCameraOffset(Vector3 offset)
+    private void SetCameraOffset(Vector3 offset)
     {
         if (_controller == null)
         {
             Debug.LogWarning("PlayerControllerが存在しません！");
             return;
         }
-        if (_controller.follow == null)
+        if (follow == null)
         {
             Debug.LogWarning("CinemachineFollowが存在しません！");
             return;
         }
 
-        _controller.follow.FollowOffset = offset;
+        follow.FollowOffset = offset;
     }
 
-    public void ResetCameraOffset()
+    private void ResetCameraOffset()
     {
         if (_controller == null)
         {
             Debug.LogWarning("PlayerControllerが存在しません！");
             return;
         }
-        if (_controller.follow == null)
+        if (follow == null)
         {
             Debug.LogWarning("CinemachineFollowが存在しません！");
             return;
         }
-        _controller.follow.FollowOffset = defaultFollow;
+        follow.FollowOffset = defaultFollow;
     }
 
     private bool _isDead = false;
+    private bool _deathAnimationPlayed = false;
     public void Tick(float deltaTime)
     {
         if (_isDead) return;
@@ -104,13 +125,15 @@ public class CameraView : MonoBehaviour, ITickable
         }
         if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
             // 死亡したら死体が見えるようにする
-            _controller.SetModelVisibility(true);
             _isDead = true;
             GameLoop.Instance.Unregister(this);
             return;
         }
         // 死亡アニメーション中は1人称に
         if (_controller.PlayerLogic.State != Entity_Data.PlayerState.DeathAnimationWait) return;
+        if (_deathAnimationPlayed) return;
+        _deathAnimationPlayed = true;
+        PlayDeathEffect(_controller.PlayerLogic.Type);
         To1stPerson();
     }
 }

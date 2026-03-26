@@ -28,7 +28,7 @@ public class DeathGimmick : MonoBehaviour
         {
             if (player.PlayerLogic.State == Entity_Data.PlayerState.Alive)
             {
-                player.PlayerLogic.Die(deathType);
+                player.PlayerLogic.Die(deathType, false);
             }
         }
     }
