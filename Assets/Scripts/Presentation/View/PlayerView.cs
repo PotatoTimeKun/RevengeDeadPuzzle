@@ -109,6 +109,11 @@ public class PlayerView : MonoBehaviour , ITickable
             SetCostume(_controller.PlayerLogic.CostumeId);
             _costumeId = _controller.PlayerLogic.CostumeId;
         }
+        if (GameUseCase.Instance.IsGameOver) {
+            // ゲームオーバー時はモデルを表示
+            SetModelVisibility(true);
+            return;
+        }
         if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Alive) {
             // 生存時にモデルを表示
             SetModelVisibility(true);

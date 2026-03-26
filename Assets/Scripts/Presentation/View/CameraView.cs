@@ -57,6 +57,10 @@ public class CameraView : MonoBehaviour, ITickable
         GameLoop.Instance.Register(this);
     }
 
+    private void OnDestroy() {
+        GameLoop.Instance.Unregister(this);
+    }
+
     private void To3rdPerson()
     {
         if (_controller == null || !_isFirstPerson) return;
@@ -118,13 +122,17 @@ public class CameraView : MonoBehaviour, ITickable
     public void Tick(float deltaTime)
     {
         if (_isDead) return;
+        if (GameUseCase.Instance.IsGameOver) {
+            // ゲームオーバー時は三人称に
+            To3rdPerson();
+            return;
+        }
         if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Alive) {
             // 生きていたら三人称に
             To3rdPerson();
             return;
         }
         if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
-            // 死亡したら死体が見えるようにする
             _isDead = true;
             GameLoop.Instance.Unregister(this);
             return;
