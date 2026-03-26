@@ -19,10 +19,8 @@ public class GameUseCase : MonoBehaviour , ITickable
 
     [HideInInspector] public MentalLogic Mental;
     [HideInInspector] public ScoreLogic Score;
-    [Header("UI設定")]
-    [SerializeField] private GameObject _gameOverPrefab; 
-    [SerializeField] private Transform _uiParent; 
     private bool _isGameOver = false;
+    public bool IsGameOver { get { return _isGameOver; } }
     void Start(){
         Mental = new MentalLogic(Stage.MaxMental);
         Score = new ScoreLogic(Stage);
@@ -65,16 +63,9 @@ public class GameUseCase : MonoBehaviour , ITickable
         Time.timeScale = 1f;
     }
 
-    public void OnPlayerDead(Entity_Data.DeathType deathType){ // 
-       if (Mental != null && Mental.CurrentValue > 0)
-        {
-            SpawnPlayer();
-        }
-        else
-        {
-            Debug.Log("Mental is 0. Skip SpawnPlayer.");
-        }
-}
+    public void OnPlayerDead(Entity_Data.DeathType deathType){
+        SpawnPlayer();
+    }
     
 
     private bool _goalFlag = false;
@@ -93,9 +84,15 @@ public class GameUseCase : MonoBehaviour , ITickable
     public void Tick(float deltaTime){
         
         // 死んだときに処理を実行
-        if (!_isGameOver && Mental != null && Mental.CurrentValue <= 0)
+        if (!_isGameOver && Mental.CurrentValue <= 0)
         {
             PerformGameOver();
+            return;
+        }
+        if (_isGameOver) {
+            if (PlayerController.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
+                ResultView.OpenScene(); // リザルト画面へ
+            }
             return;
         }
 
@@ -113,26 +110,11 @@ public class GameUseCase : MonoBehaviour , ITickable
             }
         }
     }
+
     private void PerformGameOver()
-{
-    if (_isGameOver) return;
-    _isGameOver = true;
-
-    GameObject obj = Instantiate(_gameOverPrefab, _uiParent);
-
-    InputHandler.Instance.SetInputState(InputState.Menu);
-
-    Score.StopTimer();
-
-    if (PlayerController != null) {
-        PlayerController.enabled = false; 
-    }
-}
-    public void RestartGame()
     {
-        Time.timeScale = 1.0f;
-        string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(currentSceneName);
-
+        if (_isGameOver) return;
+        _isGameOver = true;
+        Score.StopTimer();
     }
 }

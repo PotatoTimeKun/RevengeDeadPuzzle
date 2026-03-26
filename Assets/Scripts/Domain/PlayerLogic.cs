@@ -35,5 +35,8 @@ public class PlayerLogic : ITickable
         }
         // スコアに反映
         GameUseCase.Instance.Score.AddDeath(deathType);
+        if (GameUseCase.Instance.Mental.CurrentValue <= 0) {
+            GameUseCase.Instance.Score.IsClear = false;
+        }
     }
 }

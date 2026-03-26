@@ -10,6 +10,7 @@ public class ScoreLogic : ITickable
     public float CurrentTime { get { return _currentTime; } }
     public int DeathCount { get; private set; }
     public List<Entity_Data.DeathType> DeathTypeHistory = new();
+    public bool IsClear = true;
 
     public ScoreLogic(StageDef stage)
     {
