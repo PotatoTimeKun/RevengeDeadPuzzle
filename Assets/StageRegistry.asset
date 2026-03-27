@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d705246728fc0d4490fbecc3c174ba1, type: 3}
   m_Name: StageRegistry
   m_EditorClassIdentifier: Assembly-CSharp::StageRegistry
-  AllStages: []
+  AllStages:
+  - {fileID: 11400000, guid: b0fe622eab627ec489d24481009078a4, type: 2}
+  - {fileID: 11400000, guid: 72ea36d98e38cf841a4e9c1fdeb50117, type: 2}
