@@ -35,9 +35,9 @@ public class SaveDataStore
         if (UnityEngine.PlayerPrefs.HasKey(SaveKey))
         {
             string json = UnityEngine.PlayerPrefs.GetString(SaveKey);
-            var saveData = UnityEngine.JsonUtility.FromJson<SaveData>(json);
-            ModifySaveData(saveData);
-            return saveData;
+            var cacheSaveData = UnityEngine.JsonUtility.FromJson<SaveData>(json);
+            ModifySaveData(cacheSaveData);
+            return cacheSaveData;
         }
 
         var saveData = new SaveData
