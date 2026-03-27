@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class StageSelectView : MonoBehaviour, ITickable
 {
@@ -39,6 +40,9 @@ public class StageSelectView : MonoBehaviour, ITickable
         }
     }
 
+    private static int _beforeMaxUnlockedCount = -1;
+    public GameObject UnlockEffect;
+
     private void Start() {
         PutStageObject();
         InputHandler.Instance.SetInputState(InputState.Menu);
@@ -46,6 +50,16 @@ public class StageSelectView : MonoBehaviour, ITickable
         InputHandler.Instance.Menu.Submit += PlayButton;
         InputHandler.Instance.Menu.Cancel += BackButton;
         GameLoop.Instance.Register(this);
+        Camera.main.transform.position = new Vector3(SelectedIndex * _objectDistance, Camera.main.transform.position.y, Camera.main.transform.position.z);
+        if (_beforeMaxUnlockedCount == -1) {
+            _beforeMaxUnlockedCount = StageSelecter.Instance.UnlockedStageList.Count;
+            SelectedIndex = _beforeMaxUnlockedCount - 1;
+            Camera.main.transform.position = new Vector3(SelectedIndex * _objectDistance, Camera.main.transform.position.y, Camera.main.transform.position.z);
+        } else if (_beforeMaxUnlockedCount < StageSelecter.Instance.UnlockedStageList.Count) {
+            _beforeMaxUnlockedCount = StageSelecter.Instance.UnlockedStageList.Count;
+            SelectedIndex = _beforeMaxUnlockedCount - 1;
+            Instantiate(UnlockEffect, _stageObjectList[SelectedIndex].transform.position, Quaternion.identity);
+        }
         UpdateUI();
     }
 
@@ -58,9 +72,12 @@ public class StageSelectView : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime){
         MoveCamera(_selectedIndex, deltaTime);
+        GameObject stageObject = _stageObjectList[SelectedIndex];
+        stageObject.transform.Rotate(0, 30 * deltaTime, 0);
     }
 
     private float _objectDistance = 5f;
+    private List<GameObject> _stageObjectList = new();
     private void PutStageObject(){
         var stageList = StageSelecter.Instance.StageRegistry.AllStages;
         for (int i = 0; i < stageList.Count; i++) {
@@ -75,6 +92,8 @@ public class StageSelectView : MonoBehaviour, ITickable
                 stageObject = Instantiate(LockedPrefab, transform);
             }
             stageObject.transform.position = new Vector3(i * _objectDistance, 0, 0);
+            stageObject.transform.Rotate(0, 180, 0);
+            _stageObjectList.Add(stageObject);
         }
     }
 
