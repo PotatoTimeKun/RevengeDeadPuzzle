@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameUseCase
   PlayerController: {fileID: 0}
-  Stage: {fileID: 11400000, guid: b0fe622eab627ec489d24481009078a4, type: 2}
+  Stage: {fileID: 11400000, guid: 72ea36d98e38cf841a4e9c1fdeb50117, type: 2}
   PlayerPrefab: {fileID: 4561269876711536481, guid: 3aa64a99ba331bf42a4cb725ef9667bc, type: 3}
   _startPos: {fileID: 6054983442152854788}
 --- !u!1 &6604528392872729849
