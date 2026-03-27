@@ -45,17 +45,19 @@ public class StageSelectView : MonoBehaviour, ITickable
 
     private void Start() {
         PutStageObject();
+        // 入力設定
         InputHandler.Instance.SetInputState(InputState.Menu);
         InputHandler.Instance.Menu.Move += Move;
         InputHandler.Instance.Menu.Submit += PlayButton;
         InputHandler.Instance.Menu.Cancel += BackButton;
         GameLoop.Instance.Register(this);
+        // カメラ初期位置設定
         Camera.main.transform.position = new Vector3(SelectedIndex * _objectDistance, Camera.main.transform.position.y, Camera.main.transform.position.z);
-        if (_beforeMaxUnlockedCount == -1) {
+        if (_beforeMaxUnlockedCount == -1) { // 初回起動時
             _beforeMaxUnlockedCount = StageSelecter.Instance.UnlockedStageList.Count;
             SelectedIndex = _beforeMaxUnlockedCount - 1;
             Camera.main.transform.position = new Vector3(SelectedIndex * _objectDistance, Camera.main.transform.position.y, Camera.main.transform.position.z);
-        } else if (_beforeMaxUnlockedCount < StageSelecter.Instance.UnlockedStageList.Count) {
+        } else if (_beforeMaxUnlockedCount < StageSelecter.Instance.UnlockedStageList.Count) { // 新ステージ解放時
             _beforeMaxUnlockedCount = StageSelecter.Instance.UnlockedStageList.Count;
             SelectedIndex = _beforeMaxUnlockedCount - 1;
             Instantiate(UnlockEffect, _stageObjectList[SelectedIndex].transform.position, Quaternion.identity);
@@ -72,13 +74,14 @@ public class StageSelectView : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime){
         MoveCamera(_selectedIndex, deltaTime);
+        // ステージオブジェクトの回転
         GameObject stageObject = _stageObjectList[SelectedIndex];
         stageObject.transform.Rotate(0, 30 * deltaTime, 0);
     }
 
     private float _objectDistance = 5f;
     private List<GameObject> _stageObjectList = new();
-    private void PutStageObject(){
+    private void PutStageObject(){ // ステージオブジェクトの配置
         var stageList = StageSelecter.Instance.StageRegistry.AllStages;
         for (int i = 0; i < stageList.Count; i++) {
             var stage = stageList[i];
