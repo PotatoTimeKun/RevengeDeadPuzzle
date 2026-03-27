@@ -1,19 +1,12 @@
 using UnityEngine;
 
-public class SettingDataController : MonoBehaviour
+public class SettingDataController
 {
     private static SettingDataController _instance;
     public static SettingDataController Instance {
         get {
             if (_instance == null) _instance = new SettingDataController();
             return _instance;
-        }
-    }
-    private void Awake() {
-        if (_instance == null) _instance = this;
-        else {
-            Destroy(gameObject);
-            return;
         }
     }
     private static SettingData _currentData;

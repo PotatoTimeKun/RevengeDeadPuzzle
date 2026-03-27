@@ -4,7 +4,7 @@ using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 
-[CustomEditor(typeof(Application.View.UI.UIButton))]
+[CustomEditor(typeof(UIButton))]
 public class UIButtonEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -16,16 +16,13 @@ public class UIButtonEditor : Editor
 }
 #endif
 
-namespace Application.View.UI
+public class UIButton : UISelectableItem
 {
-    public class UIButton : UISelectableItem
-    {
-        [SerializeField, Tooltip("Event invoked when the button is submitted.")]
-        public UnityEvent OnSubmitEvent;
+    [SerializeField, Tooltip("Event invoked when the button is submitted.")]
+    public UnityEvent OnSubmitEvent;
 
-        public override void OnSubmit()
-        {
-            OnSubmitEvent?.Invoke();
-        }
+    public override void OnSubmit()
+    {
+        OnSubmitEvent?.Invoke();
     }
 }

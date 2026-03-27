@@ -13,6 +13,34 @@ public class SettingView : MonoBehaviour
     }
 
     public void CloseScene() {
+        OnClose?.Invoke();
         SceneManager.UnloadSceneAsync(gameObject.scene);
+    }
+    public static System.Action OnClose;
+
+    void Start() {
+        InputHandler.Instance.Menu.Cancel += CloseScene;
+        InputHandler.Instance.SetInputState(InputState.Menu);
+        Init();
+    }
+
+    void OnDestroy() {
+        InputHandler.Instance.Menu.Cancel -= CloseScene;
+    }
+
+    public UISlider bgmSlider;
+    public UISlider seSlider;
+    public UISlider masterSlider;
+    public SwitchButton recoveryIsCatSwitch;
+
+    void Init() {
+        bgmSlider.SetValue(SettingDataController.CurrentData.BgmVolume);
+        seSlider.SetValue(SettingDataController.CurrentData.SeVolume);
+        masterSlider.SetValue(SettingDataController.CurrentData.MasterVolume);
+        recoveryIsCatSwitch.SetSwitched(!SettingDataController.CurrentData.RecoveryIsCat);
+        bgmSlider.OnValueChanged += (value) => SettingDataController.Instance.SetBgmVolume(value);
+        seSlider.OnValueChanged += (value) => SettingDataController.Instance.SetSeVolume(value);
+        masterSlider.OnValueChanged += (value) => SettingDataController.Instance.SetMasterVolume(value);
+        recoveryIsCatSwitch.OnValueChanged += (value) => SettingDataController.Instance.SetRecoveryIsCat(!value);
     }
 }

@@ -1,20 +1,17 @@
 using UnityEngine;
 
-namespace Application.View.UI
+public class InputNavigator : MonoBehaviour
 {
-    public class InputNavigator : MonoBehaviour
-    {
-        public GameObject KeyboardGuide;
-        public GameObject GamepadGuide;
+    public GameObject KeyboardGuide;
+    public GameObject GamepadGuide;
 
-        private void Update() {
-            if(InputHandler.Instance.IsGamepad) {
-                KeyboardGuide.SetActive(false);
-                GamepadGuide.SetActive(true);
-            } else {
-                KeyboardGuide.SetActive(true);
-                GamepadGuide.SetActive(false);
-            }
+    private void Update() {
+        if(InputHandler.Instance.IsGamepad) {
+            KeyboardGuide.SetActive(false);
+            GamepadGuide.SetActive(true);
+        } else {
+            KeyboardGuide.SetActive(true);
+            GamepadGuide.SetActive(false);
         }
     }
 }

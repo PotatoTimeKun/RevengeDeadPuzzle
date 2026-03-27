@@ -30,6 +30,13 @@ public class HUDView : MonoBehaviour, ITickable
         if(isSettingViewOpen) return;
         SettingView.OpenScene();
         isSettingViewOpen = true;
+        SettingView.OnClose += CloseSettingView;
+        GetComponentInChildren<UIListNavigator>().IsActive = false;
+    }
+    private void CloseSettingView() {
+        isSettingViewOpen = false;
+        SettingView.OnClose -= CloseSettingView;
+        GetComponentInChildren<UIListNavigator>().IsActive = true;
     }
     public void OpenStageSelectView() {
         if(isSettingViewOpen) return;
