@@ -22,6 +22,17 @@ public class CostumeCollector : MonoBehaviour
         {
             UnlockedIdList = data.UnlockedIdList;
         }
+        ModifySaveData();
+    }
+
+    private void ModifySaveData(){
+        // デバッグ等でコスチュームが削除された場合に対応
+        for (int i = UnlockedIdList.Count - 1; i >= 0; i--) {
+            var costume = CostumeRegistry.GetById(UnlockedIdList[i]);
+            if (costume == null) {
+                UnlockedIdList.RemoveAt(i);
+            }
+        }
     }
     
     public string UnlockRandomId()

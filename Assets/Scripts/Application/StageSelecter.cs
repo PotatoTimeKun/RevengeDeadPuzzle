@@ -25,6 +25,18 @@ public class StageSelecter : MonoBehaviour
             UnlockedStageList = data.UnlockedIdList;
             ScoreDataList = data.ScoreDataList;
         }
+        ModifySaveData();
+    }
+
+    private void ModifySaveData(){
+        // デバッグ等でステージが削除された場合に対応
+        for (int i = UnlockedStageList.Count - 1; i >= 0; i--) {
+            var stage = StageRegistry.GetById(UnlockedStageList[i]);
+            if (stage == null) {
+                UnlockedStageList.RemoveAt(i);
+            }
+        }
+        UnlockedStageList.Add(StageRegistry.AllStages[0].Id);
     }
 
     private void UnlockStage(string id)
