@@ -33,4 +33,15 @@ public class StageDef : ScriptableObject
     public int DeathCountTarget = 0;
     public List<Entity_Data.DeathType> AcceptedDeathTypeTarget = new();
     public string DeathTypeTargetExplanation = "";
+    public string TimerTargetToString(){
+        var minute = TimerSecondTarget / 60;
+        var second = TimerSecondTarget % 60;
+        return $"{minute:D2}:{second:D2}以内";
+    }
+    public string DeathCountTargetToString(){
+        return $"死亡{DeathCountTarget}回以内";
+    }
+    public string AcceptedDeathTypeTargetToString(){
+        return DeathTypeTargetExplanation;
+    }
 }

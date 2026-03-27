@@ -37,11 +37,9 @@ public class ResultView : MonoBehaviour
             ClearPanel.SetActive(false);
             GameOverPanel.SetActive(true);
         }
-        int minute = (int)(GameUseCase.BeforeStage.TimerSecondTarget / 60);
-        int second = (int)(GameUseCase.BeforeStage.TimerSecondTarget % 60);
-        TimeText.text = $"{minute:00}分{second:00}秒以内";
-        CountText.text = $"死亡{GameUseCase.BeforeStage.DeathCountTarget.ToString()}回以内";
-        TypeText.text = GameUseCase.BeforeStage.DeathTypeTargetExplanation;
+        TimeText.text = GameUseCase.BeforeStage.TimerTargetToString();
+        CountText.text = GameUseCase.BeforeStage.DeathCountTargetToString();
+        TypeText.text = GameUseCase.BeforeStage.AcceptedDeathTypeTargetToString();
         TimeEvaluation.SetActive(ScoreLogic.BeforeScore.CheckEvaluation()[0]);
         CountEvaluation.SetActive(ScoreLogic.BeforeScore.CheckEvaluation()[1]);
         TypeEvaluation.SetActive(ScoreLogic.BeforeScore.CheckEvaluation()[2]);

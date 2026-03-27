@@ -80,10 +80,8 @@ public class HUDView : MonoBehaviour, ITickable
 
     private void UpdateEvaluationText()
     {
-        int minute = (int)(GameUseCase.Instance.Stage.TimerSecondTarget / 60);
-        int second = (int)(GameUseCase.Instance.Stage.TimerSecondTarget % 60);
-        TimeEvaluationText.text = $"{minute:00}分{second:00}秒以内";
-        CountEvaluationText.text = $"死亡{GameUseCase.Instance.Stage.DeathCountTarget.ToString()}回以内";
+        TimeEvaluationText.text = GameUseCase.Instance.Stage.TimerTargetToString();
+        CountEvaluationText.text = GameUseCase.Instance.Stage.DeathCountTargetToString();
         TypeEvaluationText.text = GameUseCase.Instance.Stage.DeathTypeTargetExplanation;
     }
 
