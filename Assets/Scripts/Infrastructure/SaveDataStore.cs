@@ -35,15 +35,19 @@ public class SaveDataStore
         if (UnityEngine.PlayerPrefs.HasKey(SaveKey))
         {
             string json = UnityEngine.PlayerPrefs.GetString(SaveKey);
-            return UnityEngine.JsonUtility.FromJson<SaveData>(json);
+            var saveData = UnityEngine.JsonUtility.FromJson<SaveData>(json);
+            ModifySaveData(saveData);
+            return saveData;
         }
 
-        return new SaveData
+        var saveData = new SaveData
         {
             StageProgress = new StageProgressData { UnlockedIdList = new System.Collections.Generic.List<string>() , ScoreDataList = new System.Collections.Generic.List<ScoreData>()},
             Costume = new CostumeData { UnlockedIdList = new System.Collections.Generic.List<string>() },
             Setting = new SettingData { MasterVolume = 1.0f, BgmVolume = 1.0f, SeVolume = 1.0f, RecoveryIsCat = true }
         };
+        ModifySaveData(saveData);
+        return saveData;
     }
 
     public void SaveAll()
@@ -68,6 +72,23 @@ public class SaveDataStore
     public SettingData LoadSetting()
     {
         return CurrentData.Setting;
+    }
+
+    private void ModifySaveData(SaveData saveData){
+        // デバッグ等でステージやコスチュームが削除された場合に対応
+        for (int i = saveData.StageProgress.UnlockedIdList.Count - 1; i >= 0; i--) {
+            var stage = StageSelecter.Instance.StageRegistry.GetById(saveData.StageProgress.UnlockedIdList[i]);
+            if (stage == null) {
+                saveData.StageProgress.UnlockedIdList.RemoveAt(i);
+            }
+        }
+        saveData.StageProgress.UnlockedIdList.Add(StageSelecter.Instance.StageRegistry.AllStages[0].Id);
+        for (int i = saveData.Costume.UnlockedIdList.Count - 1; i >= 0; i--) {
+            var costume = CostumeCollector.Instance.CostumeRegistry.GetById(saveData.Costume.UnlockedIdList[i]);
+            if (costume == null) {
+                saveData.Costume.UnlockedIdList.RemoveAt(i);
+            }
+        }
     }
 }
 
