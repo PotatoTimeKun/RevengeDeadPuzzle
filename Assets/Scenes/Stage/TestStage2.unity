@@ -1050,6 +1050,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d603be88b88818479a0c35076ff9ced, type: 3}
+--- !u!1001 &667465413157032954
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.879764
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0000009536743
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -10.860733
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7223274
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.69155127
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 87.506
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763527139398554656, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7466948169975973626, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
+      propertyPath: m_Name
+      value: KA-F1000_FridgeSBS_V1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4c542ab0e1db6b54a8c42977461f6f45, type: 3}
 --- !u!1001 &1050061112529282421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1835,3 +1892,4 @@ SceneRoots:
   - {fileID: 1108886841697770397}
   - {fileID: 37737088426837068}
   - {fileID: 5982560214496111099}
+  - {fileID: 667465413157032954}
