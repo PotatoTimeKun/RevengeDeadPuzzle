@@ -111,7 +111,6 @@ public class Button : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(_countOnButton);
         _buttonObject.transform.position = Vector3.Lerp(_buttonObject.transform.position, _targetPosition, Time.deltaTime);
     }
 }
