@@ -70,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e6c6433d65d07da4287a804f40f8ed51, type: 2}
+  - {fileID: 2100000, guid: 70c5b78664a7c1b43a36b23daf885985, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -199,6 +199,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_GroundFire_Circle
       objectReference: {fileID: 0}
+    - target: {fileID: 4146898699796669935, guid: 5334360cd0cfad84bbf6855beaf10de4, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335182323122487861, guid: 5334360cd0cfad84bbf6855beaf10de4, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4335182323122487861, guid: 5334360cd0cfad84bbf6855beaf10de4, type: 3}
       propertyPath: scalingMode
       value: 0
@@ -206,6 +214,10 @@ PrefabInstance:
     - target: {fileID: 4335182323122487861, guid: 5334360cd0cfad84bbf6855beaf10de4, type: 3}
       propertyPath: moveWithTransform
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6998159428792986707, guid: 5334360cd0cfad84bbf6855beaf10de4, type: 3}
+      propertyPath: playOnAwake
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
