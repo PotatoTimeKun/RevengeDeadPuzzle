@@ -90,7 +90,11 @@ public class PlayerController : MonoBehaviour, ITickable
         Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
         if (velocity.sqrMagnitude > 0.001f && _rb.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f, QueryTriggerInteraction.Ignore))
         {
-            velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
+            // 動的なRigidbody（死体などのPhysicsオブジェクト）にはSlideせず、押し込めるようにする
+            if (hit.rigidbody == null || hit.rigidbody.isKinematic)
+            {
+                velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
+            }
         }
         velocity.y = _rb.linearVelocity.y;
         _rb.linearVelocity = velocity;

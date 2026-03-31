@@ -132,12 +132,20 @@ PrefabInstance:
       value: Wood
       objectReference: {fileID: 0}
     - target: {fileID: 8126861230153022128, guid: 6606ee5df165ec747800f97e6495f776, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.8489
+      objectReference: {fileID: 0}
+    - target: {fileID: 8126861230153022128, guid: 6606ee5df165ec747800f97e6495f776, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.6042
+      objectReference: {fileID: 0}
+    - target: {fileID: 8126861230153022128, guid: 6606ee5df165ec747800f97e6495f776, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.497064
+      value: -6.61
       objectReference: {fileID: 0}
     - target: {fileID: 8126861230153022128, guid: 6606ee5df165ec747800f97e6495f776, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 8126861230153022128, guid: 6606ee5df165ec747800f97e6495f776, type: 3}
       propertyPath: m_LocalPosition.z
@@ -219,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d547e178bba9ae43bbdb2aedf81afc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeathGimmick
-  deathType: 4
+  deathType: 2
 --- !u!65 &277759051
 BoxCollider:
   m_ObjectHideFlags: 0
