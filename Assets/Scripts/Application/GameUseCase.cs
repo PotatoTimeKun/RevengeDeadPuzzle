@@ -12,7 +12,7 @@ public class GameUseCase : MonoBehaviour , ITickable
 
     public static StageDef BeforeStage; // 前のステージをクラス変数に保存
 
-    public PlayerController PlayerController;
+    [HideInInspector]public PlayerController PlayerController;
     public StageDef Stage;
     public GameObject PlayerPrefab;
     [SerializeField] private GameObject _startPos;
