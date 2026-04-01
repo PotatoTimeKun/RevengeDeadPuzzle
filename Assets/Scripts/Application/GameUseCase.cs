@@ -43,10 +43,8 @@ public class GameUseCase : MonoBehaviour , ITickable
         GameLoop.Instance.Unregister(this);
         PlayerController.PlayerLogic.OnDead -= OnPlayerDead;
         Mental.OnMentalChange -= CheckGameOver;
-        if (Instance == this)
-        {
-            Instance = null;
-        }
+        Time.timeScale = 1f;
+        if (Instance == this) Instance = null;
     }
 
     private void SpawnPlayer(){

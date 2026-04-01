@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour, ITickable
         _grab.Dispose();
 
         InputHandler.Instance.Player.Suicide -= Suicide;
-        GameUseCase.Instance.OnGameClear -= OnGameClear;
+        if (GameUseCase.Instance != null) GameUseCase.Instance.OnGameClear -= OnGameClear;
 
         GameLoop.Instance.Unregister(this);
         PlayerLogic.OnDead -= OnDead;
