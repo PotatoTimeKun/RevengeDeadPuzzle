@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class Spin : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 1.0f;
+    public float Speed = 20.0f;
 
     private void Update()
     {
-        transform.Rotate(0, _speed * Time.deltaTime, 0);
+        transform.Rotate(0, Speed * Time.deltaTime, 0);
     }
 }

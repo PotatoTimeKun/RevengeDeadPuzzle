@@ -53,4 +53,9 @@ public class CostumeCollector : MonoBehaviour
         SaveDataStore.Instance.SaveAll(); // 解放したコスチュームの保存
         return randomCostume.Id;
     }
+
+    public void Unlock(string id){
+        if (!UnlockedIdList.Contains(id)) UnlockedIdList.Add(id);
+        SaveDataStore.Instance.SaveAll(); // 解放したコスチュームの保存
+    }
 }

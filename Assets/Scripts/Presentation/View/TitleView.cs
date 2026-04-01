@@ -73,8 +73,7 @@ public class TitleView : MonoBehaviour
 
     public void OnClickCollection()
     {
-        // CollectionViewを開く
-        SceneManager.LoadScene("CollectionScene"); 
+        CollectionView.OpenScene();
     }
 
     public void OnClickSetting()
