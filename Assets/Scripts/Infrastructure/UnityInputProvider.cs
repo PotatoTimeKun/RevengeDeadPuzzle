@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class UnityInputProvider : MonoBehaviour
 {
-    public static UnityInputProvider Instance { get; private set; }
+    private static UnityInputProvider _instance;
 
     private InputActions inputActions;
     private InputHandler inputHandler;
@@ -16,9 +16,9 @@ public class UnityInputProvider : MonoBehaviour
     }
     private void Awake()
     {
-        if (Instance == null)
+        if (_instance == null)
         {
-            Instance = this;
+            _instance = this;
         }
         else
         {
