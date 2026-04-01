@@ -1,4 +1,5 @@
 // UnityEngine禁止
+using System;
 
 public class MentalLogic
 {
@@ -9,7 +10,13 @@ public class MentalLogic
     }
     public float CurrentValue {
         get { return _currentValue; }
+        set {
+            _currentValue = value;
+            if (_currentValue < 0) _currentValue = 0;
+            OnMentalChange?.Invoke();
+        }
     }
+    public Action OnMentalChange;
 
     public MentalLogic(float maxAmount)
     {
@@ -19,12 +26,11 @@ public class MentalLogic
 
     public void Decrease(float amount)
     {
-        _currentValue -= amount;
-        if (_currentValue < 0) _currentValue = 0;
+        CurrentValue -= amount;
     }
 
     public void Recover()
     {
-        _currentValue = _maxValue;
+        CurrentValue = MaxValue;
     }
 }

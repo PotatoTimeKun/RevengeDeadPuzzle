@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class HUDView : MonoBehaviour, ITickable
+public class HUDView : MonoBehaviour
 {
     public static HUDView Instance { get; private set; }
     private void Awake() {
@@ -45,7 +45,21 @@ public class HUDView : MonoBehaviour, ITickable
     void OnDestroy(){
         InputHandler.Instance.Player.Menu -= OpenMenuPanel;
         InputHandler.Instance.Menu.Cancel -= CloseMenuPanel;
-        GameLoop.Instance.Unregister(this);
+        
+        if (GameUseCase.Instance != null && GameUseCase.Instance.Mental != null) {
+            GameUseCase.Instance.Mental.OnMentalChange -= UpdateMental;
+        }
+        if (GameUseCase.Instance != null && GameUseCase.Instance.Score != null) {
+            GameUseCase.Instance.Score.OnDeathCountChange -= UpdateDeadCount;
+            GameUseCase.Instance.Score.OnTimerChange -= UpdateTimer;
+            GameUseCase.Instance.Score.OnEvaluationChange -= UpdateEvaluation;
+        }
+        if (GameUseCase.Instance != null) {
+            GameUseCase.Instance.OnGameClear -= ShowClearEffect;
+        }
+        if (InputHandler.Instance != null) {
+            InputHandler.Instance.OnInputMethodChange -= UpdateGuide;
+        }
     }
     public GameObject MenuPanel;
     public Slider MentalSlider;
@@ -61,18 +75,24 @@ public class HUDView : MonoBehaviour, ITickable
     public GameObject KeybordGuide;
     public GameObject GamepadGuide;
     public Animator ClearTextAnimator;
-    private void UpdateMental(float value)
+    
+    private void UpdateMental()
     {
+        float value = GameUseCase.Instance.Mental.CurrentValue / GameUseCase.Instance.Mental.MaxValue;
         MentalSlider.value = value;
     }
 
-    private void UpdateDeadCount(int count)
+    private void UpdateDeadCount()
     {
+        int count = GameUseCase.Instance.Score.DeathCount;
         DeadCountText.text = $"DEAD : {count.ToString()}";
     }
 
-    private void UpdateEvaluation(bool timeEval, bool countEval, bool typeEval)
+    private void UpdateEvaluation()
     {
+        bool timeEval = GameUseCase.Instance.Score.TimeTarget;
+        bool countEval = GameUseCase.Instance.Score.CountTarget;
+        bool typeEval = GameUseCase.Instance.Score.TypeTarget;
         TimeEvaluation.SetActive(timeEval);
         CountEvaluation.SetActive(countEval);
         TypeEvaluation.SetActive(typeEval);
@@ -85,8 +105,10 @@ public class HUDView : MonoBehaviour, ITickable
         TypeEvaluationText.text = GameUseCase.Instance.Stage.DeathTypeTargetExplanation;
     }
 
-    private void UpdateTimer(int minute, int second)
+    private void UpdateTimer()
     {
+        int minute = (int)(GameUseCase.Instance.Score.CurrentTime / 60);
+        int second = (int)(GameUseCase.Instance.Score.CurrentTime % 60);
         TimerText.text = $"{minute:00}:{second:00}";
     }
 
@@ -95,9 +117,9 @@ public class HUDView : MonoBehaviour, ITickable
         StageNameText.text = name;
     }
 
-    private void UpdateGuide()
+    private void UpdateGuide(bool isGamepad)
     {
-        if (InputHandler.Instance.IsGamepad)
+        if (isGamepad)
         {
             KeybordGuide.SetActive(false);
             GamepadGuide.SetActive(true);
@@ -120,22 +142,18 @@ public class HUDView : MonoBehaviour, ITickable
         InputHandler.Instance.Menu.Cancel += CloseMenuPanel;
         UpdateStageName(GameUseCase.Instance.Stage.DisplayName);
         UpdateEvaluationText();
-        GameLoop.Instance.Register(this);
-    }
 
-    public void Tick(float deltaTime){
-        // ゲームの状態を監視してHUDに反映
-        float mental = GameUseCase.Instance.Mental.CurrentValue / GameUseCase.Instance.Mental.MaxValue;
-        UpdateMental(mental);
-        UpdateDeadCount(GameUseCase.Instance.Score.DeathCount);
-        List<bool> evaluations = GameUseCase.Instance.Score.CheckEvaluation();
-        UpdateEvaluation(evaluations[0], evaluations[1], evaluations[2]);
-        int minute = (int)(GameUseCase.Instance.Score.CurrentTime / 60);
-        int second = (int)(GameUseCase.Instance.Score.CurrentTime % 60);
-        UpdateTimer(minute, second);
-        UpdateGuide();
-        if(GameUseCase.Instance.PlayerController.PlayerLogic.State == Entity_Data.PlayerState.Goal){
-            ShowClearEffect();
-        }
+        UpdateMental();
+        UpdateDeadCount();
+        UpdateTimer();
+        UpdateEvaluation();
+        UpdateGuide(InputHandler.Instance.IsGamepad);
+
+        GameUseCase.Instance.Mental.OnMentalChange += UpdateMental;
+        GameUseCase.Instance.Score.OnDeathCountChange += UpdateDeadCount;
+        GameUseCase.Instance.Score.OnTimerChange += UpdateTimer;
+        GameUseCase.Instance.Score.OnEvaluationChange += UpdateEvaluation;
+        InputHandler.Instance.OnInputMethodChange += UpdateGuide;
+        GameUseCase.Instance.OnGameClear += ShowClearEffect;
     }
 }

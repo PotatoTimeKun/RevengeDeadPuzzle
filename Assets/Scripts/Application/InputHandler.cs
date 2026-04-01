@@ -27,7 +27,17 @@ public class InputHandler
         set { _currentInputState = value; }
     }
 
-    public bool IsGamepad { get; set; }
+    public Action<bool> OnInputMethodChange;
+    private bool _isGamepad;
+    public bool IsGamepad { 
+        get { return _isGamepad; }
+        set { 
+            if (_isGamepad != value) {
+                _isGamepad = value;
+                OnInputMethodChange?.Invoke(_isGamepad);
+            }
+        }
+    }
 
 
     [SerializeField]

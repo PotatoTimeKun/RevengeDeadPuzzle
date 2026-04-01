@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour, ITickable
         _movement = new PlayerMovement(this);
         _jump = new PlayerJump(this);
         _grab = new PlayerGrab(this);
+        PlayerLogic.OnDead += OnDead;
     }
 
     private void Start()
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour, ITickable
         _grab.Init();
 
         InputHandler.Instance.Player.Suicide += Suicide;
+        GameUseCase.Instance.OnGameClear += OnGameClear;
 
         GameLoop.Instance.Register(this);
     }
@@ -51,20 +53,23 @@ public class PlayerController : MonoBehaviour, ITickable
         _grab.Dispose();
 
         InputHandler.Instance.Player.Suicide -= Suicide;
+        GameUseCase.Instance.OnGameClear -= OnGameClear;
 
+        GameLoop.Instance.Unregister(this);
+        PlayerLogic.OnDead -= OnDead;
+    }
+
+    private void OnDead(){
+        GameLoop.Instance.Unregister(this);
+    }
+
+    private void OnGameClear(){
         GameLoop.Instance.Unregister(this);
     }
 
     public void Tick(float deltaTime)
     {
         _grab.Tick(deltaTime);
-
-        // 死亡したらループから外す
-        if (PlayerLogic.State == Entity_Data.PlayerState.Dead)
-        {
-            GameLoop.Instance.Unregister(this);
-            return;
-        }
 
         if (_rb == null) _rb = GetComponent<Rigidbody>();
 
@@ -96,11 +101,13 @@ public class PlayerController : MonoBehaviour, ITickable
         public void Init()
         {
             InputHandler.Instance.Player.Move += Move;
+            _player.PlayerLogic.OnDeathAnimationStart += OnDead;
         }
 
         public void Dispose()
         {
             InputHandler.Instance.Player.Move -= Move;
+            _player.PlayerLogic.OnDeathAnimationStart -= OnDead;
         }
 
         public void ResetMove()
@@ -119,14 +126,13 @@ public class PlayerController : MonoBehaviour, ITickable
             _player.transform.rotation = Quaternion.LookRotation(direction);
         }
 
+        private void OnDead()
+        { // 生きていないときは移動させない
+            _moveValue = Vector2.zero;
+        }
+
         public void Tick(float deltaTime)
         {
-            // 生きていないときは移動させない
-            if (_player.PlayerLogic.State != Entity_Data.PlayerState.Alive)
-            {
-                _moveValue = Vector2.zero;
-            }
-
             // 移動
             Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
             if (velocity.sqrMagnitude > 0.001f && _player.Rigidbody.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f, QueryTriggerInteraction.Ignore))
@@ -238,11 +244,13 @@ public class PlayerController : MonoBehaviour, ITickable
             _grabAnchor.localPosition = new Vector3(0, 1f, 1.8f); // プレイヤーの少し前方に配置
 
             InputHandler.Instance.Player.Drag += Grab;
+            _player.PlayerLogic.OnDeathAnimationStart += OnDead;
         }
 
         public void Dispose()
         {
             InputHandler.Instance.Player.Drag -= Grab;
+            _player.PlayerLogic.OnDeathAnimationStart -= OnDead;
         }
 
         private void Grab()
@@ -319,13 +327,13 @@ public class PlayerController : MonoBehaviour, ITickable
             _isGrabbing = false;
         }
 
+        private void OnDead()
+        { // 死亡時に掴んでいた死体を離す
+            EndGrab();
+        }
+
         public void Tick(float deltaTime)
         {
-            // 死亡時に掴んでいた死体を離す
-            if (_player.PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait && _isGrabbing)
-            {
-                EndGrab();
-            }
         }
     }
 }

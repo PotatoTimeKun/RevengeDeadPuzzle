@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerView : MonoBehaviour , ITickable
+public class PlayerView : MonoBehaviour
 {
     private PlayerController _controller;
 
@@ -12,14 +12,27 @@ public class PlayerView : MonoBehaviour , ITickable
 
     private void Start()
     {
-        GameLoop.Instance.Register(this);
         _costumeId = _controller.PlayerLogic.CostumeId;
         SetCostume(_costumeId);
+
+        _controller.PlayerLogic.OnCostumeChange += OnCostumeChange;
+        _controller.PlayerLogic.OnDeathAnimationStart += OnDeathAnimationStart;
+        _controller.PlayerLogic.OnDead += OnDead;
+        GameUseCase.Instance.OnGameOver += OnGameOver;
     }
 
     private void OnDisable()
     {
-        GameLoop.Instance.Unregister(this);
+        if (_controller != null && _controller.PlayerLogic != null)
+        {
+            _controller.PlayerLogic.OnCostumeChange -= OnCostumeChange;
+            _controller.PlayerLogic.OnDeathAnimationStart -= OnDeathAnimationStart;
+            _controller.PlayerLogic.OnDead -= OnDead;
+        }
+        if (GameUseCase.Instance != null)
+        {
+            GameUseCase.Instance.OnGameOver -= OnGameOver;
+        }
     }
 
     private Renderer[] _allRenderers;
@@ -57,7 +70,7 @@ public class PlayerView : MonoBehaviour , ITickable
         var cv = _currentCostumeObj.GetComponent<CameraView>();
         if (cv != null) DestroyImmediate(cv);
 
-        // 物理挙動が二重にならないように子オブジェクトのRigidbodyのプロパティを親にコピーして削除
+        // 物理挙 মন্ত্রিসが二重にならないように子オブジェクトのRigidbodyのプロパティを親にコピーして削除
         var childRb = _currentCostumeObj.GetComponent<Rigidbody>();
         if (childRb != null) {
             var parentRb = gameObject.GetComponent<Rigidbody>();
@@ -75,9 +88,6 @@ public class PlayerView : MonoBehaviour , ITickable
 
             DestroyImmediate(childRb);
         }
-
-        // PlayerControllerの参照を更新（HitCheckなど）
-        _controller.Ground = _currentCostumeObj.GetComponentInChildren<HitCheck>();
 
         _allRenderers = _currentCostumeObj.GetComponentsInChildren<Renderer>(true);
         SetModelVisibility(_isVisible);
@@ -103,34 +113,32 @@ public class PlayerView : MonoBehaviour , ITickable
     }
 
     private bool _deathCostumeChanged = false;
-    public void Tick(float deltaTime){
-        // コスチュームを変更
-        if (_controller.PlayerLogic.CostumeId != _costumeId) {
+
+    private void OnCostumeChange()
+    {
+        if (_controller.PlayerLogic.CostumeId != _costumeId)
+        {
             SetCostume(_controller.PlayerLogic.CostumeId);
             _costumeId = _controller.PlayerLogic.CostumeId;
         }
-        if (GameUseCase.Instance.IsGameOver) {
-            // ゲームオーバー時はモデルを表示
-            SetModelVisibility(true);
-            return;
-        }
-        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Alive) {
-            // 生存時にモデルを表示
-            SetModelVisibility(true);
-        }
-        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait) {
-            // 死亡アニメーション中にモデルを非表示
-            SetModelVisibility(false);
-        }
-        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
-            // 死亡時にコスチュームを変更
-            if (_deathCostumeChanged) return;
-            _deathCostumeChanged = true;
-            SetModelVisibility(true);
-            if (_controller.PlayerLogic.Type == Entity_Data.DeathType.None) return;
-            SetCostume(_controller.PlayerLogic.Type.ToString());
-            _controller.PlayerLogic.CostumeId = _controller.PlayerLogic.Type.ToString();
-            _costumeId = _controller.PlayerLogic.Type.ToString();
-        }
+    }
+
+    private void OnDeathAnimationStart()
+    {
+        SetModelVisibility(false);
+    }
+
+    private void OnDead()
+    {
+        if (_deathCostumeChanged) return;
+        _deathCostumeChanged = true;
+        SetModelVisibility(true);
+        if (_controller.PlayerLogic.Type == Entity_Data.DeathType.None) return;
+        _controller.PlayerLogic.CostumeId = _controller.PlayerLogic.Type.ToString();
+    }
+
+    private void OnGameOver()
+    {
+        SetModelVisibility(true);
     }
 }

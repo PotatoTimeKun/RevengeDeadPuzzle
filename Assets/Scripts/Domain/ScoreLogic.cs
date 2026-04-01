@@ -1,5 +1,6 @@
 // UnityEngine禁止
 using System.Collections.Generic;
+using System;
 
 public class ScoreLogic : ITickable
 {
@@ -12,6 +13,10 @@ public class ScoreLogic : ITickable
     public List<Entity_Data.DeathType> DeathTypeHistory = new();
     public bool IsClear = true;
 
+    public Action OnTimerChange;
+    public Action OnDeathCountChange;
+    public Action OnEvaluationChange;
+
     public ScoreLogic(StageDef stage)
     {
         BeforeScore = this;
@@ -19,24 +24,37 @@ public class ScoreLogic : ITickable
         _currentTime = 0f;
         _isTimerEnabled = true;
         DeathCount = 0;
+        GameUseCase.Instance.OnGameClear += OnClear;
+        GameUseCase.Instance.OnPause += StopTimer;
+        GameUseCase.Instance.OnResume += ResumeTimer;
+        GameUseCase.Instance.OnGameOver += OnGameOver;
         GameLoop.Instance.Register(this);
     }
     ~ScoreLogic(){
+        GameUseCase.Instance.OnGameClear -= OnClear;
+        GameUseCase.Instance.OnPause -= StopTimer;
+        GameUseCase.Instance.OnResume -= ResumeTimer;
+        GameUseCase.Instance.OnGameOver -= OnGameOver;
         GameLoop.Instance.Unregister(this);
     }
 
     public void Tick(float deltaTime)
     {
         if (!_isTimerEnabled) return;
+        int oldTimerInt = (int)_currentTime;
         _currentTime += deltaTime;
+        if (oldTimerInt != (int)_currentTime) {
+            OnTimerChange?.Invoke();
+            OnEvaluationChange?.Invoke();
+        }
     }
 
-    public void StopTimer()
+    private void StopTimer()
     {
         _isTimerEnabled = false;
     }
 
-    public void ResumeTimer()
+    private void ResumeTimer()
     {
         _isTimerEnabled = true;
     }
@@ -45,16 +63,21 @@ public class ScoreLogic : ITickable
     {
         DeathCount++;
         DeathTypeHistory.Add(deathType);
+        OnDeathCountChange?.Invoke();
+        OnEvaluationChange?.Invoke();
     }
 
-    public List<bool> CheckEvaluation()
-    {
-        List<bool> evaluations = new();
+    public bool TimeTarget { get { return CurrentTime <= _currentStage.TimerSecondTarget; } }
+    public bool CountTarget { get { return DeathCount <= _currentStage.DeathCountTarget; } }
+    public bool TypeTarget { get { return DeathTypeHistory.TrueForAll(deathType => _currentStage.AcceptedDeathTypeTarget.Contains(deathType)); } }
 
-        evaluations.Add(CurrentTime <= _currentStage.TimerSecondTarget);
-        evaluations.Add(DeathCount <= _currentStage.DeathCountTarget);
-        evaluations.Add(DeathTypeHistory.TrueForAll(deathType => _currentStage.AcceptedDeathTypeTarget.Contains(deathType)));
+    private void OnClear(){
+        StopTimer();
+        // 評価を保存
+        StageSelecter.Instance.ClearStage(_currentStage.Id,TimeTarget,CountTarget,TypeTarget);
+    }
 
-        return evaluations;
+    private void OnGameOver(){
+        StopTimer();
     }
 }

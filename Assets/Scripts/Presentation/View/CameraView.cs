@@ -1,7 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class CameraView : MonoBehaviour, ITickable
+public class CameraView : MonoBehaviour
 {
     private PlayerController _controller;
     private static Vector3 defaultFollow;
@@ -54,11 +54,22 @@ public class CameraView : MonoBehaviour, ITickable
             defaultFollow = follow.FollowOffset;
             hasDefaultFollow = true;
         }
-        GameLoop.Instance.Register(this);
+
+        To3rdPerson();
+
+        _controller.PlayerLogic.OnDeathAnimationStart += OnDeathAnimationStart;
+        GameUseCase.Instance.OnGameOver += OnGameOver;
     }
 
     private void OnDestroy() {
-        GameLoop.Instance.Unregister(this);
+        if (_controller != null && _controller.PlayerLogic != null)
+        {
+            _controller.PlayerLogic.OnDeathAnimationStart -= OnDeathAnimationStart;
+        }
+        if (GameUseCase.Instance != null)
+        {
+            GameUseCase.Instance.OnGameOver -= OnGameOver;
+        }
     }
 
     private void To3rdPerson()
@@ -117,31 +128,21 @@ public class CameraView : MonoBehaviour, ITickable
         follow.FollowOffset = defaultFollow;
     }
 
-    private bool _isDead = false;
     private bool _deathAnimationPlayed = false;
-    public void Tick(float deltaTime)
+
+    private void OnDeathAnimationStart()
     {
-        if (_isDead) return;
-        if (GameUseCase.Instance.IsGameOver) {
-            // ゲームオーバー時は三人称に
-            To3rdPerson();
-            return;
-        }
-        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Alive) {
-            // 生きていたら三人称に
-            To3rdPerson();
-            return;
-        }
-        if (_controller.PlayerLogic.State == Entity_Data.PlayerState.Dead) {
-            _isDead = true;
-            GameLoop.Instance.Unregister(this);
-            return;
-        }
-        // 死亡アニメーション中は1人称に
-        if (_controller.PlayerLogic.State != Entity_Data.PlayerState.DeathAnimationWait) return;
         if (_deathAnimationPlayed) return;
         _deathAnimationPlayed = true;
+        GameUseCase.Instance.OnGameOver -= OnGameOver;
+        _controller.PlayerLogic.OnDeathAnimationStart -= OnDeathAnimationStart;
         PlayDeathEffect(_controller.PlayerLogic.Type);
+        if (GameUseCase.Instance.IsGameOver) return;
         To1stPerson();
+    }
+
+    private void OnGameOver()
+    {
+        To3rdPerson();
     }
 }

@@ -40,9 +40,9 @@ public class ResultView : MonoBehaviour
         TimeText.text = GameUseCase.BeforeStage.TimerTargetToString();
         CountText.text = GameUseCase.BeforeStage.DeathCountTargetToString();
         TypeText.text = GameUseCase.BeforeStage.AcceptedDeathTypeTargetToString();
-        TimeEvaluation.SetActive(ScoreLogic.BeforeScore.CheckEvaluation()[0]);
-        CountEvaluation.SetActive(ScoreLogic.BeforeScore.CheckEvaluation()[1]);
-        TypeEvaluation.SetActive(ScoreLogic.BeforeScore.CheckEvaluation()[2]);
+        TimeEvaluation.SetActive(ScoreLogic.BeforeScore.TimeTarget);
+        CountEvaluation.SetActive(ScoreLogic.BeforeScore.CountTarget);
+        TypeEvaluation.SetActive(ScoreLogic.BeforeScore.TypeTarget);
         DeathHistoryText.text = DeathTypeHistoryToString();
     }
     private Dictionary<Entity_Data.DeathType, string> DeathTypeNames = new();
