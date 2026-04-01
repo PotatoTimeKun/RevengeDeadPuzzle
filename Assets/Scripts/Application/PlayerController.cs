@@ -10,28 +10,24 @@ public enum GroundState
 
 public class PlayerController : MonoBehaviour, ITickable
 {
-    [HideInInspector] public HitCheck Ground;
     [HideInInspector] public PlayerLogic PlayerLogic;
-    private float moveSpeed = 5f;
-    private float jumpPower = 6f;
     private Rigidbody _rb;
-    private PlayerController _grabbedObject;
-    private GroundState _groundState;
-    private bool _isGrabbing = false;
-    private float _grabRange = 1.5f;
-    private Transform _grabAnchor;
-    private float _throwForce = 10f;
+    public Rigidbody Rigidbody => _rb;
+
+    private PlayerMovement _movement;
+    private PlayerJump _jump;
+    private PlayerGrab _grab;
+
     private void Awake()
     {
         PlayerLogic = new PlayerLogic();
+        _movement = new PlayerMovement(this);
+        _jump = new PlayerJump(this);
+        _grab = new PlayerGrab(this);
     }
 
     private void Start()
     {
-        // ヒットチェックの初期化
-        Ground = GetComponentInChildren<HitCheck>();
-        Ground.IsHit += OnHitGround;
-
         // リジッドボディの初期化
         _rb = GetComponent<Rigidbody>();
         if (_rb == null) {
@@ -39,26 +35,21 @@ public class PlayerController : MonoBehaviour, ITickable
             _rb.freezeRotation = true;
         }
 
-        // 掴む位置のアンカーの初期化
-        GameObject anchorObj = new GameObject("GrabAnchor");
-        _grabAnchor = anchorObj.transform;
-        _grabAnchor.SetParent(transform);
-        _grabAnchor.localPosition = new Vector3(0, 1f, 1.8f); // プレイヤーの少し前方に配置
+        _movement.Init();
+        _jump.Init();
+        _grab.Init();
 
-        // 入力イベントの登録
-        InputHandler.Instance.Player.Move += Move;
-        InputHandler.Instance.Player.Jump += Jump;
-        InputHandler.Instance.Player.Drag += Grab;
         InputHandler.Instance.Player.Suicide += Suicide;
 
         GameLoop.Instance.Register(this);
     }
+
     private void OnDestroy()
     {
-        // 入力イベントの登録解除
-        InputHandler.Instance.Player.Move -= Move;
-        InputHandler.Instance.Player.Jump -= Jump;
-        InputHandler.Instance.Player.Drag -= Grab;
+        _movement.Dispose();
+        _jump.Dispose();
+        _grab.Dispose();
+
         InputHandler.Instance.Player.Suicide -= Suicide;
 
         GameLoop.Instance.Unregister(this);
@@ -66,11 +57,8 @@ public class PlayerController : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
-        // 死亡時に掴んでいた死体を離す
-        if (PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait && _isGrabbing)
-        {
-            EndGrab();
-        }
+        _grab.Tick(deltaTime);
+
         // 死亡したらループから外す
         if (PlayerLogic.State == Entity_Data.PlayerState.Dead)
         {
@@ -80,148 +68,264 @@ public class PlayerController : MonoBehaviour, ITickable
 
         if (_rb == null) _rb = GetComponent<Rigidbody>();
 
-        // 生きていないときは移動させない
-        if (PlayerLogic.State != Entity_Data.PlayerState.Alive)
-        {
-            _moveValue = Vector2.zero;
-        }
-
-        // 移動
-        Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
-        if (velocity.sqrMagnitude > 0.001f && _rb.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f, QueryTriggerInteraction.Ignore))
-        {
-            // 動的なRigidbody（死体などのPhysicsオブジェクト）にはSlideせず、押し込めるようにする
-            if (hit.rigidbody == null || hit.rigidbody.isKinematic)
-            {
-                velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
-            }
-        }
-        velocity.y = _rb.linearVelocity.y;
-        _rb.linearVelocity = velocity;
-        if (_rb.linearVelocity.y < -0.1f && _groundState != GroundState.Jumping)
-        {
-            _groundState = GroundState.Falling;
-        }
-    }
-    private void OnHitGround(bool isHit, Collider other)
-    {
-        if (isHit)
-        {
-            _groundState = GroundState.Grounded;
-        }
-        else
-        {
-            _groundState = GroundState.Jumping;
-        }
-    }
-
-    private Vector2 _moveValue;
-    //移動
-    public void Move(Vector2 moveValue)
-    {
-        if (PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
-        _moveValue = moveValue * moveSpeed;
-        if(moveValue.x == 0 && moveValue.y == 0) return;
-        // 2Dの(x, y)を3Dの(x, 0, z)に変換
-        Vector3 direction = new Vector3(_moveValue.x, 0, _moveValue.y);
-        // その方向を向く回転データを作成して代入
-        transform.rotation = Quaternion.LookRotation(direction);
-    }
-    //ジャンプ
-    public void Jump()
-    {
-        if (PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
-        switch (_groundState)
-        {
-            case GroundState.Grounded:
-                _groundState = GroundState.Jumping;
-                _rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-                break;
-
-            case GroundState.Jumping:
-                break;
-
-            case GroundState.Falling:
-                break;
-        }
-    }
-
-    //掴む・離す
-    public void Grab()
-    {
-        if (PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
-        if (!_isGrabbing)
-        {
-            StartGrab();
-        }
-        else
-        {
-            EndGrab();
-        }
-    }
-
-    private void StartGrab()
-    {
-        // 周囲の死体を検索して掴む処理
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _grabRange);
-        foreach (var hitCollider in hitColliders)
-        {
-            PlayerController target = hitCollider.GetComponentInParent<PlayerController>();
-            if (target == null || target == this || target.PlayerLogic.State != Entity_Data.PlayerState.Dead) continue;
-
-            _grabbedObject = target;
-            _isGrabbing = true;
-
-            // 掴んだオブジェクトをアンカーに固定
-            _grabbedObject.transform.SetParent(_grabAnchor);
-            _grabbedObject.transform.localPosition = _grabbedObject.transform.localRotation * new Vector3(0, -1.0f, 0);
-
-            // 物理挙動を無効化して持ち運びやすくする
-            if (_grabbedObject._rb != null) _grabbedObject._rb.isKinematic = true;
-            PlayerView view = _grabbedObject.GetComponent<PlayerView>();
-            Collider collider = view.GetCollider();
-            if (collider != null) collider.isTrigger = true;
-
-            break;
-        }
-    }
-
-    private void EndGrab()
-    {
-        if (_grabbedObject != null)
-        {
-            // 物理挙動を元に戻す
-            if (_grabbedObject._rb != null)
-            {
-                _grabbedObject._rb.isKinematic = false;
-            
-                // 死因が「切断」の場合は前方に吹き飛ばす
-                if (_grabbedObject.PlayerLogic.Type == Entity_Data.DeathType.Dismembered)
-                {
-                    _grabbedObject._rb.AddForce(transform.forward * _throwForce + Vector3.up * (_throwForce * 0.5f), ForceMode.Impulse);
-                }
-            }
-
-            // 親子関係を解除してその場に少し浮かせて置く
-            _grabbedObject.transform.SetParent(null);
-            _grabbedObject.transform.position += Vector3.up * 0.5f;
-
-            PlayerView view = _grabbedObject.GetComponent<PlayerView>();
-            Collider collider = view.GetCollider();
-            if (collider != null) collider.isTrigger = false;
-        }
-
-        _grabbedObject = null;
-        _isGrabbing = false;
+        _movement.Tick(deltaTime);
+        _jump.Tick(deltaTime);
     }
 
     //自殺
-    public void Suicide()
+    private void Suicide()
     {
         if (PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
         PlayerLogic.Die(Entity_Data.DeathType.None, true);
         _rb.constraints = RigidbodyConstraints.None;
-        _moveValue = new Vector2(0,0);
+        _movement.ResetMove();
         transform.Rotate(30f, 0, 0, Space.Self);
+    }
+
+    private class PlayerMovement
+    {
+        private PlayerController _player;
+        private float moveSpeed = 5f;
+        private Vector2 _moveValue;
+
+        public PlayerMovement(PlayerController player)
+        {
+            _player = player;
+        }
+
+        public void Init()
+        {
+            InputHandler.Instance.Player.Move += Move;
+        }
+
+        public void Dispose()
+        {
+            InputHandler.Instance.Player.Move -= Move;
+        }
+
+        public void ResetMove()
+        {
+            _moveValue = Vector2.zero;
+        }
+
+        private void Move(Vector2 moveValue)
+        {
+            if (_player.PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
+            _moveValue = moveValue * moveSpeed;
+            if(moveValue.x == 0 && moveValue.y == 0) return;
+            // 2Dの(x, y)を3Dの(x, 0, z)に変換
+            Vector3 direction = new Vector3(_moveValue.x, 0, _moveValue.y);
+            // その方向を向く回転データを作成して代入
+            _player.transform.rotation = Quaternion.LookRotation(direction);
+        }
+
+        public void Tick(float deltaTime)
+        {
+            // 生きていないときは移動させない
+            if (_player.PlayerLogic.State != Entity_Data.PlayerState.Alive)
+            {
+                _moveValue = Vector2.zero;
+            }
+
+            // 移動
+            Vector3 velocity = new Vector3(_moveValue.x, 0, _moveValue.y);
+            if (velocity.sqrMagnitude > 0.001f && _player.Rigidbody.SweepTest(velocity.normalized, out RaycastHit hit, 0.1f, QueryTriggerInteraction.Ignore))
+            {
+                // 動的なRigidbody（死体などのPhysicsオブジェクト）にはSlideせず、押し込めるようにする
+                if (hit.rigidbody == null || hit.rigidbody.isKinematic)
+                {
+                    velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
+                }
+            }
+            velocity.y = _player.Rigidbody.linearVelocity.y;
+            _player.Rigidbody.linearVelocity = velocity;
+        }
+    }
+
+    private class PlayerJump
+    {
+        private PlayerController _player;
+        private HitCheck _ground;
+        private float jumpPower = 6f;
+        private GroundState _groundState;
+
+        public PlayerJump(PlayerController player)
+        {
+            _player = player;
+        }
+
+        public void Init()
+        {
+            // ヒットチェックの初期化
+            _ground = _player.GetComponentInChildren<HitCheck>();
+            if (_ground != null)
+            {
+                _ground.IsHit += OnHitGround;
+            }
+
+            InputHandler.Instance.Player.Jump += Jump;
+        }
+
+        public void Dispose()
+        {
+            if (_ground != null)
+            {
+                _ground.IsHit -= OnHitGround;
+            }
+
+            InputHandler.Instance.Player.Jump -= Jump;
+        }
+
+        private void OnHitGround(bool isHit, Collider other)
+        {
+            if (isHit)
+            {
+                _groundState = GroundState.Grounded;
+            }
+            else
+            {
+                _groundState = GroundState.Jumping;
+            }
+        }
+
+        private void Jump()
+        {
+            if (_player.PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
+            switch (_groundState)
+            {
+                case GroundState.Grounded:
+                    _groundState = GroundState.Jumping;
+                    _player.Rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+                    break;
+
+                case GroundState.Jumping:
+                    break;
+
+                case GroundState.Falling:
+                    break;
+            }
+        }
+
+        public void Tick(float deltaTime)
+        {
+            if (_player.Rigidbody.linearVelocity.y < -0.1f && _groundState != GroundState.Jumping)
+            {
+                _groundState = GroundState.Falling;
+            }
+        }
+    }
+
+    private class PlayerGrab
+    {
+        private PlayerController _player;
+        private PlayerController _grabbedObject;
+        private bool _isGrabbing = false;
+        private float _grabRange = 1.5f;
+        private Transform _grabAnchor;
+        private float _throwForce = 10f;
+
+        public PlayerGrab(PlayerController player)
+        {
+            _player = player;
+        }
+
+        public void Init()
+        {
+            // 掴む位置のアンカーの初期化
+            GameObject anchorObj = new GameObject("GrabAnchor");
+            _grabAnchor = anchorObj.transform;
+            _grabAnchor.SetParent(_player.transform);
+            _grabAnchor.localPosition = new Vector3(0, 1f, 1.8f); // プレイヤーの少し前方に配置
+
+            InputHandler.Instance.Player.Drag += Grab;
+        }
+
+        public void Dispose()
+        {
+            InputHandler.Instance.Player.Drag -= Grab;
+        }
+
+        private void Grab()
+        {
+            if (_player.PlayerLogic.State != Entity_Data.PlayerState.Alive) return;
+            if (!_isGrabbing)
+            {
+                StartGrab();
+            }
+            else
+            {
+                EndGrab();
+            }
+        }
+
+        private void StartGrab()
+        {
+            // 周囲の死体を検索して掴む処理
+            Collider[] hitColliders = Physics.OverlapSphere(_player.transform.position, _grabRange);
+            foreach (var hitCollider in hitColliders)
+            {
+                PlayerController target = hitCollider.GetComponentInParent<PlayerController>();
+                if (target == null || target == _player || target.PlayerLogic.State != Entity_Data.PlayerState.Dead) continue;
+
+                _grabbedObject = target;
+                _isGrabbing = true;
+
+                // 掴んだオブジェクトをアンカーに固定
+                _grabbedObject.transform.SetParent(_grabAnchor);
+                _grabbedObject.transform.localPosition = _grabbedObject.transform.localRotation * new Vector3(0, -1.0f, 0);
+
+                // 物理挙動を無効化して持ち運びやすくする
+                if (_grabbedObject.Rigidbody != null) _grabbedObject.Rigidbody.isKinematic = true;
+                PlayerView view = _grabbedObject.GetComponent<PlayerView>();
+                if (view != null)
+                {
+                    Collider collider = view.GetCollider();
+                    if (collider != null) collider.isTrigger = true;
+                }
+
+                break;
+            }
+        }
+
+        private void EndGrab()
+        {
+            if (_grabbedObject != null)
+            {
+                // 物理挙動を元に戻す
+                if (_grabbedObject.Rigidbody != null)
+                {
+                    _grabbedObject.Rigidbody.isKinematic = false;
+                
+                    // 死因が「切断」の場合は前方に吹き飛ばす
+                    if (_grabbedObject.PlayerLogic.Type == Entity_Data.DeathType.Dismembered)
+                    {
+                        _grabbedObject.Rigidbody.AddForce(_player.transform.forward * _throwForce + Vector3.up * (_throwForce * 0.5f), ForceMode.Impulse);
+                    }
+                }
+
+                // 親子関係を解除してその場に少し浮かせて置く
+                _grabbedObject.transform.SetParent(null);
+                _grabbedObject.transform.position += Vector3.up * 0.5f;
+
+                PlayerView view = _grabbedObject.GetComponent<PlayerView>();
+                if (view != null)
+                {
+                    Collider collider = view.GetCollider();
+                    if (collider != null) collider.isTrigger = false;
+                }
+            }
+
+            _grabbedObject = null;
+            _isGrabbing = false;
+        }
+
+        public void Tick(float deltaTime)
+        {
+            // 死亡時に掴んでいた死体を離す
+            if (_player.PlayerLogic.State == Entity_Data.PlayerState.DeathAnimationWait && _isGrabbing)
+            {
+                EndGrab();
+            }
+        }
     }
 }
