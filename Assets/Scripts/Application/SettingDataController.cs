@@ -28,8 +28,4 @@ public class SettingDataController
         _currentData.MasterVolume = volume;
         SaveDataStore.Instance.SaveAll();
     }
-    public void SetRecoveryIsCat(bool isCat){
-        _currentData.RecoveryIsCat = isCat;
-        SaveDataStore.Instance.SaveAll();
-    }
 }

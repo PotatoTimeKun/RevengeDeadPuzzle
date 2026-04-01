@@ -28,9 +28,4 @@ public class MentalLogic
     {
         CurrentValue -= amount;
     }
-
-    public void Recover()
-    {
-        CurrentValue = MaxValue;
-    }
 }
