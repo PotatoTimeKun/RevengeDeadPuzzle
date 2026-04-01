@@ -69,6 +69,11 @@ public class PlayerController : MonoBehaviour, ITickable
 
     public void Tick(float deltaTime)
     {
+        if (transform.position.y < -10 && PlayerLogic.State == Entity_Data.PlayerState.Alive) {
+            // 落下死
+            PlayerLogic.Die(Entity_Data.DeathType.None, false);
+        }
+
         _grab.Tick(deltaTime);
 
         if (_rb == null) _rb = GetComponent<Rigidbody>();
