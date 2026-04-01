@@ -134,7 +134,6 @@ public class PlayerView : MonoBehaviour
         _deathCostumeChanged = true;
         SetModelVisibility(true);
         if (_controller.PlayerLogic.Type == Entity_Data.DeathType.None) return;
-        _controller.PlayerLogic.CostumeId = _controller.PlayerLogic.Type.ToString();
     }
 
     private void OnGameOver()

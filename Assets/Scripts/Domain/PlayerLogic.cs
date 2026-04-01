@@ -55,6 +55,9 @@ public class PlayerLogic : ITickable
         if (GameUseCase.Instance.Mental.CurrentValue <= 0) {
             GameUseCase.Instance.Score.IsClear = false;
         }
+        // 死体のコスチュームを設定
+        CostumeId = deathType.ToString();
+        CostumeCollector.Instance.Unlock(CostumeId);
         OnDeathAnimationStart?.Invoke();
     }
 }
