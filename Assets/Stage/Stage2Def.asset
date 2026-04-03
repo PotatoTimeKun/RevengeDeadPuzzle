@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d63d9e54e39e5f4c9d171ef0c74b70b, type: 3}
-  m_Name: TestStage2Def
+  m_Name: Stage2Def
   m_EditorClassIdentifier: Assembly-CSharp::StageDef
-  Id: Test2
-  DisplayName: "\u30C6\u30B9\u30C82"
-  Scene: TestStage2
+  Id: Stage2
+  DisplayName: "\u30B9\u30C6\u30FC\u30B82"
+  Scene: Stage2
   MaxMental: 7
   TimerSecondTarget: 90
   DeathCountTarget: 1
   AcceptedDeathTypeTarget: 01000000
-  DeathTypeTargetExplanation: "\u7279\u6B8A\u6B7B\u56E0\u3092\u4F7F\u308F\u305A\u306B\u30AF\u30EA\u30A2"
+  DeathTypeTargetExplanation: "\u713C\u6B7B\u306E\u307F"

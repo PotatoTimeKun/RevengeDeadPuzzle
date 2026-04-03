@@ -9,6 +9,7 @@ public class HUDView : MonoBehaviour
         Instance = this;
         MenuPanel.SetActive(false);
         InputHandler.Instance.SetInputState(InputState.Player);
+        if(GameUseCase.Instance != null) GameUseCase.Instance.OnGameStart += OnGameStart;
     }
     private int _lastFrame = -1; // 連続呼び出しを防ぐ
     public void CloseMenuPanel(){
@@ -141,7 +142,10 @@ public class HUDView : MonoBehaviour
         MenuPanel.SetActive(false);
         InputHandler.Instance.Player.Menu += OpenMenuPanel;
         InputHandler.Instance.Menu.Cancel += CloseMenuPanel;
-        GameUseCase.Instance.OnGameStart += OnGameStart;
+        if(GameUseCase.Instance != null) {
+            GameUseCase.Instance.OnGameStart -= OnGameStart;
+            GameUseCase.Instance.OnGameStart += OnGameStart;
+        }
     }
 
     private void OnGameStart() {
