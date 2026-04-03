@@ -9,8 +9,6 @@ public class GameUseCase : MonoBehaviour , ITickable
     private void Awake() {
         Instance = this;
         BeforeStage = Stage;
-        Mental = new MentalLogic(Stage.MaxMental);
-        Score = new ScoreLogic(Stage);
     }
 
     public static StageDef BeforeStage; // 前のステージをクラス変数に保存
@@ -34,7 +32,10 @@ public class GameUseCase : MonoBehaviour , ITickable
     }
     public Action OnGameOver;
     public Action OnGameClear;
+    public Action OnGameStart;
     void Start(){
+        Mental = new MentalLogic(Stage.MaxMental);
+        Score = new ScoreLogic(Stage);
         StartGame();
         GameLoop.Instance.Register(this);
         Mental.OnMentalChange += CheckGameOver;
@@ -59,6 +60,7 @@ public class GameUseCase : MonoBehaviour , ITickable
     private void StartGame(){
         Time.timeScale = 1f;
         SpawnPlayer();
+        OnGameStart?.Invoke();
     }
 
     public Action OnPause;

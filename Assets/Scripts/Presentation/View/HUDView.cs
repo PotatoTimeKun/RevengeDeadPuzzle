@@ -56,6 +56,7 @@ public class HUDView : MonoBehaviour
         }
         if (GameUseCase.Instance != null) {
             GameUseCase.Instance.OnGameClear -= ShowClearEffect;
+            GameUseCase.Instance.OnGameStart -= OnGameStart;
         }
         if (InputHandler.Instance != null) {
             InputHandler.Instance.OnInputMethodChange -= UpdateGuide;
@@ -140,6 +141,10 @@ public class HUDView : MonoBehaviour
         MenuPanel.SetActive(false);
         InputHandler.Instance.Player.Menu += OpenMenuPanel;
         InputHandler.Instance.Menu.Cancel += CloseMenuPanel;
+        GameUseCase.Instance.OnGameStart += OnGameStart;
+    }
+
+    private void OnGameStart() {
         UpdateStageName(GameUseCase.Instance.Stage.DisplayName);
         UpdateEvaluationText();
 
