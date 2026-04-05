@@ -19,8 +19,17 @@ public class Pusher : MonoBehaviour
     private float _speed = 2.0f;
 
     private float _t;
+    private Rigidbody _rb;
 
-    private void Update()
+    private void Start()
+    {
+        if (_targetObject != null)
+        {
+            _rb = _targetObject.GetComponent<Rigidbody>();
+        }
+    }
+
+    private void FixedUpdate()
     {
         if (_targetObject == null || _posA == null || _posB == null) return;
 
@@ -35,6 +44,15 @@ public class Pusher : MonoBehaviour
         // 必要に応じて動きを滑らかにするなら SmoothStep を通す
         // lerpValue = Mathf.SmoothStep(0, 1, lerpValue);
 
-        _targetObject.position = Vector3.Lerp(_posA.position, _posB.position, lerpValue);
+        Vector3 nextPosition = Vector3.Lerp(_posA.position, _posB.position, lerpValue);
+
+        if (_rb != null)
+        {
+            _rb.MovePosition(nextPosition);
+        }
+        else
+        {
+            _targetObject.position = nextPosition;
+        }
     }
 }
