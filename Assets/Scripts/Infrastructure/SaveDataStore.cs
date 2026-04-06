@@ -43,7 +43,7 @@ public class SaveDataStore
         {
             StageProgress = new StageProgressData { UnlockedIdList = new System.Collections.Generic.List<string>() , ScoreDataList = new System.Collections.Generic.List<ScoreData>()},
             Costume = new CostumeData { UnlockedIdList = new System.Collections.Generic.List<string>() },
-            Setting = new SettingData { MasterVolume = 1.0f, BgmVolume = 1.0f, SeVolume = 1.0f }
+            Setting = new SettingData { MasterVolume = 0.5f, BgmVolume = 0.2f, SeVolume = 1.0f }
         };
         return saveData;
     }
