@@ -60,6 +60,10 @@ public class AudioController : MonoBehaviour
             Destroy(gameObject);
         }
         Initialize();
+        float masterVolume = SaveDataStore.Instance.CurrentData.Setting.MasterVolume;
+        float bgmVolume = SaveDataStore.Instance.CurrentData.Setting.BgmVolume;
+        float seVolume = SaveDataStore.Instance.CurrentData.Setting.SeVolume;
+        SetVolume(masterVolume, bgmVolume, seVolume);
     }
 
     private void Initialize()
@@ -99,6 +103,11 @@ public class AudioController : MonoBehaviour
         SetVolume(masterVolume, bgmVolume, seVolume);
     }
 
+    private Audio_Data.BGMType _currentBGMType = Audio_Data.BGMType.None;
+    public Audio_Data.BGMType GetCurrentBGMType(){
+        return _currentBGMType;
+    }
+
     public void PlayBGM(Audio_Data.BGMType type)
     {
         if (bgmAudioSource == null) return;
@@ -106,12 +115,14 @@ public class AudioController : MonoBehaviour
         AudioClip clip = _bgmDic[type];
         bgmAudioSource.clip = clip;
         bgmAudioSource.Play();
+        _currentBGMType = type;
     }
 
     public void StopBGM()
     {
         if (bgmAudioSource == null) return;
         bgmAudioSource.Stop();
+        _currentBGMType = Audio_Data.BGMType.None;
     }
 
     public void PlaySE(Audio_Data.SEType type)
@@ -120,5 +131,14 @@ public class AudioController : MonoBehaviour
         if (!_seDic.ContainsKey(type)) return;
         AudioClip clip = _seDic[type];
         seAudioSource.PlayOneShot(clip);
+    }
+
+    public AudioClip GetSE(Audio_Data.SEType type){
+        if (!_seDic.ContainsKey(type)) return null;
+        return _seDic[type];
+    }
+
+    public float GetSEVolume(){
+        return seAudioSource.volume;
     }
 }

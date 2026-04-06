@@ -4,9 +4,11 @@ public class Audio_Data : MonoBehaviour
 {
     public enum BGMType
     {
+        None,
         Title,
         Game,
-        Result
+        Result,
+        GameOver
     }
 
     public enum SEType
@@ -14,7 +16,12 @@ public class Audio_Data : MonoBehaviour
         Jump,
         Grab,
         Release,
-        Damage,
-        Collect
+        Button,
+        DeathByFire,
+        DeathByCrush,
+        DeathByDismemberment,
+        DeathByFreeze,
+        DeathByDefault,
+        Fire
     }
 }

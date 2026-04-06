@@ -38,6 +38,7 @@ public class UISlider : UISelectableItem
             OnValueChanged?.Invoke(TargetSlider.value);
             _lastInputTime = Time.unscaledTime;
         }
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
 
     public void SetValue(float value) {

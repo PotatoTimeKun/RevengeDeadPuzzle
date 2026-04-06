@@ -63,6 +63,10 @@ public class StageSelectView : MonoBehaviour, ITickable
             SelectedIndex = _beforeMaxUnlockedCount - 1;
             Instantiate(UnlockEffect, _stageObjectList[SelectedIndex].transform.position, Quaternion.identity);
         }
+        if (AudioController.Instance.GetCurrentBGMType() != Audio_Data.BGMType.Title) {
+            AudioController.Instance.StopBGM();
+            AudioController.Instance.PlayBGM(Audio_Data.BGMType.Title);
+        }
         UpdateUI();
     }
 
@@ -107,6 +111,7 @@ public class StageSelectView : MonoBehaviour, ITickable
         } else if (inputVector.x < 0) {
             SelectedIndex--;
         }
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
         UpdateUI();
     }
 
@@ -140,10 +145,12 @@ public class StageSelectView : MonoBehaviour, ITickable
     private void PlayButton(){
         if (StageSelecter.Instance.UnlockedStageList.Contains(StageSelecter.Instance.StageRegistry.AllStages[SelectedIndex].Id)) {
             SceneManager.LoadScene(StageSelecter.Instance.StageRegistry.AllStages[SelectedIndex].Scene);
+            AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
         }
     }
 
     private void BackButton(){
         SceneManager.LoadScene("Title");
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
 }

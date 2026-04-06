@@ -92,8 +92,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioController
   bgmAudioSource: {fileID: 5722990829126419274}
   seAudioSource: {fileID: 2772131714945377275}
-  bgmDataList: []
-  seDataList: []
+  bgmDataList:
+  - type: 1
+    clip: {fileID: 8300000, guid: 16818257d864191489d14cb593d71002, type: 3}
+  - type: 2
+    clip: {fileID: 8300000, guid: 0fec354447d36f14a940474c624dccb8, type: 3}
+  - type: 3
+    clip: {fileID: 8300000, guid: b606dddd377e3cd41b1b4d33f9b6c093, type: 3}
+  - type: 4
+    clip: {fileID: 8300000, guid: 256515f6b909dbb42bacf118fae3e8be, type: 3}
+  seDataList:
+  - type: 0
+    clip: {fileID: 8300000, guid: cccfa9989cf128c47a5a743c8a8d278e, type: 3}
+  - type: 1
+    clip: {fileID: 8300000, guid: 3bf2731b0b9a91c408dfd63aad8dc819, type: 3}
+  - type: 2
+    clip: {fileID: 8300000, guid: 3bf2731b0b9a91c408dfd63aad8dc819, type: 3}
+  - type: 3
+    clip: {fileID: 8300000, guid: 2351ecabc79a6624e8c5c2f8f0d730af, type: 3}
+  - type: 4
+    clip: {fileID: 8300000, guid: 76ea9173f53f85e41826817e2dde3b2d, type: 3}
+  - type: 5
+    clip: {fileID: 8300000, guid: 047fc581bad7df54e9de9e249cbeb4f1, type: 3}
+  - type: 6
+    clip: {fileID: 8300000, guid: 17639b933c5a3524db6c1e2709acf976, type: 3}
+  - type: 7
+    clip: {fileID: 8300000, guid: 1364afe22d73dbb45b50bcc988d293b7, type: 3}
+  - type: 8
+    clip: {fileID: 8300000, guid: 047fc581bad7df54e9de9e249cbeb4f1, type: 3}
+  - type: 9
+    clip: {fileID: 8300000, guid: 96d1dcceee34a784c8ec53e831a247cf, type: 3}
 --- !u!82 &5722990829126419274
 AudioSource:
   m_ObjectHideFlags: 0
@@ -333,6 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageSelecter
   UnlockedStageList: []
+  ScoreDataList: []
   StageRegistry: {fileID: 11400000, guid: e082017ab0dc35144a7a1507447c092f, type: 2}
 --- !u!1 &4901429102741276889
 GameObject:

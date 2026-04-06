@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour, ITickable
         _jump = new PlayerJump(this);
         _grab = new PlayerGrab(this);
         PlayerLogic.OnDead += OnDead;
+        PlayerLogic.OnDeathAnimationStart += OnDeathAnimation;
     }
 
     private void Start()
@@ -57,10 +58,31 @@ public class PlayerController : MonoBehaviour, ITickable
 
         GameLoop.Instance.Unregister(this);
         PlayerLogic.OnDead -= OnDead;
+        PlayerLogic.OnDeathAnimationStart -= OnDeathAnimation;
     }
 
     private void OnDead(){
         GameLoop.Instance.Unregister(this);
+    }
+
+    private void OnDeathAnimation(){
+        switch (PlayerLogic.Type) {
+            case Entity_Data.DeathType.Burned:
+                AudioController.Instance.PlaySE(Audio_Data.SEType.DeathByFire);
+                break;
+            case Entity_Data.DeathType.Crushed:
+                AudioController.Instance.PlaySE(Audio_Data.SEType.DeathByCrush);
+                break;
+            case Entity_Data.DeathType.Dismembered:
+                AudioController.Instance.PlaySE(Audio_Data.SEType.DeathByDismemberment);
+                break;
+            case Entity_Data.DeathType.Frozen:
+                AudioController.Instance.PlaySE(Audio_Data.SEType.DeathByFreeze);
+                break;
+            case Entity_Data.DeathType.None:
+                AudioController.Instance.PlaySE(Audio_Data.SEType.DeathByDefault);
+                break;
+        }
     }
 
     private void OnGameClear(){
@@ -207,6 +229,7 @@ public class PlayerController : MonoBehaviour, ITickable
                 case GroundState.Grounded:
                     _groundState = GroundState.Jumping;
                     _player.Rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+                    AudioController.Instance.PlaySE(Audio_Data.SEType.Jump);
                     break;
 
                 case GroundState.Jumping:
@@ -295,6 +318,7 @@ public class PlayerController : MonoBehaviour, ITickable
                     Collider collider = view.GetCollider();
                     if (collider != null) collider.isTrigger = true;
                 }
+                AudioController.Instance.PlaySE(Audio_Data.SEType.Grab);
 
                 break;
             }
@@ -326,6 +350,7 @@ public class PlayerController : MonoBehaviour, ITickable
                     Collider collider = view.GetCollider();
                     if (collider != null) collider.isTrigger = false;
                 }
+                AudioController.Instance.PlaySE(Audio_Data.SEType.Release);
             }
 
             _grabbedObject = null;

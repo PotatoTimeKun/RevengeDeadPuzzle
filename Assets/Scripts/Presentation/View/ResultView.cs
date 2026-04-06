@@ -10,9 +10,11 @@ public class ResultView : MonoBehaviour
     }
     public void RetryButton(){
         SceneManager.LoadScene(GameUseCase.BeforeStage.Scene);
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
     public void BackButton(){
         SceneManager.LoadScene("StageSelect");
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
     public Text TimeText;
     public Text CountText;
@@ -31,11 +33,19 @@ public class ResultView : MonoBehaviour
             GameOverCamera.SetActive(false);
             ClearPanel.SetActive(true);
             GameOverPanel.SetActive(false);
+            if (AudioController.Instance.GetCurrentBGMType() != Audio_Data.BGMType.Result) {
+                AudioController.Instance.StopBGM();
+                AudioController.Instance.PlayBGM(Audio_Data.BGMType.Result);
+            }
         } else {
             ClearCamera.SetActive(false);
             GameOverCamera.SetActive(true);
             ClearPanel.SetActive(false);
             GameOverPanel.SetActive(true);
+            if (AudioController.Instance.GetCurrentBGMType() != Audio_Data.BGMType.GameOver) {
+                AudioController.Instance.StopBGM();
+                AudioController.Instance.PlayBGM(Audio_Data.BGMType.GameOver);
+            }
         }
         TimeText.text = GameUseCase.BeforeStage.TimerTargetToString();
         CountText.text = GameUseCase.BeforeStage.DeathCountTargetToString();

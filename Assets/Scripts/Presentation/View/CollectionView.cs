@@ -112,6 +112,7 @@ public class CollectionView : MonoBehaviour
             if (_currentPage < 0) _currentPage = _maxPage - 1; // ループ
             UpdateCameraPosition();
         }
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
 
     private Vector3 _targetPos;
@@ -132,6 +133,7 @@ public class CollectionView : MonoBehaviour
     public void BackToTitle()
     {
         SceneManager.LoadScene("Title");
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
 
     public static void OpenScene()

@@ -14,6 +14,10 @@ public class TitleView : MonoBehaviour
     {
         InputHandler.Instance.SetInputState(InputState.Menu);
         GenerateUnlockedCostumes();
+        if (AudioController.Instance.GetCurrentBGMType() != Audio_Data.BGMType.Title) {
+            AudioController.Instance.StopBGM();
+            AudioController.Instance.PlayBGM(Audio_Data.BGMType.Title);
+        }
     }
 
     private void Update()

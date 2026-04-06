@@ -14,6 +14,7 @@ public class SettingView : MonoBehaviour
 
     public void CloseScene() {
         OnClose?.Invoke();
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
         SceneManager.UnloadSceneAsync(gameObject.scene);
     }
     public static System.Action OnClose;

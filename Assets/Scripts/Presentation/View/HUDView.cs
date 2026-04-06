@@ -18,6 +18,7 @@ public class HUDView : MonoBehaviour
         MenuPanel.SetActive(false);
         InputHandler.Instance.SetInputState(InputState.Player);
         GameUseCase.Instance.ResumeGame();
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
     public void OpenMenuPanel(){
         if(isSettingViewOpen || MenuPanel.activeSelf || Time.frameCount == _lastFrame) return;
@@ -25,6 +26,7 @@ public class HUDView : MonoBehaviour
         MenuPanel.SetActive(true);
         InputHandler.Instance.SetInputState(InputState.Menu);
         GameUseCase.Instance.PauseGame();
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
     private bool isSettingViewOpen = false;
     public void OpenSettingView() {
@@ -139,6 +141,10 @@ public class HUDView : MonoBehaviour
 
     void Start()
     {
+        if (AudioController.Instance.GetCurrentBGMType() != Audio_Data.BGMType.Game) {
+            AudioController.Instance.StopBGM();
+            AudioController.Instance.PlayBGM(Audio_Data.BGMType.Game);
+        }
         MenuPanel.SetActive(false);
         InputHandler.Instance.Player.Menu += OpenMenuPanel;
         InputHandler.Instance.Menu.Cancel += CloseMenuPanel;

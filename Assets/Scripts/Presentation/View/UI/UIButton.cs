@@ -24,5 +24,6 @@ public class UIButton : UISelectableItem
     public override void OnSubmit()
     {
         OnSubmitEvent?.Invoke();
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
     }
 }
