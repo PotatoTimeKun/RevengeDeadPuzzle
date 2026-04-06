@@ -94,7 +94,24 @@ public class CameraView : MonoBehaviour
 
     private void PlayDeathEffect(Entity_Data.DeathType type)
     {
-        // 処理
+        switch (type)
+        {
+            case Entity_Data.DeathType.Burned:
+                BurnedEffect.Play();
+                break;
+            case Entity_Data.DeathType.Frozen:
+                FrozenEffect.Play();
+                break;
+            case Entity_Data.DeathType.Crushed:
+                CrushEffect.Play();
+                break;
+            case Entity_Data.DeathType.Dismembered:
+                DismemberedEffect.Play();
+                break;
+            default:
+                DefaultDeathEffect.Play();
+                break;
+        }
     }
 
     private void SetCameraOffset(Vector3 offset)
