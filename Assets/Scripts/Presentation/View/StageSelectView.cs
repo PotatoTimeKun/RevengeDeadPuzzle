@@ -56,6 +56,7 @@ public class StageSelectView : MonoBehaviour, ITickable
         if (_beforeMaxUnlockedCount == -1) { // 初回起動時
             _beforeMaxUnlockedCount = StageSelecter.Instance.UnlockedStageList.Count;
             SelectedIndex = _beforeMaxUnlockedCount - 1;
+            if (SelectedIndex < 0) SelectedIndex = 0;
             Camera.main.transform.position = new Vector3(SelectedIndex * _objectDistance, Camera.main.transform.position.y, Camera.main.transform.position.z);
         } else if (_beforeMaxUnlockedCount < StageSelecter.Instance.UnlockedStageList.Count) { // 新ステージ解放時
             _beforeMaxUnlockedCount = StageSelecter.Instance.UnlockedStageList.Count;
