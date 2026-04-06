@@ -36,7 +36,22 @@ public class StageSelecter : MonoBehaviour
                 UnlockedStageList.RemoveAt(i);
             }
         }
-        UnlockedStageList.Add(StageRegistry.AllStages[0].Id);
+        // 最初のステージがアンロックされていない場合、アンロックする
+        if (!UnlockedStageList.Contains(StageRegistry.AllStages[0].Id)) {
+            UnlockedStageList.Add(StageRegistry.AllStages[0].Id);
+        }
+        // 重複を削除する
+        for (int i = UnlockedStageList.Count - 1; i >= 0; i--) {
+            int count = 0;
+            for (int j = 0; j < UnlockedStageList.Count; j++) {
+                if (UnlockedStageList[i] == UnlockedStageList[j]) {
+                    count++;
+                }
+            }
+            if (count > 1) {
+                UnlockedStageList.RemoveAt(i);
+            }
+        }
     }
 
     private void UnlockStage(string id)
