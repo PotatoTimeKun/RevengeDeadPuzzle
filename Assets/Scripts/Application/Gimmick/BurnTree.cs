@@ -14,6 +14,8 @@ public class BurnTree : MonoBehaviour
     {
         // 燃焼エフェクトを再生
         GetComponent<WoodView>().PlayFireEffect();
+
+        AudioController.Instance.PlaySE(Audio_Data.SEType.DeathByFire);
         
         // 2秒後に木を完全に消去する
         Destroy(gameObject, 2.0f);
