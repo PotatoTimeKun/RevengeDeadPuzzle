@@ -48,6 +48,17 @@ public class SaveDataStore
         return saveData;
     }
 
+    public void ResetSaveData()
+    {
+        _currentData = new SaveData
+        {
+            StageProgress = new StageProgressData { UnlockedIdList = new System.Collections.Generic.List<string>() , ScoreDataList = new System.Collections.Generic.List<ScoreData>()},
+            Costume = new CostumeData { UnlockedIdList = new System.Collections.Generic.List<string>() },
+            Setting = new SettingData { MasterVolume = 0.5f, BgmVolume = 0.2f, SeVolume = 1.0f }
+        };
+        SaveToCache(_currentData);
+    }
+
     public void SaveAll()
     {
         CurrentData.StageProgress.ScoreDataList = StageSelecter.Instance.ScoreDataList;
