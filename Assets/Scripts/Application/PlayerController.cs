@@ -94,6 +94,7 @@ public class PlayerController : MonoBehaviour, ITickable
         if (transform.position.y < -10 && PlayerLogic.State == Entity_Data.PlayerState.Alive) {
             // 落下死
             PlayerLogic.Die(Entity_Data.DeathType.None, false);
+            Destroy(gameObject, 10f);
         }
 
         _grab.Tick(deltaTime);
