@@ -12,7 +12,6 @@ public class SEPlayer : MonoBehaviour
     private void Start() {
         _audioSource.loop = !_isOneShot;
         _audioSource.volume = AudioController.Instance.GetSEVolume();
-        Debug.Log(_audioSource.volume);
         if (_isPlayOnAwake) {
             PlaySE();
         }
