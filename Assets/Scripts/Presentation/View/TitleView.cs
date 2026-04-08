@@ -80,8 +80,21 @@ public class TitleView : MonoBehaviour
         CollectionView.OpenScene();
     }
 
+    private bool _isSettingOpen = false;
+    [SerializeField] private UIListNavigator _uiListNavigator;
     public void OnClickSetting()
     {
+        if (_isSettingOpen) return;
+        _isSettingOpen = true;
         SettingView.OpenScene();
+        SettingView.OnClose += OnSettingClose;
+        _uiListNavigator.IsActive = false;
+    }
+
+    public void OnSettingClose()
+    {
+        _isSettingOpen = false;
+        SettingView.OnClose -= OnSettingClose;
+        _uiListNavigator.IsActive = true;
     }
 }

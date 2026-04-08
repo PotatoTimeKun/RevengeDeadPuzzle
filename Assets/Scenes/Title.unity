@@ -1249,6 +1249,7 @@ MonoBehaviour:
   SpawnPoints:
   - {fileID: 1429663028}
   SpawnInterval: 2
+  _uiListNavigator: {fileID: 405564349}
 --- !u!4 &1902433095
 Transform:
   m_ObjectHideFlags: 0
