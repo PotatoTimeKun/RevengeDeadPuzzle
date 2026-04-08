@@ -94,6 +94,7 @@ public class CameraView : MonoBehaviour
 
     private void PlayDeathEffect(Entity_Data.DeathType type)
     {
+        if (GameUseCase.Instance.IsGameOver) return;
         switch (type)
         {
             case Entity_Data.DeathType.Burned:
