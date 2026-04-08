@@ -90,6 +90,7 @@ public class UIListNavigator : MonoBehaviour
                     {
                         SelectNext();
                     }
+                    AudioController.Instance.PlaySE(Audio_Data.SEType.Button);
                     _lastVerticalInputTime = Time.unscaledTime;
                 }
             }
