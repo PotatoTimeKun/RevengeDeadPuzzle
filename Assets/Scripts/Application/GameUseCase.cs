@@ -89,6 +89,7 @@ public class GameUseCase : MonoBehaviour , ITickable
         if (IsGameClear) return;
         IsGameClear = true;
         PlayerController.PlayerLogic.State = Entity_Data.PlayerState.Goal;
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Clear);
     }
 
     public void Tick(float deltaTime){
@@ -105,5 +106,6 @@ public class GameUseCase : MonoBehaviour , ITickable
     {
         if (IsGameOver || Mental.CurrentValue > 0) return;
         IsGameOver = true;
+        AudioController.Instance.PlaySE(Audio_Data.SEType.Explosion);
     }
 }

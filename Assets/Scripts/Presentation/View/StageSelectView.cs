@@ -62,6 +62,7 @@ public class StageSelectView : MonoBehaviour, ITickable
             _beforeMaxUnlockedCount = StageSelecter.Instance.UnlockedStageList.Count;
             SelectedIndex = _beforeMaxUnlockedCount - 1;
             Instantiate(UnlockEffect, _stageObjectList[SelectedIndex].transform.position, Quaternion.identity);
+            AudioController.Instance.PlaySE(Audio_Data.SEType.Unlock);
         }
         if (AudioController.Instance.GetCurrentBGMType() != Audio_Data.BGMType.Title) {
             AudioController.Instance.StopBGM();

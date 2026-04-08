@@ -22,6 +22,9 @@ public class Audio_Data : MonoBehaviour
         DeathByDismemberment,
         DeathByFreeze,
         DeathByDefault,
-        Fire
+        Fire,
+        Explosion,
+        Clear,
+        Unlock
     }
 }
