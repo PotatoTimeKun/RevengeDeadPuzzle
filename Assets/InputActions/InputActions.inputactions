@@ -232,7 +232,7 @@
                 {
                     "name": "",
                     "id": "f073a39e-8ba3-4656-9128-bd75c64bb89a",
-                    "path": "<Keyboard>/escape",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -243,18 +243,7 @@
                 {
                     "name": "",
                     "id": "bea1e5cb-48dc-411d-93f3-3589a4f5cf99",
-                    "path": "<XInputController>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Menu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5ea94381-c66c-4417-afe1-161e1989b152",
-                    "path": "<DualShockGamepad>/start",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -333,7 +322,7 @@
                 {
                     "name": "",
                     "id": "4a32b456-3523-48fc-8023-e065aa71c97a",
-                    "path": "<Keyboard>/escape",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
