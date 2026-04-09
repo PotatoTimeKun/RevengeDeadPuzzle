@@ -5,7 +5,7 @@ using System;
 
 #if UNITY_EDITOR
 
-// ƒCƒ“ƒXƒyƒNƒ^[•\¦‚ÉƒGƒ‰[‚ªo‚é‚Ì‚Å‹Œ•û®‚É•ÏX
+// ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼è¡¨ç¤ºã«ã‚¨ãƒ©ãƒ¼ãŒå‡ºã‚‹ã®ã§æ—§æ–¹å¼ã«å¤‰æ›´
 
 using UnityEditor;
 [CustomEditor(typeof(AudioController))]
@@ -13,10 +13,10 @@ public class AudioControllerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        // UI Toolkit (V•û®) ‚ğg‚í‚¸AIMGUI (‹Œ•û®) ‚Å•`‰æ‚·‚é
+        // UI Toolkit (æ–°æ–¹å¼) ã‚’ä½¿ã‚ãšã€IMGUI (æ—§æ–¹å¼) ã§æç”»ã™ã‚‹
         serializedObject.Update();
 
-        // ]—ˆ‚Ìu•W€“I‚ÈŒ©‚½–Úv‚ÅƒŠƒXƒg‚ğ•`‰æ
+        // å¾“æ¥ã®ã€Œæ¨™æº–çš„ãªè¦‹ãŸç›®ã€ã§ãƒªã‚¹ãƒˆã‚’æç”»
         DrawDefaultInspector();
 
         serializedObject.ApplyModifiedProperties();
@@ -73,7 +73,7 @@ public class AudioController : MonoBehaviour
         {
             if (_bgmDic.ContainsKey(data.type))
             {
-                Debug.LogWarning("BGMƒ^ƒCƒv‚ªd•¡‚µ‚Ä‚¢‚é‚à‚Ì‚ª‚ ‚è‚Ü‚·IŠm”F‚µ‚Ä‚­‚¾‚³‚¢");
+                Debug.LogWarning("BGMã‚¿ã‚¤ãƒ—ãŒé‡è¤‡ã—ã¦ã„ã‚‹ã‚‚ã®ãŒã‚ã‚Šã¾ã™ï¼ç¢ºèªã—ã¦ãã ã•ã„");
                 continue;
             }
             _bgmDic.Add(data.type, data.clip);
@@ -83,7 +83,7 @@ public class AudioController : MonoBehaviour
         {
             if (_seDic.ContainsKey(data.type))
             {
-                Debug.LogWarning("SEƒ^ƒCƒv‚ªd•¡‚µ‚Ä‚¢‚é‚à‚Ì‚ª‚ ‚è‚Ü‚·IŠm”F‚µ‚Ä‚­‚¾‚³‚¢");
+                Debug.LogWarning("SEã‚¿ã‚¤ãƒ—ãŒé‡è¤‡ã—ã¦ã„ã‚‹ã‚‚ã®ãŒã‚ã‚Šã¾ã™ï¼ç¢ºèªã—ã¦ãã ã•ã„");
                 continue;
             }
             _seDic.Add(data.type, data.clip);

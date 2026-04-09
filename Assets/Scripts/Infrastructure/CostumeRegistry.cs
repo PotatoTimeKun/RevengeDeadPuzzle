@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR
 
-// ƒCƒ“ƒXƒyƒNƒ^[•\¦‚ÉƒGƒ‰[‚ªo‚é‚Ì‚Å‹Œ•û®‚É•ÏX
+// ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼è¡¨ç¤ºã«ã‚¨ãƒ©ãƒ¼ãŒå‡ºã‚‹ã®ã§æ—§æ–¹å¼ã«å¤‰æ›´
 
 using UnityEditor;
 [CustomEditor(typeof(CostumeRegistry))]
@@ -11,10 +11,10 @@ public class CostumeRegistryEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        // UI Toolkit (V•û®) ‚ğg‚í‚¸AIMGUI (‹Œ•û®) ‚Å•`‰æ‚·‚é
+        // UI Toolkit (æ–°æ–¹å¼) ã‚’ä½¿ã‚ãšã€IMGUI (æ—§æ–¹å¼) ã§æç”»ã™ã‚‹
         serializedObject.Update();
         
-        // ]—ˆ‚Ìu•W€“I‚ÈŒ©‚½–Úv‚ÅƒŠƒXƒg‚ğ•`‰æ
+        // å¾“æ¥ã®ã€Œæ¨™æº–çš„ãªè¦‹ãŸç›®ã€ã§ãƒªã‚¹ãƒˆã‚’æç”»
         DrawDefaultInspector();
         
         serializedObject.ApplyModifiedProperties();
@@ -39,7 +39,7 @@ public class CostumeRegistry : ScriptableObject
         AllCostumeDic = null;
         if (AllCostume == null)
         {
-            Debug.LogWarning($"{name}: ƒRƒXƒ`ƒ…[ƒ€‚ªˆê‚Â‚àİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñI");
+            Debug.LogWarning($"{name}: ã‚³ã‚¹ãƒãƒ¥ãƒ¼ãƒ ãŒä¸€ã¤ã‚‚è¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ï¼");
             return;
         }
 
@@ -49,12 +49,12 @@ public class CostumeRegistry : ScriptableObject
             if (costume == null) continue;
             if (string.IsNullOrEmpty(costume.Id))
             {
-                Debug.LogWarning($"{name}: ID‚ª‹ó‚Ì—v‘f‚ª‚ ‚è‚Ü‚·");
+                Debug.LogWarning($"{name}: IDãŒç©ºã®è¦ç´ ãŒã‚ã‚Šã¾ã™");
                 continue;
             }
             if (AllCostumeDic.ContainsKey(costume.Id))
             {
-                Debug.LogError($"{name}: ID '{costume.Id}' ‚ªd•¡‚µ‚Ä‚¢‚Ü‚·IŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+                Debug.LogError($"{name}: ID '{costume.Id}' ãŒé‡è¤‡ã—ã¦ã„ã¾ã™ï¼ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
                 continue;
             }
 

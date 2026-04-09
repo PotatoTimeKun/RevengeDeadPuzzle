@@ -26,7 +26,7 @@ public class CostumeCollector : MonoBehaviour
     }
 
     private void ModifySaveData(){
-        // ƒfƒoƒbƒO“™‚ÅƒRƒXƒ`ƒ…[ƒ€‚ªíœ‚³‚ê‚½ê‡‚É‘Î‰
+        // ãƒ‡ãƒãƒƒã‚°ç­‰ã§ã‚³ã‚¹ãƒãƒ¥ãƒ¼ãƒ ãŒå‰Šé™¤ã•ã‚ŒãŸå ´åˆã«å¯¾å¿œ
         for (int i = UnlockedIdList.Count - 1; i >= 0; i--) {
             var costume = CostumeRegistry.GetById(UnlockedIdList[i]);
             if (costume == null) {
@@ -36,26 +36,26 @@ public class CostumeCollector : MonoBehaviour
     }
     
     public string UnlockRandomId()
-    { // ƒRƒXƒ`ƒ…[ƒ€‰ğ•ú
+    { // ã‚³ã‚¹ãƒãƒ¥ãƒ¼ãƒ è§£æ”¾
         if (CostumeRegistry == null || CostumeRegistry.AllCostume == null || CostumeRegistry.AllCostume.Count == 0)
         {
-            Debug.LogWarning("CostumeRegistry‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢‚©AƒRƒXƒ`ƒ…[ƒ€‚ªˆê‚Â‚à“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñI");
+            Debug.LogWarning("CostumeRegistryãŒè¨­å®šã•ã‚Œã¦ã„ãªã„ã‹ã€ã‚³ã‚¹ãƒãƒ¥ãƒ¼ãƒ ãŒä¸€ã¤ã‚‚ç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“ï¼");
             return null;
         }
-        // €‘Ì‚ÌID‚ğœŠO
+        // æ­»ä½“ã®IDã‚’é™¤å¤–
         var restrictedIds = new HashSet<string> { "None", "Burned", "Frozen", "Crushed", "Dismembered" };
         var costumes = CostumeRegistry.AllCostume.FindAll(c => 
             c != null && 
             !restrictedIds.Contains(c.Id));
-        // ƒ‰ƒ“ƒ_ƒ€‚ÈƒRƒXƒ`ƒ…[ƒ€‚ÌID‚ğ•Ô‚·
+        // ãƒ©ãƒ³ãƒ€ãƒ ãªã‚³ã‚¹ãƒãƒ¥ãƒ¼ãƒ ã®IDã‚’è¿”ã™
         var randomCostume = costumes[Random.Range(0, costumes.Count)];
         if (!UnlockedIdList.Contains(randomCostume.Id)) UnlockedIdList.Add(randomCostume.Id);
-        SaveDataStore.Instance.SaveAll(); // ‰ğ•ú‚µ‚½ƒRƒXƒ`ƒ…[ƒ€‚Ì•Û‘¶
+        SaveDataStore.Instance.SaveAll(); // è§£æ”¾ã—ãŸã‚³ã‚¹ãƒãƒ¥ãƒ¼ãƒ ã®ä¿å­˜
         return randomCostume.Id;
     }
 
     public void Unlock(string id){
         if (!UnlockedIdList.Contains(id)) UnlockedIdList.Add(id);
-        SaveDataStore.Instance.SaveAll(); // ‰ğ•ú‚µ‚½ƒRƒXƒ`ƒ…[ƒ€‚Ì•Û‘¶
+        SaveDataStore.Instance.SaveAll(); // è§£æ”¾ã—ãŸã‚³ã‚¹ãƒãƒ¥ãƒ¼ãƒ ã®ä¿å­˜
     }
 }
