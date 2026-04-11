@@ -56,8 +56,10 @@ public class PlayerLogic : ITickable
             GameUseCase.Instance.Score.IsClear = false;
         }
         // 死体のコスチュームを設定
-        if(deathType != Entity_Data.DeathType.None) CostumeId = deathType.ToString();
-        CostumeCollector.Instance.Unlock(deathType.ToString());
+        if(deathType != Entity_Data.DeathType.None) {
+            CostumeId = deathType.ToString();
+            CostumeCollector.Instance.Unlock(CostumeId);
+        }
         OnDeathAnimationStart?.Invoke();
     }
 }
