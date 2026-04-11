@@ -42,7 +42,6 @@ public class Button : MonoBehaviour
     private GameObject _defaultPosition;
     [SerializeField]
     private GameObject _pressedPosition;
-    private Vector3 _targetPosition;
     [SerializeField]
     [Tooltip("ボタンが離されても戻らない")]
     private bool _isOneTime = false;
@@ -96,14 +95,12 @@ public class Button : MonoBehaviour
         if (_pressingPlayers.Count > 0 && !_isPressed)
         {
             _isPressed = true;
-            _targetPosition = _pressedPosition.transform.position;
             onPressed?.Invoke();
         }
         else if (_pressingPlayers.Count == 0 && _isPressed)
         {
             if (_isOneTime) return;
             _isPressed = false;
-            _targetPosition = _defaultPosition.transform.position;
             onReleased?.Invoke();
         }
     }
@@ -121,7 +118,6 @@ public class Button : MonoBehaviour
         _buttonPressedObject = _buttonObject.GetComponent<ButtonPressedObject>();
         _buttonPressedObject.OnButtonPressed += ProcessEnter;
         _buttonPressedObject.OnButtonReleased += ProcessExit;
-        _targetPosition = _defaultPosition.transform.position;
     }
 
     private void Update()
@@ -143,7 +139,7 @@ public class Button : MonoBehaviour
                 CheckState();
             }
         }
-
-        _buttonObject.transform.position = Vector3.Lerp(_buttonObject.transform.position, _targetPosition, Time.deltaTime);
+        Vector3 targetPosition = _isPressed ? _pressedPosition.transform.position : _defaultPosition.transform.position;
+        _buttonObject.transform.position = Vector3.Lerp(_buttonObject.transform.position, targetPosition, Time.deltaTime);
     }
 }
